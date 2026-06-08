@@ -923,6 +923,20 @@ let TEXT_ITEMS = TEXT_SETS[0].items;
 const KEY='oxQuizData_v3';
 const OLDKEY='oxQuizData_ch3';
 let DB = load();
+sanitizeDB();
+function isObj(o){ return o && typeof o==='object' && !Array.isArray(o); }
+function sanitizeDB(){
+  if(!isObj(DB.history)) DB.history={};
+  for(const c in DB.history){ if(!isObj(DB.history[c])) DB.history[c]={}; for(const q in DB.history[c]){ if(!Array.isArray(DB.history[c][q])) DB.history[c][q]=[]; } }
+  if(!isObj(DB.textHist)) DB.textHist={fill:{},puzzle:{}};
+  ['fill','puzzle'].forEach(md=>{ if(!isObj(DB.textHist[md])) DB.textHist[md]={}; for(const id in DB.textHist[md]){ if(!Array.isArray(DB.textHist[md][id])) DB.textHist[md][id]=[]; } });
+  if(!Array.isArray(DB.usageDates)) DB.usageDates=[];
+  if(!isObj(DB.achievements)) DB.achievements={};
+  if(!isObj(DB.memos)) DB.memos={};
+  if(!isObj(DB.memoT)) DB.memoT={};
+  if(!isObj(DB.textMemos)) DB.textMemos={fill:{},puzzle:{}};
+  if(!isObj(DB.textMemoT)) DB.textMemoT={fill:{},puzzle:{}};
+}
 function blankDB(){ return {version:3, history:{}, memos:{}, memoT:{}, usageDates:[], achievements:{}, textHist:{fill:{},puzzle:{}}, textMemos:{fill:{},puzzle:{}}, textMemoT:{fill:{},puzzle:{}}}; }
 function load(){
   try{ const r=localStorage.getItem(KEY); if(r){ return Object.assign(blankDB(), JSON.parse(r)); } }catch(e){}
@@ -937,12 +951,12 @@ function load(){
 function persist(){ localStorage.setItem(KEY, JSON.stringify(DB)); autoWrite(); schedulePush(); }
 function todayStr(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 function markUsage(){ const t=todayStr(); if(!DB.usageDates.includes(t)){ DB.usageDates.push(t); DB.usageDates.sort(); } }
-function getHist(cid,qi){ DB.history[cid]=DB.history[cid]||{}; DB.history[cid][qi]=DB.history[cid][qi]||[]; return DB.history[cid][qi]; }
+function getHist(cid,qi){ DB.history[cid]=DB.history[cid]||{}; if(!Array.isArray(DB.history[cid][qi])) DB.history[cid][qi]=[]; return DB.history[cid][qi]; }
 function getMemo(cid,qi){ return (DB.memos[cid]||{})[qi]||''; }
 function setMemo(cid,qi,v){ DB.memos[cid]=DB.memos[cid]||{}; DB.memos[cid][qi]=v; DB.memoT=DB.memoT||{}; DB.memoT[cid]=DB.memoT[cid]||{}; DB.memoT[cid][qi]=new Date().toISOString(); }
 function pushHist(cid,qi,correct){ getHist(cid,qi).push({t:new Date().toISOString(), c:correct}); }
 /* 暗記モード用 */
-function getTHist(mode,id){ DB.textHist=DB.textHist||{fill:{},puzzle:{}}; DB.textHist[mode]=DB.textHist[mode]||{}; DB.textHist[mode][id]=DB.textHist[mode][id]||[]; return DB.textHist[mode][id]; }
+function getTHist(mode,id){ DB.textHist=DB.textHist||{fill:{},puzzle:{}}; DB.textHist[mode]=DB.textHist[mode]||{}; if(!Array.isArray(DB.textHist[mode][id])) DB.textHist[mode][id]=[]; return DB.textHist[mode][id]; }
 function pushTHist(mode,id,c){ getTHist(mode,id).push({t:new Date().toISOString(), c}); }
 function getTMemo(mode,id){ DB.textMemos=DB.textMemos||{fill:{},puzzle:{}}; return (DB.textMemos[mode]||{})[id]||''; }
 function setTMemo(mode,id,v){ DB.textMemos=DB.textMemos||{fill:{},puzzle:{}}; DB.textMemos[mode]=DB.textMemos[mode]||{}; DB.textMemos[mode][id]=v; DB.textMemoT=DB.textMemoT||{fill:{},puzzle:{}}; DB.textMemoT[mode]=DB.textMemoT[mode]||{}; DB.textMemoT[mode][id]=new Date().toISOString(); }
