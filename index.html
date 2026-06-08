@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>国税徴収法 ○×クイズ</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <style>
   :root{
     --bg:#0f1c2e; --card:#16263d; --card2:#1d3151; --ink:#e8eef7; --sub:#9fb3cc;
@@ -167,6 +169,16 @@
     <div class="card">
       <div style="font-weight:700;font-size:14px;margin-bottom:10px;">🏆 実績 <span class="small" id="achCount"></span></div>
       <div class="ach-grid" id="achGrid"></div>
+    </div>
+
+    <div class="card">
+      <div style="font-weight:700;font-size:14px;margin-bottom:10px;">☁️ クラウド同期（複数端末で共有）</div>
+      <input id="syncRoomInput" placeholder="合言葉（全端末で同じものを入力）" autocomplete="off"
+        style="width:100%;box-sizing:border-box;padding:11px;border-radius:9px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-size:14px;margin-bottom:8px;">
+      <button class="bigbtn" style="font-size:14px;padding:12px;" onclick="saveSyncRoom()">☁️ 同期を開始／更新</button>
+      <button class="bigbtn ghost" style="font-size:13px;padding:10px;" onclick="stopSyncRoom()">同期を解除</button>
+      <div class="small" id="syncState" style="margin-top:6px;">未設定（この端末のみ）</div>
+      <div class="small" style="margin-top:6px;line-height:1.6;">スマホ・事務所PC・自宅PCで<b>同じ合言葉</b>を入れると、解答記録・メモ・実績が共有されます。推測されにくい長めの合言葉にしてください。</div>
     </div>
 
     <div class="card">
@@ -911,7 +923,7 @@ let TEXT_ITEMS = TEXT_SETS[0].items;
 const KEY='oxQuizData_v3';
 const OLDKEY='oxQuizData_ch3';
 let DB = load();
-function blankDB(){ return {version:3, history:{}, memos:{}, usageDates:[], achievements:{}, textHist:{fill:{},puzzle:{}}, textMemos:{fill:{},puzzle:{}}}; }
+function blankDB(){ return {version:3, history:{}, memos:{}, memoT:{}, usageDates:[], achievements:{}, textHist:{fill:{},puzzle:{}}, textMemos:{fill:{},puzzle:{}}, textMemoT:{fill:{},puzzle:{}}}; }
 function load(){
   try{ const r=localStorage.getItem(KEY); if(r){ return Object.assign(blankDB(), JSON.parse(r)); } }catch(e){}
   // 旧データ（滞納処分のみ）の移行
@@ -922,18 +934,97 @@ function load(){
       localStorage.setItem(KEY, JSON.stringify(db)); return db; } }catch(e){}
   return blankDB();
 }
-function persist(){ localStorage.setItem(KEY, JSON.stringify(DB)); autoWrite(); }
+function persist(){ localStorage.setItem(KEY, JSON.stringify(DB)); autoWrite(); schedulePush(); }
 function todayStr(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 function markUsage(){ const t=todayStr(); if(!DB.usageDates.includes(t)){ DB.usageDates.push(t); DB.usageDates.sort(); } }
 function getHist(cid,qi){ DB.history[cid]=DB.history[cid]||{}; DB.history[cid][qi]=DB.history[cid][qi]||[]; return DB.history[cid][qi]; }
 function getMemo(cid,qi){ return (DB.memos[cid]||{})[qi]||''; }
-function setMemo(cid,qi,v){ DB.memos[cid]=DB.memos[cid]||{}; DB.memos[cid][qi]=v; }
+function setMemo(cid,qi,v){ DB.memos[cid]=DB.memos[cid]||{}; DB.memos[cid][qi]=v; DB.memoT=DB.memoT||{}; DB.memoT[cid]=DB.memoT[cid]||{}; DB.memoT[cid][qi]=new Date().toISOString(); }
 function pushHist(cid,qi,correct){ getHist(cid,qi).push({t:new Date().toISOString(), c:correct}); }
 /* 暗記モード用 */
 function getTHist(mode,id){ DB.textHist=DB.textHist||{fill:{},puzzle:{}}; DB.textHist[mode]=DB.textHist[mode]||{}; DB.textHist[mode][id]=DB.textHist[mode][id]||[]; return DB.textHist[mode][id]; }
 function pushTHist(mode,id,c){ getTHist(mode,id).push({t:new Date().toISOString(), c}); }
 function getTMemo(mode,id){ DB.textMemos=DB.textMemos||{fill:{},puzzle:{}}; return (DB.textMemos[mode]||{})[id]||''; }
-function setTMemo(mode,id,v){ DB.textMemos=DB.textMemos||{fill:{},puzzle:{}}; DB.textMemos[mode]=DB.textMemos[mode]||{}; DB.textMemos[mode][id]=v; }
+function setTMemo(mode,id,v){ DB.textMemos=DB.textMemos||{fill:{},puzzle:{}}; DB.textMemos[mode]=DB.textMemos[mode]||{}; DB.textMemos[mode][id]=v; DB.textMemoT=DB.textMemoT||{fill:{},puzzle:{}}; DB.textMemoT[mode]=DB.textMemoT[mode]||{}; DB.textMemoT[mode][id]=new Date().toISOString(); }
+
+/* ============ クラウド同期（Firebase Firestore） ============ */
+const firebaseConfig = {
+  apiKey: "AIzaSyBu7PQV0M0AQ6U5wt8qOR65OTtGKocKIIU",
+  authDomain: "kokucho-quiz-app.firebaseapp.com",
+  projectId: "kokucho-quiz-app",
+  storageBucket: "kokucho-quiz-app.firebasestorage.app",
+  messagingSenderId: "978308330684",
+  appId: "1:978308330684:web:aad3bd906fdaad7f4e4cb9",
+  measurementId: "G-Y9V1MZJ6ZM"
+};
+let _fb=null, _fsDoc=null, _unsub=null, _pushTimer=null, _applyingRemote=false;
+function syncRoom(){ return localStorage.getItem('oxSyncRoom')||''; }
+function initFirebase(){ if(_fb)return true; if(typeof firebase==='undefined')return false;
+  try{ _fb=firebase.initializeApp(firebaseConfig); }catch(e){ try{_fb=firebase.app();}catch(e2){return false;} } return true; }
+/* --- マージ：履歴は和集合、メモは新しい方、実績は最早解除を採用 --- */
+function _mergeHist(a,b){ const out=JSON.parse(JSON.stringify(a||{}));
+  for(const k in (b||{})){ out[k]=out[k]||{};
+    for(const j in b[k]){ out[k][j]=out[k][j]||[];
+      const seen=new Set(out[k][j].map(x=>x.t+'|'+(x.c?1:0)));
+      b[k][j].forEach(x=>{ const key=x.t+'|'+(x.c?1:0); if(!seen.has(key)){ seen.add(key); out[k][j].push(x); } });
+      out[k][j].sort((x,y)=>(x.t<y.t?-1:x.t>y.t?1:0)); } }
+  return out; }
+function _mergeMemo1(aV,aT,bV,bT){ const v=Object.assign({},aV||{}), t=Object.assign({},aT||{});
+  for(const k in (bV||{})){ const bt=(bT||{})[k]||'', at=t[k]||'', bval=bV[k], aval=v[k]; let take;
+    if(at&&bt) take=bt>at?'b':'a';
+    else if(bt&&!at) take='b';
+    else if(at&&!bt) take='a';
+    else take=(!aval||!aval.trim())?'b':((!bval||!bval.trim())?'a':(bval.length>aval.length?'b':'a'));
+    if(take==='b'){ v[k]=bval; if(bt)t[k]=bt; } }
+  return {v,t}; }
+function _mergeMemo2(aV,aT,bV,bT){ const v=JSON.parse(JSON.stringify(aV||{})), t=JSON.parse(JSON.stringify(aT||{}));
+  const keys=new Set([...Object.keys(aV||{}),...Object.keys(bV||{})]);
+  keys.forEach(k=>{ const r=_mergeMemo1(v[k],t[k],(bV||{})[k],(bT||{})[k]); v[k]=r.v; t[k]=r.t; });
+  return {v,t}; }
+function mergeDB(L,R){ L=Object.assign(blankDB(),L||{}); R=Object.assign(blankDB(),R||{}); const M=blankDB();
+  M.history=_mergeHist(L.history,R.history);
+  M.textHist={ fill:_mergeHist((L.textHist||{}).fill,(R.textHist||{}).fill), puzzle:_mergeHist((L.textHist||{}).puzzle,(R.textHist||{}).puzzle) };
+  M.usageDates=Array.from(new Set([...(L.usageDates||[]),...(R.usageDates||[])])).sort();
+  const ach={}; [L.achievements||{},R.achievements||{}].forEach(src=>{ for(const k in src){
+    if(k==='_played'){ ach._played=Math.max(ach._played||0, src[k]||0); }
+    else { if(!ach[k]) ach[k]=src[k]; else if(src[k]&&src[k]<ach[k]) ach[k]=src[k]; } } });
+  M.achievements=ach;
+  M._perfectCount=Math.max(L._perfectCount||0, R._perfectCount||0);
+  const mm=_mergeMemo2(L.memos,L.memoT,R.memos,R.memoT); M.memos=mm.v; M.memoT=mm.t;
+  const fT=_mergeMemo1((L.textMemos||{}).fill,(L.textMemoT||{}).fill,(R.textMemos||{}).fill,(R.textMemoT||{}).fill);
+  const pT=_mergeMemo1((L.textMemos||{}).puzzle,(L.textMemoT||{}).puzzle,(R.textMemos||{}).puzzle,(R.textMemoT||{}).puzzle);
+  M.textMemos={fill:fT.v,puzzle:pT.v}; M.textMemoT={fill:fT.t,puzzle:pT.t};
+  return M; }
+function startSync(){ const room=syncRoom();
+  if(!room){ updateSyncUI('off'); return; }
+  if(!initFirebase()){ updateSyncUI('error','読込失敗'); return; }
+  let fs; try{ fs=firebase.firestore(); }catch(e){ updateSyncUI('error','FS失敗'); return; }
+  if(_unsub){ _unsub(); _unsub=null; }
+  _fsDoc=fs.collection('quizdata').doc(room); updateSyncUI('connecting');
+  _unsub=_fsDoc.onSnapshot(snap=>{
+    const remote=snap.exists?(snap.data()||{}).db:null;
+    _applyingRemote=true;
+    const before=JSON.stringify(DB);
+    DB=mergeDB(DB, remote);
+    const after=JSON.stringify(DB);
+    localStorage.setItem(KEY, after);
+    _applyingRemote=false;
+    if(after!==before) renderHome();
+    updateSyncUI('on');
+    if(after!==JSON.stringify(remote||null)) pushNow();
+  }, err=>{ updateSyncUI('error', err.code||'通信エラー'); });
+}
+function pushNow(){ if(!_fsDoc)return; updateSyncUI('saving');
+  _fsDoc.set({db:DB, updatedAt:Date.now()}).then(()=>updateSyncUI('on')).catch(e=>updateSyncUI('error', e.code||'保存失敗')); }
+function schedulePush(){ if(_applyingRemote)return; if(!_fsDoc)return; clearTimeout(_pushTimer); _pushTimer=setTimeout(pushNow,1000); }
+function saveSyncRoom(){ const v=(document.getElementById('syncRoomInput').value||'').trim();
+  if(!v){ alert('合言葉を入力してください'); return; }
+  localStorage.setItem('oxSyncRoom', v); startSync(); toast('☁️ 同期を開始しました'); }
+function stopSyncRoom(){ if(_unsub){_unsub();_unsub=null;} _fsDoc=null; localStorage.removeItem('oxSyncRoom'); updateSyncUI('off'); toast('同期を解除しました'); }
+function updateSyncUI(state,msg){ const e=document.getElementById('syncState'); if(!e)return;
+  const map={off:['未設定（この端末のみ）','var(--sub)'],connecting:['接続中…','var(--gold)'],
+    on:['✓ 同期中','var(--maru)'],saving:['保存中…','var(--gold)'],error:['⚠ '+(msg||'エラー'),'var(--batsu)']};
+  const m=map[state]||map.off; e.textContent=m[0]; e.style.color=m[1]; }
 
 /* ============ 連続日数 ============ */
 function calcStreak(){
@@ -1015,6 +1106,7 @@ function renderHome(){
   let total=0; CATEGORIES.forEach(c=>c.questions.forEach((_,i)=>total+=getHist(c.id,i).length));
   document.getElementById('hTotal').textContent=total;
   renderCats(); renderTextSets();
+  const sr=document.getElementById('syncRoomInput'); if(sr && document.activeElement!==sr) sr.value=syncRoom();
   if(calYear===undefined){ const d=new Date(); calYear=d.getFullYear(); calMonth=d.getMonth(); }
   renderCal(); renderAch();
 }
@@ -1358,6 +1450,7 @@ function savePzMemo(){ const it=TEXT_ITEMS[pzOrder[pzIdx]]; setTMemo('puzzle',it
 
 /* 起動 */
 renderHome();
+startSync();
 </script>
 </body>
 </html>
