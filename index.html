@@ -957,10 +957,13 @@ const firebaseConfig = {
   appId: "1:978308330684:web:aad3bd906fdaad7f4e4cb9",
   measurementId: "G-Y9V1MZJ6ZM"
 };
-let _fb=null, _fsDoc=null, _unsub=null, _pushTimer=null, _applyingRemote=false;
+let _fb=null, _fsDoc=null, _unsub=null, _pushTimer=null, _applyingRemote=false, _connTimer=null;
 function syncRoom(){ return localStorage.getItem('oxSyncRoom')||''; }
 function initFirebase(){ if(_fb)return true; if(typeof firebase==='undefined')return false;
-  try{ _fb=firebase.initializeApp(firebaseConfig); }catch(e){ try{_fb=firebase.app();}catch(e2){return false;} } return true; }
+  try{ _fb=firebase.initializeApp(firebaseConfig); }catch(e){ try{_fb=firebase.app();}catch(e2){return false;} }
+  /* プロキシ/ファイアウォール/広告ブロッカー越しでも通るようロングポーリングを使う */
+  try{ firebase.firestore().settings({ experimentalForceLongPolling:true }); }catch(e){}
+  return true; }
 /* --- マージ：履歴は和集合、メモは新しい方、実績は最早解除を採用 --- */
 function _mergeHist(a,b){ const out=JSON.parse(JSON.stringify(a||{}));
   for(const k in (b||{})){ out[k]=out[k]||{};
@@ -1001,18 +1004,24 @@ function startSync(){ const room=syncRoom();
   let fs; try{ fs=firebase.firestore(); }catch(e){ updateSyncUI('error','FS失敗'); return; }
   if(_unsub){ _unsub(); _unsub=null; }
   _fsDoc=fs.collection('quizdata').doc(room); updateSyncUI('connecting');
+  let gotSnap=false;
+  clearTimeout(_connTimer);
+  _connTimer=setTimeout(()=>{ if(!gotSnap) updateSyncUI('error','接続できません（社内ネット/拡張機能でブロックの可能性）'); }, 12000);
   _unsub=_fsDoc.onSnapshot(snap=>{
-    const remote=snap.exists?(snap.data()||{}).db:null;
-    _applyingRemote=true;
-    const before=JSON.stringify(DB);
-    DB=mergeDB(DB, remote);
-    const after=JSON.stringify(DB);
-    localStorage.setItem(KEY, after);
-    _applyingRemote=false;
-    if(after!==before) renderHome();
-    updateSyncUI('on');
-    if(after!==JSON.stringify(remote||null)) pushNow();
-  }, err=>{ updateSyncUI('error', err.code||'通信エラー'); });
+    gotSnap=true; clearTimeout(_connTimer);
+    try{
+      const remote=snap.exists?(snap.data()||{}).db:null;
+      _applyingRemote=true;
+      const before=JSON.stringify(DB);
+      DB=mergeDB(DB, remote);
+      const after=JSON.stringify(DB);
+      localStorage.setItem(KEY, after);
+      _applyingRemote=false;
+      if(after!==before) renderHome();
+      updateSyncUI('on');
+      if(after!==JSON.stringify(remote||null)) pushNow();
+    }catch(e){ _applyingRemote=false; updateSyncUI('error','処理失敗:'+(e.message||e)); }
+  }, err=>{ gotSnap=true; clearTimeout(_connTimer); updateSyncUI('error', err.code||'通信エラー'); });
 }
 function pushNow(){ if(!_fsDoc)return; updateSyncUI('saving');
   _fsDoc.set({db:DB, updatedAt:Date.now()}).then(()=>updateSyncUI('on')).catch(e=>updateSyncUI('error', e.code||'保存失敗')); }
