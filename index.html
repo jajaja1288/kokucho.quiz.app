@@ -1117,6 +1117,7 @@ function renderHome(){
   document.getElementById('hStreak').textContent=calcStreak();
   document.getElementById('hDays').textContent=DB.usageDates.length;
   let total=0; CATEGORIES.forEach(c=>c.questions.forEach((_,i)=>total+=getHist(c.id,i).length));
+  ['fill','puzzle'].forEach(mode=>TEXT_SETS.forEach(s=>s.items.forEach(it=>total+=getTHist(mode,it.id).length)));
   document.getElementById('hTotal').textContent=total;
   renderCats(); renderTextSets();
   const sr=document.getElementById('syncRoomInput'); if(sr && document.activeElement!==sr) sr.value=syncRoom();
@@ -1287,6 +1288,7 @@ function renderList(){
 /* ============ 書出/読込 ============ */
 function buildExport(){
   let total=0; CATEGORIES.forEach(c=>c.questions.forEach((_,i)=>total+=getHist(c.id,i).length));
+  ['fill','puzzle'].forEach(mode=>TEXT_SETS.forEach(s=>s.items.forEach(it=>total+=getTHist(mode,it.id).length)));
   return {
     app:'国税徴収法自習app', exportedAt:new Date().toISOString(),
     usageDates:DB.usageDates, streak:{current:calcStreak(), longest:longestStreak()},
