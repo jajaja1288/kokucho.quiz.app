@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>国税徴収法 ○×クイズ</title>
+<title>国税徴収法自習app</title>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <style>
@@ -134,7 +134,7 @@
 <div class="wrap">
   <header>
     <button class="back" id="backBtn" onclick="showScreen('home')" style="display:none">← ホーム</button>
-    <h1>国税徴収法 ○×クイズ</h1>
+    <h1>国税徴収法自習app</h1>
     <div class="sub">理論チェック ○×問題</div>
   </header>
 
@@ -1275,7 +1275,7 @@ function renderList(){
 function buildExport(){
   let total=0; CATEGORIES.forEach(c=>c.questions.forEach((_,i)=>total+=getHist(c.id,i).length));
   return {
-    app:'国税徴収法○×クイズ', exportedAt:new Date().toISOString(),
+    app:'国税徴収法自習app', exportedAt:new Date().toISOString(),
     usageDates:DB.usageDates, streak:{current:calcStreak(), longest:longestStreak()},
     achievements:Object.keys(DB.achievements).filter(k=>!k.startsWith('_')),
     summary:{ totalAnswers:total },
