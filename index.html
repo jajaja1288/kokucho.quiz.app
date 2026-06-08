@@ -965,15 +965,19 @@ function initFirebase(){ if(_fb)return true; if(typeof firebase==='undefined')re
   try{ firebase.firestore().settings({ experimentalForceLongPolling:true }); }catch(e){}
   return true; }
 /* --- マージ：履歴は和集合、メモは新しい方、実績は最早解除を採用 --- */
+function _arr(v){ return Array.isArray(v)?v:[]; }
+function _str(v){ return typeof v==='string'?v:''; }
 function _mergeHist(a,b){ const out=JSON.parse(JSON.stringify(a||{}));
-  for(const k in (b||{})){ out[k]=out[k]||{};
-    for(const j in b[k]){ out[k][j]=out[k][j]||[];
-      const seen=new Set(out[k][j].map(x=>x.t+'|'+(x.c?1:0)));
-      b[k][j].forEach(x=>{ const key=x.t+'|'+(x.c?1:0); if(!seen.has(key)){ seen.add(key); out[k][j].push(x); } });
-      out[k][j].sort((x,y)=>(x.t<y.t?-1:x.t>y.t?1:0)); } }
+  for(const k in (b||{})){ if(typeof out[k]!=='object'||out[k]===null||Array.isArray(out[k])) out[k]={};
+    const bk=b[k]||{};
+    for(const j in bk){ const cur=_arr(out[k][j]).slice(); const inc=_arr(bk[j]);
+      const seen=new Set(cur.map(x=>(x&&x.t)+'|'+(x&&x.c?1:0)));
+      inc.forEach(x=>{ if(x&&x.t!=null){ const key=x.t+'|'+(x.c?1:0); if(!seen.has(key)){ seen.add(key); cur.push(x); } } });
+      cur.sort((x,y)=>((x.t<y.t)?-1:(x.t>y.t)?1:0));
+      out[k][j]=cur; } }
   return out; }
 function _mergeMemo1(aV,aT,bV,bT){ const v=Object.assign({},aV||{}), t=Object.assign({},aT||{});
-  for(const k in (bV||{})){ const bt=(bT||{})[k]||'', at=t[k]||'', bval=bV[k], aval=v[k]; let take;
+  for(const k in (bV||{})){ const bt=_str((bT||{})[k]), at=_str(t[k]), bval=_str(bV[k]), aval=_str(v[k]); let take;
     if(at&&bt) take=bt>at?'b':'a';
     else if(bt&&!at) take='b';
     else if(at&&!bt) take='a';
@@ -987,7 +991,7 @@ function _mergeMemo2(aV,aT,bV,bT){ const v=JSON.parse(JSON.stringify(aV||{})), t
 function mergeDB(L,R){ L=Object.assign(blankDB(),L||{}); R=Object.assign(blankDB(),R||{}); const M=blankDB();
   M.history=_mergeHist(L.history,R.history);
   M.textHist={ fill:_mergeHist((L.textHist||{}).fill,(R.textHist||{}).fill), puzzle:_mergeHist((L.textHist||{}).puzzle,(R.textHist||{}).puzzle) };
-  M.usageDates=Array.from(new Set([...(L.usageDates||[]),...(R.usageDates||[])])).sort();
+  M.usageDates=Array.from(new Set([..._arr(L.usageDates),..._arr(R.usageDates)])).sort();
   const ach={}; [L.achievements||{},R.achievements||{}].forEach(src=>{ for(const k in src){
     if(k==='_played'){ ach._played=Math.max(ach._played||0, src[k]||0); }
     else { if(!ach[k]) ach[k]=src[k]; else if(src[k]&&src[k]<ach[k]) ach[k]=src[k]; } } });
