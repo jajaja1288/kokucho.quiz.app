@@ -1219,6 +1219,14 @@ function initFirebase(){ if(_fb)return true; if(typeof firebase==='undefined')re
 /* --- マージ：履歴は和集合、メモは新しい方、実績は最早解除を採用 --- */
 function _arr(v){ return Array.isArray(v)?v:[]; }
 function _str(v){ return typeof v==='string'?v:''; }
+/* キー順に依存しない構造比較（配列は順序を見る） */
+function deepEq(a,b){ if(a===b)return true;
+  if(a===null||b===null||typeof a!==typeof b) return a===b;
+  if(Array.isArray(a)||Array.isArray(b)){ if(!Array.isArray(a)||!Array.isArray(b)||a.length!==b.length)return false;
+    for(let i=0;i<a.length;i++){ if(!deepEq(a[i],b[i]))return false; } return true; }
+  if(typeof a==='object'){ const ka=Object.keys(a), kb=Object.keys(b); if(ka.length!==kb.length)return false;
+    for(const k of ka){ if(!Object.prototype.hasOwnProperty.call(b,k))return false; if(!deepEq(a[k],b[k]))return false; } return true; }
+  return false; }
 function _mergeHist(a,b){ const out=JSON.parse(JSON.stringify(a||{}));
   for(const k in (b||{})){ if(typeof out[k]!=='object'||out[k]===null||Array.isArray(out[k])) out[k]={};
     const bk=b[k]||{};
@@ -1227,6 +1235,14 @@ function _mergeHist(a,b){ const out=JSON.parse(JSON.stringify(a||{}));
       inc.forEach(x=>{ if(x&&x.t!=null){ const key=x.t+'|'+(x.c?1:0); if(!seen.has(key)){ seen.add(key); cur.push(x); } } });
       cur.sort((x,y)=>((x.t<y.t)?-1:(x.t>y.t)?1:0));
       out[k][j]=cur; } }
+  return out; }
+/* 1階層 {id:[entries]} 用（暗記モードの履歴） */
+function _mergeHist1(a,b){ const out=JSON.parse(JSON.stringify(a||{}));
+  for(const k in (b||{})){ const cur=_arr(out[k]).slice();
+    const seen=new Set(cur.map(x=>(x&&x.t)+'|'+(x&&x.c?1:0)));
+    _arr(b[k]).forEach(x=>{ if(x&&x.t!=null){ const key=x.t+'|'+(x.c?1:0); if(!seen.has(key)){ seen.add(key); cur.push(x); } } });
+    cur.sort((x,y)=>((x.t<y.t)?-1:(x.t>y.t)?1:0));
+    out[k]=cur; }
   return out; }
 function _mergeMemo1(aV,aT,bV,bT){ const v=Object.assign({},aV||{}), t=Object.assign({},aT||{});
   for(const k in (bV||{})){ const bt=_str((bT||{})[k]), at=_str(t[k]), bval=_str(bV[k]), aval=_str(v[k]); let take;
@@ -1242,7 +1258,7 @@ function _mergeMemo2(aV,aT,bV,bT){ const v=JSON.parse(JSON.stringify(aV||{})), t
   return {v,t}; }
 function mergeDB(L,R){ L=Object.assign(blankDB(),L||{}); R=Object.assign(blankDB(),R||{}); const M=blankDB();
   M.history=_mergeHist(L.history,R.history);
-  M.textHist={ fill:_mergeHist((L.textHist||{}).fill,(R.textHist||{}).fill), puzzle:_mergeHist((L.textHist||{}).puzzle,(R.textHist||{}).puzzle) };
+  M.textHist={ fill:_mergeHist1((L.textHist||{}).fill,(R.textHist||{}).fill), puzzle:_mergeHist1((L.textHist||{}).puzzle,(R.textHist||{}).puzzle) };
   M.usageDates=Array.from(new Set([..._arr(L.usageDates),..._arr(R.usageDates)])).sort();
   const ach={}; [L.achievements||{},R.achievements||{}].forEach(src=>{ for(const k in src){
     if(k==='_played'){ ach._played=Math.max(ach._played||0, src[k]||0); }
@@ -1277,8 +1293,9 @@ function startSync(){ const room=syncRoom();
       localStorage.setItem(KEY, after);
       _applyingRemote=false;
       if(after!==before) renderHome();
-      updateSyncUI('on');
-      if(after!==JSON.stringify(remote||null)) pushNow();
+      /* キー順に依存しない構造比較で収束判定（Firestoreはキー順を保持しないため文字列比較はNG） */
+      if(deepEq(DB, remote)) updateSyncUI('on');
+      else pushNow();
     }catch(e){ _applyingRemote=false; updateSyncUI('error','処理失敗:'+(e.message||e)); }
   }, err=>{ gotSnap=true; clearTimeout(_connTimer); updateSyncUI('error', err.code||'通信エラー'); });
 }
