@@ -102,6 +102,11 @@
   .rev-item{background:var(--card2);border:1px solid var(--line);border-left:4px solid var(--batsu);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:13px;line-height:1.7;}
   .rev-item .ra{color:#ff8a8a;font-size:12px;margin-top:4px;}
   .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--gold);color:#1a1300;font-weight:800;padding:12px 18px;border-radius:99px;font-size:14px;box-shadow:0 6px 20px rgba(0,0,0,.4);z-index:50;}
+  .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:60;padding:20px;}
+  .modal-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;max-width:380px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.5);}
+  .modal-ttl{font-weight:800;font-size:17px;margin-bottom:8px;color:var(--ink);}
+  .modal-msg{font-size:14px;color:var(--sub);line-height:1.7;margin-bottom:16px;}
+  .modal-card .bigbtn{margin-top:8px;}
 
   .lcat{font-size:14px;font-weight:800;color:var(--accent);margin:14px 0 8px;border-bottom:1px solid var(--line);padding-bottom:6px;}
   .li{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;}
@@ -1164,8 +1169,10 @@ function sanitizeDB(){
   if(!isObj(DB.memoT)) DB.memoT={};
   if(!isObj(DB.textMemos)) DB.textMemos={fill:{},puzzle:{}};
   if(!isObj(DB.textMemoT)) DB.textMemoT={fill:{},puzzle:{}};
+  if(!isObj(DB.progress)) DB.progress={fill:{},puzzle:{}};
+  ['fill','puzzle'].forEach(md=>{ if(!isObj(DB.progress[md])) DB.progress[md]={}; });
 }
-function blankDB(){ return {version:3, history:{}, memos:{}, memoT:{}, usageDates:[], achievements:{}, textHist:{fill:{},puzzle:{}}, textMemos:{fill:{},puzzle:{}}, textMemoT:{fill:{},puzzle:{}}}; }
+function blankDB(){ return {version:3, history:{}, memos:{}, memoT:{}, usageDates:[], achievements:{}, textHist:{fill:{},puzzle:{}}, textMemos:{fill:{},puzzle:{}}, textMemoT:{fill:{},puzzle:{}}, progress:{fill:{},puzzle:{}}}; }
 function load(){
   try{ const r=localStorage.getItem(KEY); if(r){ return Object.assign(blankDB(), JSON.parse(r)); } }catch(e){}
   // 旧データ（滞納処分のみ）の移行
@@ -1188,6 +1195,9 @@ function getTHist(mode,id){ DB.textHist=DB.textHist||{fill:{},puzzle:{}}; DB.tex
 function pushTHist(mode,id,c){ getTHist(mode,id).push({t:new Date().toISOString(), c}); }
 function getTMemo(mode,id){ DB.textMemos=DB.textMemos||{fill:{},puzzle:{}}; return (DB.textMemos[mode]||{})[id]||''; }
 function setTMemo(mode,id,v){ DB.textMemos=DB.textMemos||{fill:{},puzzle:{}}; DB.textMemos[mode]=DB.textMemos[mode]||{}; DB.textMemos[mode][id]=v; DB.textMemoT=DB.textMemoT||{fill:{},puzzle:{}}; DB.textMemoT[mode]=DB.textMemoT[mode]||{}; DB.textMemoT[mode][id]=new Date().toISOString(); }
+/* 暗記モードの進捗（テキスト順／どこまで進んだか） */
+function getProg(mode,setId){ DB.progress=DB.progress||{fill:{},puzzle:{}}; DB.progress[mode]=DB.progress[mode]||{}; const v=DB.progress[mode][setId]; return (typeof v==='number'&&v>0)?v:0; }
+function setProg(mode,setId,idx){ DB.progress=DB.progress||{fill:{},puzzle:{}}; DB.progress[mode]=DB.progress[mode]||{}; DB.progress[mode][setId]=idx; }
 
 /* ============ クラウド同期（Firebase Firestore） ============ */
 const firebaseConfig = {
@@ -1243,6 +1253,9 @@ function mergeDB(L,R){ L=Object.assign(blankDB(),L||{}); R=Object.assign(blankDB
   const fT=_mergeMemo1((L.textMemos||{}).fill,(L.textMemoT||{}).fill,(R.textMemos||{}).fill,(R.textMemoT||{}).fill);
   const pT=_mergeMemo1((L.textMemos||{}).puzzle,(L.textMemoT||{}).puzzle,(R.textMemos||{}).puzzle,(R.textMemoT||{}).puzzle);
   M.textMemos={fill:fT.v,puzzle:pT.v}; M.textMemoT={fill:fT.t,puzzle:pT.t};
+  M.progress={fill:{},puzzle:{}};
+  ['fill','puzzle'].forEach(md=>{ const lp=(L.progress||{})[md]||{}, rp=(R.progress||{})[md]||{};
+    new Set([...Object.keys(lp),...Object.keys(rp)]).forEach(k=>{ M.progress[md][k]=Math.max(lp[k]||0, rp[k]||0); }); });
   return M; }
 function startSync(){ const room=syncRoom();
   if(!room){ updateSyncUI('off'); return; }
@@ -1388,12 +1401,14 @@ function renderTextSets(){
   TEXT_SETS.forEach((s,si)=>{
     const n=s.items.length;
     let conquered=0; s.items.forEach(it=>{ if(getTHist('fill',it.id).some(x=>x.c)||getTHist('puzzle',it.id).some(x=>x.c))conquered++; });
+    const pf=getProg('fill',s.id), pp=getProg('puzzle',s.id);
+    const note=(pf>0||pp>0)?('<div class="cm" style="color:var(--gold)">前回　'+(pf>0?('📝'+(pf+1)+'問目'):'📝未')+'　/　'+(pp>0?('🧩'+(pp+1)+'問目'):'🧩未')+'</div>'):'';
     const el=document.createElement('div'); el.className='catcard';
     el.innerHTML='<div class="ct">'+s.name+'</div>'+
-      '<div class="cm">規定本文　全'+n+'文　／　踏破 '+conquered+'/'+n+'</div>'+
+      '<div class="cm">規定本文　全'+n+'文　／　踏破 '+conquered+'/'+n+'（テキスト順）</div>'+note+
       '<div class="cbar"><span style="width:'+(conquered/n*100)+'%"></span></div>'+
-      '<div class="btns2"><button class="play" onclick="startFill('+si+',true)">📝 穴埋め</button>'+
-      '<button class="seq" onclick="startPuzzle('+si+',true)">🧩 パズル</button></div>';
+      '<div class="btns2"><button class="play" onclick="startMode(\'fill\','+si+')">📝 穴埋め</button>'+
+      '<button class="seq" onclick="startMode(\'puzzle\','+si+')">🧩 パズル</button></div>';
     box.appendChild(el);
   });
 }
@@ -1584,11 +1599,38 @@ async function setupAutoSave(){
 }
 async function autoWrite(){ if(!fileHandle)return; try{ const w=await fileHandle.createWritable(); await w.write(JSON.stringify(buildExport(),null,2)); await w.close(); }catch(e){} }
 
+/* ============ 暗記モード 開始（続き／最初から選択） ============ */
+function startMode(mode,setIdx){
+  const s=TEXT_SETS[setIdx]; const total=s.items.length; const saved=getProg(mode,s.id);
+  if(saved>0 && saved<total){ showResumeModal(mode,setIdx,saved,total); }
+  else { launchMode(mode,setIdx,0); }
+}
+function launchMode(mode,setIdx,startIdx){ if(mode==='fill') startFill(setIdx,startIdx); else startPuzzle(setIdx,startIdx); }
+function showResumeModal(mode,setIdx,saved,total){
+  const s=TEXT_SETS[setIdx]; const mname=(mode==='fill')?'穴埋め':'パズル';
+  const ov=document.createElement('div'); ov.className='modal-ov';
+  ov.innerHTML='<div class="modal-card">'+
+    '<div class="modal-ttl">'+s.name+'（'+mname+'）</div>'+
+    '<div class="modal-msg">前回は <b>'+saved+'問目</b>まで進みました（全'+total+'問・テキスト順）。<br>続きからやりますか？最初からやりますか？</div>'+
+    '<button class="bigbtn" id="mResume">▶ 続きから（'+(saved+1)+'問目）</button>'+
+    '<button class="bigbtn ghost" id="mRestart">↺ 最初から（1問目）</button>'+
+    '<button class="bigbtn ghost" id="mCancel" style="font-size:13px;padding:9px;">キャンセル</button>'+
+    '</div>';
+  document.body.appendChild(ov);
+  const close=()=>ov.remove();
+  ov.addEventListener('click',e=>{ if(e.target===ov) close(); });
+  ov.querySelector('#mResume').onclick=()=>{ close(); launchMode(mode,setIdx,saved); };
+  ov.querySelector('#mRestart').onclick=()=>{ close(); launchMode(mode,setIdx,0); };
+  ov.querySelector('#mCancel').onclick=close;
+}
+
 /* ============ 暗記モード：穴埋め ============ */
 function shuffleArr(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 let fillOrder=[], fillIdx=0, fillState=[], fillSel=-1, fillBank=[], fillBankUsed=[];
-function startFill(setIdx,shuffle){ if(typeof setIdx==='boolean'){shuffle=setIdx;setIdx=0;} curSetIdx=setIdx; TEXT_ITEMS=TEXT_SETS[setIdx].items;
-  fillOrder=TEXT_ITEMS.map((_,i)=>i); if(shuffle)shuffleArr(fillOrder); fillIdx=0;
+function startFill(setIdx,startIdx){ curSetIdx=setIdx; TEXT_ITEMS=TEXT_SETS[setIdx].items;
+  fillOrder=TEXT_ITEMS.map((_,i)=>i); /* テキスト順（シャッフルしない） */
+  fillIdx=Math.min(Math.max(startIdx||0,0), TEXT_ITEMS.length-1);
+  setProg('fill',TEXT_SETS[setIdx].id,fillIdx); persist();
   document.getElementById('fillTotal').textContent=TEXT_ITEMS.length; showScreen('fill'); renderFill(); }
 function renderFill(){
   const it=TEXT_ITEMS[fillOrder[fillIdx]];
@@ -1650,14 +1692,18 @@ function checkFill(){
   document.getElementById('fillNext').textContent=(fillIdx===TEXT_ITEMS.length-1)?'ホームへ →':'次の文 →';
   checkAchievements({});
 }
-function nextFill(){ if(fillIdx<TEXT_ITEMS.length-1){ fillIdx++; renderFill(); } else { toast('穴埋め一周完了！'); showScreen('home'); } }
+function nextFill(){ const setId=TEXT_SETS[curSetIdx].id;
+  if(fillIdx<TEXT_ITEMS.length-1){ fillIdx++; setProg('fill',setId,fillIdx); persist(); renderFill(); }
+  else { setProg('fill',setId,0); persist(); toast('穴埋め一周完了！'); showScreen('home'); } }
 function saveFillMemo(){ const it=TEXT_ITEMS[fillOrder[fillIdx]]; setTMemo('fill',it.id,document.getElementById('fillMemo').value);
   clearTimeout(memoTimer); memoTimer=setTimeout(()=>{ persist(); const e=document.getElementById('fillSaved'); e.textContent='✓ 保存'; setTimeout(()=>e.textContent='',1500); },400); }
 
 /* ============ 暗記モード：パズル ============ */
 let pzOrder=[], pzIdx=0, pzAns=[], pzTray=[];
-function startPuzzle(setIdx,shuffle){ if(typeof setIdx==='boolean'){shuffle=setIdx;setIdx=0;} curSetIdx=setIdx; TEXT_ITEMS=TEXT_SETS[setIdx].items;
-  pzOrder=TEXT_ITEMS.map((_,i)=>i); if(shuffle)shuffleArr(pzOrder); pzIdx=0;
+function startPuzzle(setIdx,startIdx){ curSetIdx=setIdx; TEXT_ITEMS=TEXT_SETS[setIdx].items;
+  pzOrder=TEXT_ITEMS.map((_,i)=>i); /* テキスト順（シャッフルしない） */
+  pzIdx=Math.min(Math.max(startIdx||0,0), TEXT_ITEMS.length-1);
+  setProg('puzzle',TEXT_SETS[setIdx].id,pzIdx); persist();
   document.getElementById('pzTotal').textContent=TEXT_ITEMS.length; showScreen('puzzle'); renderPuzzle(); }
 function renderPuzzle(){
   const it=TEXT_ITEMS[pzOrder[pzIdx]];
@@ -1701,7 +1747,9 @@ function checkPuzzle(){
   document.getElementById('pzNext').textContent=(pzIdx===TEXT_ITEMS.length-1)?'ホームへ →':'次の文 →';
   checkAchievements({});
 }
-function nextPuzzle(){ if(pzIdx<TEXT_ITEMS.length-1){ pzIdx++; renderPuzzle(); } else { toast('パズル一周完了！'); showScreen('home'); } }
+function nextPuzzle(){ const setId=TEXT_SETS[curSetIdx].id;
+  if(pzIdx<TEXT_ITEMS.length-1){ pzIdx++; setProg('puzzle',setId,pzIdx); persist(); renderPuzzle(); }
+  else { setProg('puzzle',setId,0); persist(); toast('パズル一周完了！'); showScreen('home'); } }
 function savePzMemo(){ const it=TEXT_ITEMS[pzOrder[pzIdx]]; setTMemo('puzzle',it.id,document.getElementById('pzMemo').value);
   clearTimeout(memoTimer); memoTimer=setTimeout(()=>{ persist(); const e=document.getElementById('pzSaved'); e.textContent='✓ 保存'; setTimeout(()=>e.textContent='',1500); },400); }
 
