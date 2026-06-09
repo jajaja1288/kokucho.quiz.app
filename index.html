@@ -1273,42 +1273,64 @@ function mergeDB(L,R){ L=Object.assign(blankDB(),L||{}); R=Object.assign(blankDB
   ['fill','puzzle'].forEach(md=>{ const lp=(L.progress||{})[md]||{}, rp=(R.progress||{})[md]||{};
     new Set([...Object.keys(lp),...Object.keys(rp)]).forEach(k=>{ M.progress[md][k]=Math.max(lp[k]||0, rp[k]||0); }); });
   return M; }
+/* ---- Firestore REST（SDKのストリーミングを使わず、通常のHTTPSで読み書き） ---- */
+const FS_BASE='https://firestore.googleapis.com/v1/projects/'+firebaseConfig.projectId+'/databases/(default)/documents/quizdata/';
+function docUrl(room){ return FS_BASE+encodeURIComponent(room)+'?key='+firebaseConfig.apiKey; }
+function fromFs(v){ if(v==null)return null;
+  if('stringValue' in v)return v.stringValue;
+  if('integerValue' in v)return Number(v.integerValue);
+  if('doubleValue' in v)return Number(v.doubleValue);
+  if('booleanValue' in v)return v.booleanValue;
+  if('nullValue' in v)return null;
+  if('timestampValue' in v)return v.timestampValue;
+  if('arrayValue' in v)return (v.arrayValue.values||[]).map(fromFs);
+  if('mapValue' in v){ const o={},f=v.mapValue.fields||{}; for(const k in f)o[k]=fromFs(f[k]); return o; }
+  return null; }
+async function fetchTimeout(url,opt,ms){ const c=new AbortController(); const id=setTimeout(()=>c.abort(),ms||10000);
+  try{ return await fetch(url,Object.assign({signal:c.signal},opt||{})); } finally{ clearTimeout(id); } }
+let _pollTimer=null, _lastSaved=null, _pulling=false;
 function startSync(){ const room=syncRoom();
   if(!room){ updateSyncUI('off'); return; }
-  if(!initFirebase()){ updateSyncUI('error','読込失敗'); return; }
-  let fs; try{ fs=firebase.firestore(); }catch(e){ updateSyncUI('error','FS失敗'); return; }
-  if(_unsub){ _unsub(); _unsub=null; }
-  _fsDoc=fs.collection('quizdata').doc(room); updateSyncUI('connecting');
-  let gotSnap=false;
-  clearTimeout(_connTimer);
-  _connTimer=setTimeout(()=>{ if(!gotSnap) updateSyncUI('error','接続できません（社内ネット/拡張機能でブロックの可能性）'); }, 12000);
-  _unsub=_fsDoc.onSnapshot(snap=>{
-    gotSnap=true; clearTimeout(_connTimer);
-    try{
-      const remote=snap.exists?(snap.data()||{}).db:null;
-      _applyingRemote=true;
-      const before=JSON.stringify(DB);
-      DB=mergeDB(DB, remote);
-      const after=JSON.stringify(DB);
-      localStorage.setItem(KEY, after);
-      _applyingRemote=false;
-      if(after!==before) renderHome();
-      /* キー順に依存しない構造比較で収束判定（Firestoreはキー順を保持しないため文字列比較はNG） */
-      if(deepEq(DB, remote)) updateSyncUI('on');
-      else pushNow();
-    }catch(e){ _applyingRemote=false; updateSyncUI('error','処理失敗:'+(e.message||e)); }
-  }, err=>{ gotSnap=true; clearTimeout(_connTimer); updateSyncUI('error', err.code||'通信エラー'); });
+  updateSyncUI('connecting'); clearInterval(_pollTimer);
+  pullSync(); _pollTimer=setInterval(()=>{ if(!document.hidden) pullSync(); }, 15000);
 }
-function pushNow(){ if(!_fsDoc)return; updateSyncUI('saving');
-  _fsDoc.set({db:DB, updatedAt:Date.now()}).then(()=>updateSyncUI('on')).catch(e=>updateSyncUI('error', e.code||'保存失敗')); }
-function schedulePush(){ if(_applyingRemote)return; if(!_fsDoc)return; clearTimeout(_pushTimer); _pushTimer=setTimeout(pushNow,1000); }
+async function pullSync(){ const room=syncRoom(); if(!room||_pulling)return; _pulling=true;
+  try{
+    const res=await fetchTimeout(docUrl(room),{method:'GET'},10000);
+    let remote=null;
+    if(res.status===200){ const j=await res.json(); const f=j.fields||{};
+      if(f.json&&typeof f.json.stringValue==='string'){ try{ remote=JSON.parse(f.json.stringValue); }catch(e){ remote=null; } }
+      else if(f.db){ remote=fromFs(f.db); } /* 旧形式を救済 */
+    } else if(res.status===404){ remote=null; }
+    else { updateSyncUI('error','取得失敗('+res.status+')'); return; }
+    const before=JSON.stringify(DB);
+    DB=mergeDB(DB, remote); sanitizeDB();
+    const after=JSON.stringify(DB);
+    localStorage.setItem(KEY, after);
+    if(after!==before) renderHome();
+    if(!deepEq(DB, remote)) await pushSync(); else updateSyncUI('on');
+  }catch(e){ updateSyncUI('error',(e&&e.name==='AbortError')?'接続が遅い':'接続失敗'); }
+  finally{ _pulling=false; }
+}
+async function pushSync(){ const room=syncRoom(); if(!room)return; updateSyncUI('saving');
+  try{
+    const body=JSON.stringify({fields:{ json:{stringValue:JSON.stringify(DB)}, ts:{integerValue:String(Date.now())} }});
+    const url=docUrl(room)+'&updateMask.fieldPaths=json&updateMask.fieldPaths=ts';
+    const res=await fetchTimeout(url,{method:'PATCH',headers:{'Content-Type':'application/json'},body},10000);
+    if(res.status===200){ _lastSaved=new Date(); updateSyncUI('on'); }
+    else if(res.status===429){ updateSyncUI('error','本日の保存上限(無料枠)。翌日リセット'); }
+    else { updateSyncUI('error','保存失敗('+res.status+')'); }
+  }catch(e){ updateSyncUI('error',(e&&e.name==='AbortError')?'保存できません(書込ブロック?)':'保存失敗'); }
+}
+function schedulePush(){ if(!syncRoom())return; clearTimeout(_pushTimer); _pushTimer=setTimeout(()=>pushSync(),1500); }
 function saveSyncRoom(){ const v=(document.getElementById('syncRoomInput').value||'').trim();
   if(!v){ alert('合言葉を入力してください'); return; }
   localStorage.setItem('oxSyncRoom', v); startSync(); toast('☁️ 同期を開始しました'); }
-function stopSyncRoom(){ if(_unsub){_unsub();_unsub=null;} _fsDoc=null; localStorage.removeItem('oxSyncRoom'); updateSyncUI('off'); toast('同期を解除しました'); }
+function stopSyncRoom(){ clearInterval(_pollTimer); clearTimeout(_pushTimer); localStorage.removeItem('oxSyncRoom'); updateSyncUI('off'); toast('同期を解除しました'); }
 function updateSyncUI(state,msg){ const e=document.getElementById('syncState'); if(!e)return;
+  const tm=_lastSaved?(' ('+String(_lastSaved.getHours()).padStart(2,'0')+':'+String(_lastSaved.getMinutes()).padStart(2,'0')+'保存)'):'';
   const map={off:['未設定（この端末のみ）','var(--sub)'],connecting:['接続中…','var(--gold)'],
-    on:['✓ 同期中','var(--maru)'],saving:['保存中…','var(--gold)'],error:['⚠ '+(msg||'エラー'),'var(--batsu)']};
+    on:['✓ 同期中'+tm,'var(--maru)'],saving:['保存中…','var(--gold)'],error:['⚠ '+(msg||'エラー'),'var(--batsu)']};
   const m=map[state]||map.off; e.textContent=m[0]; e.style.color=m[1]; }
 
 /* ============ 連続日数 ============ */
