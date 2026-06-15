@@ -68,6 +68,18 @@
   .qcat{display:block;font-size:12px;color:var(--gold);font-weight:700;margin-left:8px;}
   .srcTitle{font-size:14px;color:var(--gold);font-weight:800;line-height:1.4;}
   .srcSub{font-size:12px;color:var(--sub);font-weight:600;margin-top:2px;}
+  .typeInput{width:100%;box-sizing:border-box;min-height:140px;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-size:15px;line-height:1.7;resize:vertical;}
+  .hintArea{margin-top:10px;}
+  .hintLbl{font-size:12px;color:var(--gold);font-weight:700;margin-bottom:4px;}
+  .hintTxt{font-size:14px;line-height:1.8;background:var(--card2);border:1px dashed var(--line);border-radius:8px;padding:10px;}
+  .hintRem{color:var(--sub);font-size:12px;}
+  .scoreBox{margin:14px 0 6px;}
+  .scoreRow{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .scoreLbl{font-size:13px;font-weight:800;color:var(--ink);min-width:62px;}
+  .scoreBtns{display:flex;gap:5px;flex-wrap:wrap;}
+  .scoreBtn{width:30px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--sub);font-weight:800;font-size:14px;cursor:pointer;}
+  .scoreBtn.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .m.sc{background:var(--card2);color:var(--ink);font-size:12px;font-weight:700;padding:2px 7px;}
   .qtext{font-size:17px;line-height:1.85;min-height:110px;}
   .btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
   .btn{border:none;border-radius:14px;padding:18px 0;font-size:30px;font-weight:800;cursor:pointer;color:#fff;transition:transform .05s;}
@@ -284,6 +296,33 @@
         <div class="memo"><label>📝 メモ</label><textarea id="pzMemo" placeholder="つまずいた所など" oninput="savePzMemo()"></textarea><div class="saved" id="pzSaved"></div></div>
       </div>
       <button class="next" id="pzNext" onclick="nextPuzzle()">次の文 →</button>
+    </div>
+  </div>
+
+  <!-- TYPE (手入力) -->
+  <div class="screen" id="s-type">
+    <div class="meta"><div>手入力　第 <b id="typeCur">1</b> / <b id="typeTotal">0</b> 文</div></div>
+    <div class="card">
+      <div class="qcat" id="typeSrc"></div>
+      <div class="small" style="margin:6px 0 10px;">タイトルを手がかりに規定本文を入力 → ヒントで一部開示 → 答えを見て自己採点</div>
+      <textarea id="typeInput" class="typeInput" placeholder="ここに規定本文を入力（覚えている範囲で）"></textarea>
+      <div class="hintArea" id="typeHintArea"></div>
+      <div class="btns2" id="typeActions">
+        <button class="seq" id="typeHintBtn" onclick="typeHint()">💡 ヒント</button>
+        <button class="play" id="typeShow" onclick="typeReveal()">答えを見る →</button>
+      </div>
+      <div class="result" id="typeResult">
+        <div class="judge" style="color:var(--gold)">模範解答</div>
+        <div class="exp" id="typeAnswer"></div>
+        <div class="scoreBox">
+          <div class="scoreRow"><div class="scoreLbl">内容理解</div><div class="scoreBtns" id="typeScoreU"></div></div>
+          <div class="scoreRow"><div class="scoreLbl">完全暗記</div><div class="scoreBtns" id="typeScoreM"></div></div>
+          <div class="small" style="opacity:.75;">※ 1〜10で自己採点（両方押すと次へ進めます）</div>
+        </div>
+        <div class="hist" id="typeHist"></div>
+        <div class="memo"><label>📝 メモ</label><textarea id="typeMemo" placeholder="抜けた箇所・覚え方など" oninput="saveTypeMemo()"></textarea><div class="saved" id="typeSaved"></div></div>
+      </div>
+      <button class="next" id="typeNext" onclick="nextType()">次の文 →</button>
     </div>
   </div>
 </div>
@@ -1336,18 +1375,18 @@ function isObj(o){ return o && typeof o==='object' && !Array.isArray(o); }
 function sanitizeDB(){
   if(!isObj(DB.history)) DB.history={};
   for(const c in DB.history){ if(!isObj(DB.history[c])) DB.history[c]={}; for(const q in DB.history[c]){ if(!Array.isArray(DB.history[c][q])) DB.history[c][q]=[]; } }
-  if(!isObj(DB.textHist)) DB.textHist={fill:{},puzzle:{}};
-  ['fill','puzzle'].forEach(md=>{ if(!isObj(DB.textHist[md])) DB.textHist[md]={}; for(const id in DB.textHist[md]){ if(!Array.isArray(DB.textHist[md][id])) DB.textHist[md][id]=[]; } });
+  if(!isObj(DB.textHist)) DB.textHist={fill:{},puzzle:{},type:{}};
+  ['fill','puzzle','type'].forEach(md=>{ if(!isObj(DB.textHist[md])) DB.textHist[md]={}; for(const id in DB.textHist[md]){ if(!Array.isArray(DB.textHist[md][id])) DB.textHist[md][id]=[]; } });
   if(!Array.isArray(DB.usageDates)) DB.usageDates=[];
   if(!isObj(DB.achievements)) DB.achievements={};
   if(!isObj(DB.memos)) DB.memos={};
   if(!isObj(DB.memoT)) DB.memoT={};
-  if(!isObj(DB.textMemos)) DB.textMemos={fill:{},puzzle:{}};
-  if(!isObj(DB.textMemoT)) DB.textMemoT={fill:{},puzzle:{}};
-  if(!isObj(DB.progress)) DB.progress={fill:{},puzzle:{}};
-  ['fill','puzzle'].forEach(md=>{ if(!isObj(DB.progress[md])) DB.progress[md]={}; });
+  if(!isObj(DB.textMemos)) DB.textMemos={fill:{},puzzle:{},type:{}};
+  if(!isObj(DB.textMemoT)) DB.textMemoT={fill:{},puzzle:{},type:{}};
+  if(!isObj(DB.progress)) DB.progress={fill:{},puzzle:{},type:{}};
+  ['fill','puzzle','type'].forEach(md=>{ if(!isObj(DB.progress[md])) DB.progress[md]={}; });
 }
-function blankDB(){ return {version:3, history:{}, memos:{}, memoT:{}, usageDates:[], achievements:{}, textHist:{fill:{},puzzle:{}}, textMemos:{fill:{},puzzle:{}}, textMemoT:{fill:{},puzzle:{}}, progress:{fill:{},puzzle:{}}}; }
+function blankDB(){ return {version:3, history:{}, memos:{}, memoT:{}, usageDates:[], achievements:{}, textHist:{fill:{},puzzle:{},type:{}}, textMemos:{fill:{},puzzle:{},type:{}}, textMemoT:{fill:{},puzzle:{},type:{}}, progress:{fill:{},puzzle:{},type:{}}}; }
 function load(){
   try{ const r=localStorage.getItem(KEY); if(r){ return Object.assign(blankDB(), JSON.parse(r)); } }catch(e){}
   // 旧データ（滞納処分のみ）の移行
@@ -1433,7 +1472,7 @@ function _mergeMemo2(aV,aT,bV,bT){ const v=JSON.parse(JSON.stringify(aV||{})), t
   return {v,t}; }
 function mergeDB(L,R){ L=Object.assign(blankDB(),L||{}); R=Object.assign(blankDB(),R||{}); const M=blankDB();
   M.history=_mergeHist(L.history,R.history);
-  M.textHist={ fill:_mergeHist1((L.textHist||{}).fill,(R.textHist||{}).fill), puzzle:_mergeHist1((L.textHist||{}).puzzle,(R.textHist||{}).puzzle) };
+  M.textHist={ fill:_mergeHist1((L.textHist||{}).fill,(R.textHist||{}).fill), puzzle:_mergeHist1((L.textHist||{}).puzzle,(R.textHist||{}).puzzle), type:_mergeHist1((L.textHist||{}).type,(R.textHist||{}).type) };
   M.usageDates=Array.from(new Set([..._arr(L.usageDates),..._arr(R.usageDates)])).sort();
   const ach={}; [L.achievements||{},R.achievements||{}].forEach(src=>{ for(const k in src){
     if(k==='_played'){ ach._played=Math.max(ach._played||0, src[k]||0); }
@@ -1443,9 +1482,10 @@ function mergeDB(L,R){ L=Object.assign(blankDB(),L||{}); R=Object.assign(blankDB
   const mm=_mergeMemo2(L.memos,L.memoT,R.memos,R.memoT); M.memos=mm.v; M.memoT=mm.t;
   const fT=_mergeMemo1((L.textMemos||{}).fill,(L.textMemoT||{}).fill,(R.textMemos||{}).fill,(R.textMemoT||{}).fill);
   const pT=_mergeMemo1((L.textMemos||{}).puzzle,(L.textMemoT||{}).puzzle,(R.textMemos||{}).puzzle,(R.textMemoT||{}).puzzle);
-  M.textMemos={fill:fT.v,puzzle:pT.v}; M.textMemoT={fill:fT.t,puzzle:pT.t};
-  M.progress={fill:{},puzzle:{}};
-  ['fill','puzzle'].forEach(md=>{ const lp=(L.progress||{})[md]||{}, rp=(R.progress||{})[md]||{};
+  const tT=_mergeMemo1((L.textMemos||{}).type,(L.textMemoT||{}).type,(R.textMemos||{}).type,(R.textMemoT||{}).type);
+  M.textMemos={fill:fT.v,puzzle:pT.v,type:tT.v}; M.textMemoT={fill:fT.t,puzzle:pT.t,type:tT.t};
+  M.progress={fill:{},puzzle:{},type:{}};
+  ['fill','puzzle','type'].forEach(md=>{ const lp=(L.progress||{})[md]||{}, rp=(R.progress||{})[md]||{};
     new Set([...Object.keys(lp),...Object.keys(rp)]).forEach(k=>{ M.progress[md][k]=Math.max(lp[k]||0, rp[k]||0); }); });
   return M; }
 /* ---- Firestore REST（SDKのストリーミングを使わず、通常のHTTPSで読み書き） ---- */
@@ -1559,6 +1599,9 @@ function computeStats(extra){
       let wrong=false; h.forEach(x=>{ if(!x.c)wrong=true; else if(wrong)comeback=true; }); }));
     Object.values((DB.textMemos||{})[mode]||{}).forEach(m=>{ if(m&&m.trim())memoCount++; });
   });
+  /* 手入力（自己採点）も のべ回答・メモに加算（正誤判定はなし） */
+  TEXT_SETS.forEach(s=>s.items.forEach(it=>{ total+=getTHist('type',it.id).length; }));
+  Object.values((DB.textMemos||{}).type||{}).forEach(m=>{ if(m&&m.trim())memoCount++; });
   return { streak:calcStreak(), total, allCorrectOnce, comeback, memoCount,
     played:DB.achievements._played||0, perfect:extra.perfect||false, perfectCount:DB._perfectCount||0 };
 }
@@ -1573,7 +1616,7 @@ function toast(msg){ const t=document.createElement('div'); t.className='toast';
 
 /* ============ 画面遷移 ============ */
 function showScreen(name){
-  ['home','quiz','summary','list','fill','puzzle'].forEach(n=>document.getElementById('s-'+n).classList.toggle('show', n===name));
+  ['home','quiz','summary','list','fill','puzzle','type'].forEach(n=>document.getElementById('s-'+n).classList.toggle('show', n===name));
   document.getElementById('backBtn').style.display=(name==='home')?'none':'block';
   if(name==='home') renderHome();
   if(name==='list') renderList();
@@ -1586,7 +1629,7 @@ function renderHome(){
   document.getElementById('hStreak').textContent=calcStreak();
   document.getElementById('hDays').textContent=DB.usageDates.length;
   let total=0; CATEGORIES.forEach(c=>c.questions.forEach((_,i)=>total+=getHist(c.id,i).length));
-  ['fill','puzzle'].forEach(mode=>TEXT_SETS.forEach(s=>s.items.forEach(it=>total+=getTHist(mode,it.id).length)));
+  ['fill','puzzle','type'].forEach(mode=>TEXT_SETS.forEach(s=>s.items.forEach(it=>total+=getTHist(mode,it.id).length)));
   document.getElementById('hTotal').textContent=total;
   renderCats(); renderTextSets();
   const sr=document.getElementById('syncRoomInput'); if(sr && document.activeElement!==sr) sr.value=syncRoom();
@@ -1615,14 +1658,15 @@ function renderTextSets(){
   TEXT_SETS.forEach((s,si)=>{
     const n=s.items.length;
     let conquered=0; s.items.forEach(it=>{ if(getTHist('fill',it.id).some(x=>x.c)||getTHist('puzzle',it.id).some(x=>x.c))conquered++; });
-    const pf=getProg('fill',s.id), pp=getProg('puzzle',s.id);
-    const note=(pf>0||pp>0)?('<div class="cm" style="color:var(--gold)">前回　'+(pf>0?('📝'+(pf+1)+'問目'):'📝未')+'　/　'+(pp>0?('🧩'+(pp+1)+'問目'):'🧩未')+'</div>'):'';
+    const pf=getProg('fill',s.id), pp=getProg('puzzle',s.id), ptg=getProg('type',s.id);
+    const note=(pf>0||pp>0||ptg>0)?('<div class="cm" style="color:var(--gold)">前回　'+(pf>0?('📝'+(pf+1)):'📝未')+'　/　'+(pp>0?('🧩'+(pp+1)):'🧩未')+'　/　'+(ptg>0?('✍️'+(ptg+1)):'✍️未')+'　問目</div>'):'';
     const el=document.createElement('div'); el.className='catcard';
     el.innerHTML='<div class="ct">'+s.name+'</div>'+
       '<div class="cm">規定本文　全'+n+'文　／　踏破 '+conquered+'/'+n+'（テキスト順）</div>'+note+
       '<div class="cbar"><span style="width:'+(conquered/n*100)+'%"></span></div>'+
       '<div class="btns2"><button class="play" onclick="startMode(\'fill\','+si+')">📝 穴埋め</button>'+
-      '<button class="seq" onclick="startMode(\'puzzle\','+si+')">🧩 パズル</button></div>';
+      '<button class="seq" onclick="startMode(\'puzzle\','+si+')">🧩 パズル</button></div>'+
+      '<button class="bigbtn ghost" style="margin-top:8px;font-size:14px;padding:11px;" onclick="startMode(\'type\','+si+')">✍️ 手入力（自己採点）</button>';
     box.appendChild(el);
   });
 }
@@ -1780,7 +1824,13 @@ function buildExport(){
           return {id:it.id, source:it.src, attempts:h.length, correct:cor, wrong:h.length-cor,
             accuracy:h.length?Math.round(cor/h.length*100):null,
             history:h.map(x=>({date:x.t, result:x.c?'○':'×'})), memo:getTMemo(mode,it.id)}; }) }))
-    }))
+    })),
+    typingMode: { mode:'type', modeName:'手入力（自己採点 1-10）',
+      chapters: TEXT_SETS.map(s=>({ id:s.id, name:s.name,
+        items: s.items.map(it=>{ const h=getTHist('type',it.id); const n=h.length;
+          const avg=k=>n?Math.round(h.reduce((a,x)=>a+(x[k]||0),0)/n*10)/10:null;
+          return {id:it.id, source:it.src, attempts:n, avgUnderstand:avg('u'), avgMemorize:avg('m'),
+            scores:h.map(x=>({date:x.t, 内容理解:x.u, 完全暗記:x.m})), memo:getTMemo('type',it.id)}; }) })) }
   };
 }
 function exportData(){
@@ -1819,9 +1869,9 @@ function startMode(mode,setIdx){
   if(saved>0 && saved<total){ showResumeModal(mode,setIdx,saved,total); }
   else { launchMode(mode,setIdx,0); }
 }
-function launchMode(mode,setIdx,startIdx){ if(mode==='fill') startFill(setIdx,startIdx); else startPuzzle(setIdx,startIdx); }
+function launchMode(mode,setIdx,startIdx){ if(mode==='fill') startFill(setIdx,startIdx); else if(mode==='puzzle') startPuzzle(setIdx,startIdx); else startType(setIdx,startIdx); }
 function showResumeModal(mode,setIdx,saved,total){
-  const s=TEXT_SETS[setIdx]; const mname=(mode==='fill')?'穴埋め':'パズル';
+  const s=TEXT_SETS[setIdx]; const mname=(mode==='fill')?'穴埋め':(mode==='puzzle')?'パズル':'手入力';
   const ov=document.createElement('div'); ov.className='modal-ov';
   ov.innerHTML='<div class="modal-card">'+
     '<div class="modal-ttl">'+s.name+'（'+mname+'）</div>'+
@@ -1966,6 +2016,64 @@ function nextPuzzle(){ const setId=TEXT_SETS[curSetIdx].id;
   else { setProg('puzzle',setId,0); persist(); toast('パズル一周完了！'); showScreen('home'); } }
 function savePzMemo(){ const it=TEXT_ITEMS[pzOrder[pzIdx]]; setTMemo('puzzle',it.id,document.getElementById('pzMemo').value);
   clearTimeout(memoTimer); memoTimer=setTimeout(()=>{ persist(); const e=document.getElementById('pzSaved'); e.textContent='✓ 保存'; setTimeout(()=>e.textContent='',1500); },400); }
+
+/* ============ 暗記モード：手入力（自己採点） ============ */
+let typeOrder=[], typeIdx=0, typeHintN=0, typeU=0, typeM=0;
+function startType(setIdx,startIdx){ curSetIdx=setIdx; TEXT_ITEMS=TEXT_SETS[setIdx].items;
+  typeOrder=TEXT_ITEMS.map((_,i)=>i); /* テキスト順 */
+  typeIdx=Math.min(Math.max(startIdx||0,0), TEXT_ITEMS.length-1);
+  setProg('type',TEXT_SETS[setIdx].id,typeIdx); persist();
+  document.getElementById('typeTotal').textContent=TEXT_ITEMS.length; showScreen('type'); renderType(); }
+function renderType(){
+  const it=TEXT_ITEMS[typeOrder[typeIdx]];
+  document.getElementById('typeCur').textContent=typeIdx+1;
+  document.getElementById('typeSrc').innerHTML=srcHTML(it.src);
+  document.getElementById('typeInput').value='';
+  typeHintN=0; typeU=0; typeM=0;
+  document.getElementById('typeHintArea').innerHTML='';
+  document.getElementById('typeHintBtn').textContent='💡 ヒント';
+  document.getElementById('typeActions').style.display='flex';
+  document.getElementById('typeResult').className='result';
+  document.getElementById('typeNext').className='next';
+}
+function typeHint(){ const it=TEXT_ITEMS[typeOrder[typeIdx]];
+  if(typeHintN<it.chunks.length) typeHintN++;
+  const shown=it.chunks.slice(0,typeHintN).join(''); const rem=it.chunks.length-typeHintN;
+  document.getElementById('typeHintArea').innerHTML='<div class="hintLbl">ヒント（先頭'+typeHintN+'チャンク表示）</div><div class="hintTxt">'+shown.replace(/</g,'&lt;')+(rem>0?'<span class="hintRem"> …（残り'+rem+'チャンク）</span>':'')+'</div>';
+  if(typeHintN>=it.chunks.length) document.getElementById('typeHintBtn').textContent='💡 ヒント（全表示済み）';
+}
+function renderTypeScore(){
+  const mk=(host,sel,fn)=>{ const h=document.getElementById(host); h.innerHTML='';
+    for(let i=1;i<=10;i++){ const b=document.createElement('div'); b.className='scoreBtn'+(sel===i?' on':''); b.textContent=i; b.onclick=()=>fn(i); h.appendChild(b); } };
+  mk('typeScoreU',typeU,v=>{typeU=v;renderTypeScore();});
+  mk('typeScoreM',typeM,v=>{typeM=v;renderTypeScore();});
+}
+function typeReveal(){
+  const it=TEXT_ITEMS[typeOrder[typeIdx]];
+  document.getElementById('typeAnswer').textContent=it.chunks.join('');
+  renderTypeScore();
+  const h=getTHist('type',it.id).slice(-10);
+  let hb='<div>📊 これまでの自己採点（理解／暗記）</div><div class="marks">';
+  if(!h.length) hb+='<span class="small">初挑戦</span>';
+  else h.forEach(x=>{const d=new Date(x.t);hb+='<span class="m sc">理'+(x.u||'-')+'/暗'+(x.m||'-')+'<small style="opacity:.7"> '+(d.getMonth()+1)+'/'+d.getDate()+'</small></span>';});
+  hb+='</div>'; document.getElementById('typeHist').innerHTML=hb;
+  document.getElementById('typeMemo').value=getTMemo('type',it.id); document.getElementById('typeSaved').textContent='';
+  document.getElementById('typeActions').style.display='none';
+  document.getElementById('typeResult').className='result show';
+  document.getElementById('typeNext').className='next show';
+  markUsage(); persist();
+}
+function nextType(){
+  const it=TEXT_ITEMS[typeOrder[typeIdx]]; const setId=TEXT_SETS[curSetIdx].id;
+  const revealed=document.getElementById('typeResult').classList.contains('show');
+  if(revealed && (!typeU||!typeM)){ toast('内容理解と完全暗記を採点してね'); return; }
+  if(revealed){ getTHist('type',it.id).push({t:new Date().toISOString(), u:typeU, m:typeM}); }
+  if(typeIdx<TEXT_ITEMS.length-1){ typeIdx++; setProg('type',setId,typeIdx); persist(); renderType(); }
+  else { setProg('type',setId,0); persist(); toast('手入力 一周完了！'); showScreen('home'); }
+  checkAchievements({});
+}
+function saveTypeMemo(){ const it=TEXT_ITEMS[typeOrder[typeIdx]]; setTMemo('type',it.id,document.getElementById('typeMemo').value);
+  clearTimeout(memoTimer); memoTimer=setTimeout(()=>{ persist(); const e=document.getElementById('typeSaved'); e.textContent='✓ 保存'; setTimeout(()=>e.textContent='',1500); },400); }
 
 /* 起動 */
 renderHome();
