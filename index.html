@@ -225,16 +225,16 @@
         <button class="btn maru" id="bMaru" onclick="answer(true)">○</button>
         <button class="btn batsu" id="bBatsu" onclick="answer(false)">×</button>
       </div>
-      <div class="memo">
-        <label>📝 メモ（自動保存・次回も表示されます）</label>
-        <textarea id="memo" placeholder="気づき・覚え方・間違えたポイントなど（解答前でも入力できます）" oninput="saveMemo()"></textarea>
-        <div class="saved" id="memoSaved"></div>
-      </div>
       <div class="result" id="result">
         <div class="judge" id="judge"></div>
         <div class="ans" id="ansline"></div>
         <div class="exp" id="exp"></div>
         <div class="hist" id="histBox"></div>
+        <div class="memo">
+          <label>📝 メモ（自動保存・次回も表示されます）</label>
+          <textarea id="memo" placeholder="気づき・覚え方・間違えたポイントなど" oninput="saveMemo()"></textarea>
+          <div class="saved" id="memoSaved"></div>
+        </div>
       </div>
       <button class="next" id="next" onclick="nextQ()">次の問題 →</button>
     </div>
@@ -2006,7 +2006,7 @@ function renderQ(){
   document.getElementById('result').className='result';
   document.getElementById('next').className='next';
   document.getElementById('bMaru').disabled=false; document.getElementById('bBatsu').disabled=false;
-  // 出題直後からメモを表示・入力可能に
+  // メモは解答後（result表示時）に出すが、値は先に読み込んでおく
   document.getElementById('memo').value=getMemo(curCat().id,qi);
   document.getElementById('memoSaved').textContent='';
 }
@@ -2031,6 +2031,8 @@ function answer(choice){
   const nx=document.getElementById('next'); nx.className='next show';
   nx.textContent=(idx===Q.length-1)?'結果を見る →':'次の問題 →';
   document.getElementById('prog').style.width=((idx+1)/Q.length*100)+'%';
+  // 解答後に解説・次へボタンが画面外に出ないようスクロール
+  setTimeout(()=>nx.scrollIntoView({behavior:'smooth', block:'center'}),60);
   checkAchievements({});
 }
 let memoTimer=null;
