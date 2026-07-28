@@ -264,7 +264,10 @@
 
   <!-- FILL -->
   <div class="screen" id="s-fill">
-    <div class="meta"><div>穴埋め　第 <b id="fillCur">1</b> / <b id="fillTotal">0</b> 文</div></div>
+    <div class="meta"><div>穴埋め　第 <b id="fillCur">1</b> / <b id="fillTotal">0</b> 文</div>
+      <div><button id="fillAudioToggle" onclick="toggleFillAudio()" style="background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer;">🔊 読み上げ ON</button>
+      <button onclick="replayFillAudio()" style="background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:4px 8px;font-size:12px;cursor:pointer;margin-left:4px;">↺</button></div>
+    </div>
     <div class="card">
       <div class="qcat" id="fillSrc"></div>
       <div class="small" style="margin:6px 0 10px;">空欄をタップ → 下の語群から正しい語を選ぼう</div>
@@ -2177,6 +2180,31 @@ function showResumeModal(mode,setIdx,saved,total){
 /* ============ 暗記モード：穴埋め ============ */
 function shuffleArr(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 let fillOrder=[], fillIdx=0, fillState=[], fillSel=-1, fillBank=[], fillBankUsed=[];
+/* ===== 穴埋め 読み上げ（3章のみ音声あり） ===== */
+const FILL_AUDIO_BASE='audio/fill/';
+let fillAudioOn=(localStorage.getItem('fillAudioOn')!=='0');
+let fillAudioEl=null, fillAudioSeg=0, fillAudioNClips=0;
+function fillHasAudio(){ return TEXT_SETS[curSetIdx] && TEXT_SETS[curSetIdx].id==='ch3'; }
+function toggleFillAudio(){ fillAudioOn=!fillAudioOn; localStorage.setItem('fillAudioOn', fillAudioOn?'1':'0');
+  document.getElementById('fillAudioToggle').textContent = fillAudioOn?'🔊 読み上げ ON':'🔇 読み上げ OFF';
+  if(!fillAudioOn && fillAudioEl){ fillAudioEl.pause(); } }
+function playFillClip(seg){
+  if(!fillAudioOn || !fillHasAudio()) return;
+  if(seg>=fillAudioNClips) return;
+  const it=TEXT_ITEMS[fillOrder[fillIdx]];
+  const url=FILL_AUDIO_BASE+it.id+'_'+seg+'.mp3';
+  if(fillAudioEl){ fillAudioEl.pause(); }
+  fillAudioEl=new Audio(url);
+  fillAudioEl.onerror=()=>{}; /* 空クリップ等は無視 */
+  fillAudioEl.play().catch(()=>{});
+}
+function fillContigFilled(){ let n=0; for(let i=0;i<fillState.length;i++){ if(fillState[i]!=null) n++; else break; } return n; }
+function fillAudioOnFill(){
+  if(!fillAudioOn || !fillHasAudio()) return;
+  const c=fillContigFilled();
+  if(c>fillAudioSeg){ fillAudioSeg=c; playFillClip(c); }
+}
+function replayFillAudio(){ fillAudioSeg=fillContigFilled(); playFillClip(fillAudioSeg); }
 function startFill(setIdx,startIdx){ curSetIdx=setIdx; TEXT_ITEMS=TEXT_SETS[setIdx].items;
   fillOrder=TEXT_ITEMS.map((_,i)=>i); /* テキスト順（シャッフルしない） */
   fillIdx=Math.min(Math.max(startIdx||0,0), TEXT_ITEMS.length-1);
@@ -2193,6 +2221,14 @@ function renderFill(){
   document.getElementById('fillResult').className='result';
   document.getElementById('fillCheck').style.display='block';
   document.getElementById('fillNext').className='next';
+  /* 読み上げ初期化 */
+  fillAudioNClips=(it.tpl.match(/【\d+】/g)||[]).length+1;
+  fillAudioSeg=0;
+  const tg=document.getElementById('fillAudioToggle');
+  if(tg){ tg.textContent=fillAudioOn?'🔊 読み上げ ON':'🔇 読み上げ OFF'; tg.style.display=fillHasAudio()?'inline-block':'none'; }
+  const rb=tg?tg.nextElementSibling:null; if(rb) rb.style.display=fillHasAudio()?'inline-block':'none';
+  if(fillAudioEl){ fillAudioEl.pause(); }
+  playFillClip(0);  /* 空欄手前まで再生 */
 }
 function renderFillText(checked){
   const it=TEXT_ITEMS[fillOrder[fillIdx]];
@@ -2222,6 +2258,7 @@ function placeWord(i){ if(fillBankUsed[i])return;
   let target=fillSel; if(target<0||fillState[target]!=null){ target=fillState.findIndex(v=>v==null); }
   if(target<0)return; fillState[target]=fillBank[i]; fillBankUsed[i]=true; fillSel=-1;
   renderFillText(); renderFillBank();
+  fillAudioOnFill();  /* 空欄が埋まったら次の空欄まで再生 */
 }
 function checkFill(){
   const it=TEXT_ITEMS[fillOrder[fillIdx]];
