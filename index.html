@@ -174,6 +174,7 @@
     <div id="textSetList"></div>
 
     <button class="bigbtn ghost" style="font-size:14px;padding:14px;" onclick="showScreen('list')">📚 問題一覧・履歴を見る</button>
+    <button class="bigbtn ghost" style="font-size:14px;padding:14px;" onclick="showScreen('ref')">📑 参考資料（まとめ図・表）</button>
 
     <div class="card">
       <div class="cal-head">
@@ -260,6 +261,21 @@
       <div class="small">各問の正誤マーク（新しい順・最大10件）とメモを表示します。</div>
     </div>
     <div id="listBox"></div>
+  </div>
+
+  <!-- 参考資料 -->
+  <div class="screen" id="s-ref">
+    <div class="card">
+      <div style="font-weight:700;font-size:14px;margin-bottom:6px;">📑 参考資料</div>
+      <div class="small">まとめ図・表の一覧です。画像をタップすると拡大表示（ピンチで拡大縮小）できます。</div>
+    </div>
+    <div id="refList"></div>
+  </div>
+
+  <!-- 参考資料ライトボックス -->
+  <div id="refLightbox" onclick="closeRefImg()" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.9);overflow:auto;padding:12px;text-align:center;">
+    <div style="position:sticky;top:0;text-align:right;margin-bottom:6px;"><button onclick="closeRefImg()" style="background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:15px;cursor:pointer;">✕ 閉じる</button></div>
+    <img id="refLightboxImg" alt="" style="max-width:100%;height:auto;border-radius:6px;background:#fff;">
   </div>
 
   <!-- FILL -->
@@ -1903,11 +1919,62 @@ function toast(msg){ const t=document.createElement('div'); t.className='toast';
 
 /* ============ 画面遷移 ============ */
 function showScreen(name){
-  ['home','quiz','summary','list','fill','puzzle','type'].forEach(n=>document.getElementById('s-'+n).classList.toggle('show', n===name));
+  ['home','quiz','summary','list','ref','fill','puzzle','type'].forEach(n=>document.getElementById('s-'+n).classList.toggle('show', n===name));
   document.getElementById('backBtn').style.display=(name==='home')?'none':'block';
   if(name==='home') renderHome();
   if(name==='list') renderList();
+  if(name==='ref') renderRef();
   window.scrollTo(0,0);
+}
+
+/* ============ 参考資料 ============ */
+const REF_MATERIALS=[
+  {sec:'まとめ図（罰則・期限）'},
+  {t:'罰則・期限マップ', d:'懲役・罰金の重さと、期限の起算点をまとめた図。', f:'参考資料/bassoku_kigen_map.png'},
+  {t:'罰則・期限マップ（白抜き・記入版）', d:'懲役・罰金・期限が空欄。印刷して手書きで暗記チェック用。', f:'参考資料/bassoku_kigen_blank.png'},
+  {sec:'差押えに至る各ルート（語呂）'},
+  {t:'① 督促の原則「50日待って、10日で堕とす」', d:'納期限→50日以内に督促状→発付後10日経過で差押え。', f:'参考資料/route_1_dokusoku.png'},
+  {t:'② 繰上差押え「待ってる途中でもう待てない」', d:'督促後の10日待機中に繰上請求の事実→直ちに差押え。', f:'参考資料/route_2_kuriage_sashiosae.png'},
+  {t:'④ 繰上請求による差押え「呼び出したのに来ないなら即」', d:'繰上請求に係る国税を期限まで完納しない→督促なしで差押え。', f:'参考資料/route_4_kuriage_seikyu.png'},
+  {t:'⑤ 繰上保全差押え（期限“前”）', d:'繰上請求の事実＋確定後徴収困難→法定申告期限前に仮の金額で差押え。', f:'参考資料/route_5_kuriage_hozen.png'},
+  {t:'⑥ 保全差押え（期限“後”）', d:'不正の嫌疑で差押え・逮捕等＋確定後徴収困難→保全差押金額で差押え。', f:'参考資料/route_6_hozen.png'},
+  {t:'⑦ 譲渡担保財産「別名義でも実質はあなたの財産」', d:'物的納税責任の要件該当→告知書発送日から10日経過で差押え。', f:'参考資料/route_7_joto_tanpo.png'},
+  {t:'⑧ 担保物の処分', d:'担保付国税が納期限まで完納なし／猶予取消し→担保物を処分（督促不要）。', f:'参考資料/route_8_tanpobutsu.png'},
+  {t:'⑨ 即時徴収に係る国税', d:'無免許酒類製造の酒税等。一定の事実で直ちに徴収→完納なし→差押え。', f:'参考資料/route_9_sokuji.png'},
+  {sec:'公売・計算'},
+  {t:'公売公告は少なくとも10日前', d:'20日に公売なら公告期限は9日（前日から遡って10日間を確保）。', f:'参考資料/kobai_kokoku.png'},
+  {t:'動産の売却代金は売却決定の日に現金納付', d:'納付しないと売却取消し・次点者売却／再公売となることも。', f:'参考資料/kobai_tetsuzuki.png'},
+  {t:'給与の差押禁止額・按分法（二か所給与）', d:'合計額で保護額を計算し、主たる／従たる給料の手取り割合で按分。', f:'参考資料/anbun_ho.png'},
+];
+function renderRef(){
+  const box=document.getElementById('refList'); box.innerHTML='';
+  const items=REF_MATERIALS.filter(m=>m.f);
+  if(!items.length){ box.innerHTML='<div class="card"><div class="small">参考資料はまだありません。</div></div>'; return; }
+  REF_MATERIALS.forEach(m=>{
+    if(m.sec){
+      const h=document.createElement('div');
+      h.style.cssText='font-size:13px;font-weight:700;color:var(--sub);margin:14px 0 6px;';
+      h.textContent=m.sec; box.appendChild(h); return;
+    }
+    const el=document.createElement('div'); el.className='card';
+    el.innerHTML='<div style="font-weight:700;font-size:14px;margin-bottom:2px;">'+m.t+'</div>'+
+      '<div class="small" style="margin-bottom:8px;">'+m.d+'</div>';
+    const img=document.createElement('img');
+    img.src=m.f; img.alt=m.t;
+    img.style.cssText='width:100%;height:auto;border-radius:8px;border:1px solid var(--line);cursor:zoom-in;background:#fff;display:block;';
+    img.onclick=()=>openRefImg(m.f);
+    img.onerror=()=>{ img.replaceWith(Object.assign(document.createElement('div'),{className:'small',textContent:'画像を読み込めませんでした（'+m.f+'）'})); };
+    el.appendChild(img);
+    box.appendChild(el);
+  });
+}
+function openRefImg(src){
+  document.getElementById('refLightboxImg').src=src;
+  document.getElementById('refLightbox').style.display='block';
+}
+function closeRefImg(){
+  document.getElementById('refLightbox').style.display='none';
+  document.getElementById('refLightboxImg').src='';
 }
 
 /* ============ ホーム ============ */
