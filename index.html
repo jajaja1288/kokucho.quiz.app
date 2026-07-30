@@ -219,6 +219,10 @@
       <div>第 <b id="cur">1</b> / <b id="totalQ">0</b> 問</div>
       <div>正解 <b id="score">0</b></div>
     </div>
+    <div class="meta" style="margin-top:-4px;">
+      <button id="drillToggle" onclick="toggleDrill()" style="background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer;">⏱ 周回モード OFF</button>
+      <div class="small" id="drillHint" style="text-align:right;">解答後5秒で自動的に次へ</div>
+    </div>
     <div class="card">
       <span class="qno" id="qno">Q1</span><span class="qcat" id="qcat"></span>
       <div class="qtext" id="qtext" style="margin-top:12px;"></div>
@@ -1919,6 +1923,7 @@ function toast(msg){ const t=document.createElement('div'); t.className='toast';
 
 /* ============ 画面遷移 ============ */
 function showScreen(name){
+  if(name!=='quiz' && typeof stopDrill==='function') stopDrill(false);
   ['home','quiz','summary','list','ref','fill','puzzle','type'].forEach(n=>document.getElementById('s-'+n).classList.toggle('show', n===name));
   document.getElementById('backBtn').style.display=(name==='home')?'none':'block';
   if(name==='home') renderHome();
@@ -2056,6 +2061,46 @@ function renderAch(){
 let curCatIdx=0, order=[], idx=0, score=0, wrongList=[];
 let answered=false;
 function curCat(){ return CATEGORIES[curCatIdx]; }
+/* ============ 強制周回モード（解答後5秒で自動的に次へ） ============ */
+const DRILL_SEC=5;
+let drillOn=(localStorage.getItem('drillOn')==='1');
+let drillTimer=null, drillLeft=0;
+function updateDrillBtn(){
+  const b=document.getElementById('drillToggle'); if(!b)return;
+  b.textContent=drillOn?'⏱ 周回モード ON':'⏱ 周回モード OFF';
+  b.style.borderColor=drillOn?'var(--maru)':'var(--line)';
+  b.style.fontWeight=drillOn?'700':'400';
+  const h=document.getElementById('drillHint');
+  if(h) h.textContent=drillOn?'解答後'+DRILL_SEC+'秒で自動的に次へ（メモ入力中は停止）':'解答後'+DRILL_SEC+'秒で自動的に次へ';
+}
+function setNextLabel(count){
+  const nx=document.getElementById('next'); if(!nx)return;
+  const base=(idx===curCat().questions.length-1)?'結果を見る →':'次の問題 →';
+  nx.textContent=count?base+'（'+count+'）':base;
+}
+function stopDrill(restoreLabel){
+  if(drillTimer){ clearInterval(drillTimer); drillTimer=null; }
+  drillLeft=0;
+  if(restoreLabel && answered) setNextLabel();
+}
+function startDrill(){
+  stopDrill(false);
+  if(!drillOn)return;
+  drillLeft=DRILL_SEC; setNextLabel(drillLeft);
+  drillTimer=setInterval(()=>{
+    if(document.activeElement===document.getElementById('memo'))return; // メモ入力中は一時停止
+    drillLeft--;
+    if(drillLeft<=0){ stopDrill(false); nextQ(); }
+    else setNextLabel(drillLeft);
+  },1000);
+}
+function toggleDrill(){
+  drillOn=!drillOn; localStorage.setItem('drillOn',drillOn?'1':'0');
+  updateDrillBtn();
+  if(!drillOn) stopDrill(true);
+  else if(answered) startDrill();
+}
+
 function startQuiz(catIdx, shuffle){
   curCatIdx=catIdx; const n=curCat().questions.length;
   order=curCat().questions.map((_,i)=>i);
@@ -2066,6 +2111,7 @@ function startQuiz(catIdx, shuffle){
   showScreen('quiz'); renderQ();
 }
 function renderQ(){
+  stopDrill(false); updateDrillBtn();
   answered=false; const Q=curCat().questions; const qi=order[idx], q=Q[qi];
   document.getElementById('qno').textContent='Q'+(qi+1);
   document.getElementById('qcat').textContent=curCat().name;
@@ -2074,7 +2120,7 @@ function renderQ(){
   document.getElementById('score').textContent=score;
   document.getElementById('prog').style.width=(idx/Q.length*100)+'%';
   document.getElementById('result').className='result';
-  document.getElementById('next').className='next';
+  document.getElementById('next').className='next'; setNextLabel();
   document.getElementById('bMaru').disabled=false; document.getElementById('bBatsu').disabled=false;
   // メモは解答後（result表示時）に出すが、値は先に読み込んでおく
   document.getElementById('memo').value=getMemo(curCat().id,qi);
@@ -2104,6 +2150,7 @@ function answer(choice){
   // 解答後に解説・次へボタンが画面外に出ないようスクロール
   setTimeout(()=>nx.scrollIntoView({behavior:'smooth', block:'center'}),60);
   checkAchievements({});
+  startDrill();
 }
 let memoTimer=null;
 function saveMemo(){
@@ -2112,7 +2159,7 @@ function saveMemo(){
   clearTimeout(memoTimer);
   memoTimer=setTimeout(()=>{ persist(); const e=document.getElementById('memoSaved'); e.textContent='✓ 保存しました'; setTimeout(()=>e.textContent='',1500); checkAchievements({}); },400);
 }
-function nextQ(){ if(idx<curCat().questions.length-1){idx++; renderQ();} else finishQuiz(); }
+function nextQ(){ stopDrill(false); if(idx<curCat().questions.length-1){idx++; renderQ();} else finishQuiz(); }
 function finishQuiz(){
   const Q=curCat().questions;
   DB.achievements._played=(DB.achievements._played||0)+1;
