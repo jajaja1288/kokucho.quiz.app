@@ -95,6 +95,8 @@
   .result.correct .judge{color:#7bd67f;}
   .result.wrong{background:var(--batsu-bg);border:1px solid var(--batsu);}
   .result.wrong .judge{color:#ff8a8a;}
+  .result.timeout{background:var(--card2);border:1px solid var(--line);}
+  .result.timeout .judge{color:#ffc86b;}
   .result .ans{font-weight:700;margin-bottom:6px;}
   .result .exp{color:#d7e2f1;font-size:14px;line-height:1.75;}
   .hist{margin-top:12px;font-size:12px;color:var(--sub);}
@@ -220,8 +222,8 @@
       <div>正解 <b id="score">0</b></div>
     </div>
     <div class="meta" style="margin-top:-4px;">
-      <button id="drillToggle" onclick="toggleDrill()" style="background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer;">⏱ 周回モード OFF</button>
-      <div class="small" id="drillHint" style="text-align:right;">解答後5秒で自動的に次へ</div>
+      <button id="drillToggle" onclick="toggleDrill()" style="background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer;">⏱ 自動周回 OFF</button>
+      <div class="small" id="drillHint" style="text-align:right;">自動で解答表示・次の問題へ</div>
     </div>
     <div class="card">
       <span class="qno" id="qno">Q1</span><span class="qcat" id="qcat"></span>
@@ -1923,7 +1925,7 @@ function toast(msg){ const t=document.createElement('div'); t.className='toast';
 
 /* ============ 画面遷移 ============ */
 function showScreen(name){
-  if(name!=='quiz' && typeof stopDrill==='function') stopDrill(false);
+  if(name!=='quiz' && typeof stopDrill==='function') stopDrill();
   ['home','quiz','summary','list','ref','fill','puzzle','type'].forEach(n=>document.getElementById('s-'+n).classList.toggle('show', n===name));
   document.getElementById('backBtn').style.display=(name==='home')?'none':'block';
   if(name==='home') renderHome();
@@ -2061,44 +2063,50 @@ function renderAch(){
 let curCatIdx=0, order=[], idx=0, score=0, wrongList=[];
 let answered=false;
 function curCat(){ return CATEGORIES[curCatIdx]; }
-/* ============ 強制周回モード（解答後5秒で自動的に次へ） ============ */
-const DRILL_SEC=5;
+/* ============ 自動周回モード（出題5秒→解答表示→2秒→次の問題） ============ */
+const DRILL_Q_SEC=5;  // 出題から解答表示まで
+const DRILL_A_SEC=2;  // 解答表示から次の問題まで
 let drillOn=(localStorage.getItem('drillOn')==='1');
 let drillTimer=null, drillLeft=0;
 function updateDrillBtn(){
   const b=document.getElementById('drillToggle'); if(!b)return;
-  b.textContent=drillOn?'⏱ 周回モード ON':'⏱ 周回モード OFF';
+  b.textContent=drillOn?'⏱ 自動周回 ON':'⏱ 自動周回 OFF';
   b.style.borderColor=drillOn?'var(--maru)':'var(--line)';
   b.style.fontWeight=drillOn?'700':'400';
-  const h=document.getElementById('drillHint');
-  if(h) h.textContent=drillOn?'解答後'+DRILL_SEC+'秒で自動的に次へ（メモ入力中は停止）':'解答後'+DRILL_SEC+'秒で自動的に次へ';
+  setDrillHint('');
 }
-function setNextLabel(count){
-  const nx=document.getElementById('next'); if(!nx)return;
-  const base=(idx===curCat().questions.length-1)?'結果を見る →':'次の問題 →';
-  nx.textContent=count?base+'（'+count+'）':base;
+function setDrillHint(txt){
+  const h=document.getElementById('drillHint'); if(!h)return;
+  h.style.fontWeight=txt?'700':'400';
+  h.textContent=txt||(drillOn?DRILL_Q_SEC+'秒で解答表示 → '+DRILL_A_SEC+'秒で次の問題':'自動で解答表示・次の問題へ');
 }
-function stopDrill(restoreLabel){
+function stopDrill(){
   if(drillTimer){ clearInterval(drillTimer); drillTimer=null; }
-  drillLeft=0;
-  if(restoreLabel && answered) setNextLabel();
+  drillLeft=0; setDrillHint('');
 }
-function startDrill(){
-  stopDrill(false);
+function drillCount(sec, label, onZero){
+  stopDrill();
   if(!drillOn)return;
-  drillLeft=DRILL_SEC; setNextLabel(drillLeft);
+  drillLeft=sec; setDrillHint(label(drillLeft));
   drillTimer=setInterval(()=>{
-    if(document.activeElement===document.getElementById('memo'))return; // メモ入力中は一時停止
+    if(document.activeElement===document.getElementById('memo')){ setDrillHint('⏸ メモ入力中は停止'); return; }
     drillLeft--;
-    if(drillLeft<=0){ stopDrill(false); nextQ(); }
-    else setNextLabel(drillLeft);
+    if(drillLeft<=0){ clearInterval(drillTimer); drillTimer=null; onZero(); }
+    else setDrillHint(label(drillLeft));
   },1000);
+}
+function startDrillQuestion(){
+  if(!drillOn||answered){ stopDrill(); return; }
+  drillCount(DRILL_Q_SEC, n=>'⏱ 解答表示まで '+n, ()=>{ if(!answered) answer(null,true); });
+}
+function startDrillAnswer(){
+  drillCount(DRILL_A_SEC, n=>'▶ 次の問題まで '+n, ()=>nextQ());
 }
 function toggleDrill(){
   drillOn=!drillOn; localStorage.setItem('drillOn',drillOn?'1':'0');
   updateDrillBtn();
-  if(!drillOn) stopDrill(true);
-  else if(answered) startDrill();
+  if(!drillOn){ stopDrill(); return; }
+  if(answered) startDrillAnswer(); else startDrillQuestion();
 }
 
 function startQuiz(catIdx, shuffle){
@@ -2111,7 +2119,7 @@ function startQuiz(catIdx, shuffle){
   showScreen('quiz'); renderQ();
 }
 function renderQ(){
-  stopDrill(false); updateDrillBtn();
+  stopDrill(); updateDrillBtn();
   answered=false; const Q=curCat().questions; const qi=order[idx], q=Q[qi];
   document.getElementById('qno').textContent='Q'+(qi+1);
   document.getElementById('qcat').textContent=curCat().name;
@@ -2120,26 +2128,28 @@ function renderQ(){
   document.getElementById('score').textContent=score;
   document.getElementById('prog').style.width=(idx/Q.length*100)+'%';
   document.getElementById('result').className='result';
-  document.getElementById('next').className='next'; setNextLabel();
+  document.getElementById('next').className='next';
   document.getElementById('bMaru').disabled=false; document.getElementById('bBatsu').disabled=false;
   // メモは解答後（result表示時）に出すが、値は先に読み込んでおく
   document.getElementById('memo').value=getMemo(curCat().id,qi);
   document.getElementById('memoSaved').textContent='';
+  startDrillQuestion();
 }
-function answer(choice){
+function answer(choice, timedOut){
   if(answered)return; answered=true;
   const Q=curCat().questions; const cid=curCat().id; const qi=order[idx], q=Q[qi];
   const correct=(choice===q.a);
-  markUsage(); pushHist(cid,qi,correct);
-  if(correct)score++; else wrongList.push(qi);
+  markUsage();
+  // 時間切れ（未解答）は正誤として記録しない＝通算正答率を汚さない
+  if(!timedOut){ pushHist(cid,qi,correct); if(correct)score++; else wrongList.push(qi); }
   persist();
   document.getElementById('score').textContent=score;
   document.getElementById('bMaru').disabled=true; document.getElementById('bBatsu').disabled=true;
-  const r=document.getElementById('result'); r.className='result show '+(correct?'correct':'wrong');
-  document.getElementById('judge').textContent=correct?'正解！':'不正解…';
+  const r=document.getElementById('result'); r.className='result show '+(timedOut?'timeout':(correct?'correct':'wrong'));
+  document.getElementById('judge').textContent=timedOut?'⏱ 時間切れ（未解答）':(correct?'正解！':'不正解…');
   document.getElementById('ansline').textContent='正解：'+(q.a?'○':'×');
   document.getElementById('exp').textContent=q.e;
-  const h=getHist(cid,qi); const past=h.slice(0,-1).slice(-10);
+  const h=getHist(cid,qi); const past=(timedOut?h:h.slice(0,-1)).slice(-10);
   let hb='<div>📊 これまでの正誤（今回除く・最大10件）</div><div class="marks">';
   if(past.length===0) hb+='<span class="small">初挑戦</span>';
   else past.forEach(x=>{const d=new Date(x.t); const lbl=(d.getMonth()+1)+'/'+d.getDate(); hb+='<span class="m '+(x.c?'o':'x')+'">'+(x.c?'○':'×')+'<small style="opacity:.7"> '+lbl+'</small></span>';});
@@ -2150,7 +2160,7 @@ function answer(choice){
   // 解答後に解説・次へボタンが画面外に出ないようスクロール
   setTimeout(()=>nx.scrollIntoView({behavior:'smooth', block:'center'}),60);
   checkAchievements({});
-  startDrill();
+  startDrillAnswer();
 }
 let memoTimer=null;
 function saveMemo(){
@@ -2159,7 +2169,7 @@ function saveMemo(){
   clearTimeout(memoTimer);
   memoTimer=setTimeout(()=>{ persist(); const e=document.getElementById('memoSaved'); e.textContent='✓ 保存しました'; setTimeout(()=>e.textContent='',1500); checkAchievements({}); },400);
 }
-function nextQ(){ stopDrill(false); if(idx<curCat().questions.length-1){idx++; renderQ();} else finishQuiz(); }
+function nextQ(){ stopDrill(); if(idx<curCat().questions.length-1){idx++; renderQ();} else finishQuiz(); }
 function finishQuiz(){
   const Q=curCat().questions;
   DB.achievements._played=(DB.achievements._played||0)+1;
