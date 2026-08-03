@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>国税徴収法　15分暗記パーツ集（保全措置・第二次納税義務）</title>
+<style>
+  :root{
+    --paper:#F7F6F3; --card:#FFFFFF; --ink:#1C1F26; --sub:#5C6270;
+    --line:#E2E0DA; --line2:#EFEDE8;
+    --deep:#2E4A3F;          /* 深緑：見出し */
+    --deep-soft:#E6EEE9;
+    --amber:#8A5A1E;         /* 落とし穴 */
+    --amber-bg:#FBF1DF;
+    --red:#A33540;           /* 引っかけ強調 */
+    --red-bg:#F8E7E8;
+    --done:#3E7C5A; --done-bg:#E6F1EA;
+    --shadow:0 1px 2px rgba(20,25,35,.05),0 6px 18px rgba(20,25,35,.05);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#12141A; --card:#1A1D25; --ink:#E8E9ED; --sub:#9BA1AF;
+      --line:#2B2F3A; --line2:#232732;
+      --deep:#8FBFA8; --deep-soft:#1B2B24;
+      --amber:#E0B472; --amber-bg:#332714;
+      --red:#E7929B; --red-bg:#372124;
+      --done:#7FC3A0; --done-bg:#1B3128;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="light"]{
+    --paper:#F7F6F3; --card:#FFFFFF; --ink:#1C1F26; --sub:#5C6270;
+    --line:#E2E0DA; --line2:#EFEDE8; --deep:#2E4A3F; --deep-soft:#E6EEE9;
+    --amber:#8A5A1E; --amber-bg:#FBF1DF; --red:#A33540; --red-bg:#F8E7E8;
+    --done:#3E7C5A; --done-bg:#E6F1EA;
+    --shadow:0 1px 2px rgba(20,25,35,.05),0 6px 18px rgba(20,25,35,.05);
+  }
+  :root[data-theme="dark"]{
+    --paper:#12141A; --card:#1A1D25; --ink:#E8E9ED; --sub:#9BA1AF;
+    --line:#2B2F3A; --line2:#232732; --deep:#8FBFA8; --deep-soft:#1B2B24;
+    --amber:#E0B472; --amber-bg:#332714; --red:#E7929B; --red-bg:#372124;
+    --done:#7FC3A0; --done-bg:#1B3128;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0}
+  .wrap{
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",system-ui,sans-serif;
+    background:var(--paper); color:var(--ink); line-height:1.75;
+    -webkit-font-smoothing:antialiased; padding:22px 16px 70px;
+  }
+  .inner{max-width:760px;margin:0 auto}
+
+  header.head{margin-bottom:22px}
+  .eyebrow{font-size:11.5px;letter-spacing:.16em;color:var(--sub);font-weight:700}
+  h1{font-size:clamp(21px,4.6vw,28px);margin:.3em 0 .25em;font-weight:800;letter-spacing:.01em;text-wrap:balance;line-height:1.4}
+  .lede{color:var(--sub);font-size:13.5px;margin:0}
+  .lede b{color:var(--ink)}
+
+  .howto{
+    margin-top:14px;background:var(--deep-soft);border-radius:12px;padding:12px 14px;font-size:13px;
+  }
+  .howto b{color:var(--deep)}
+  .howto ol{margin:6px 0 0;padding-left:1.25em}
+  .howto li{margin:2px 0}
+
+  .prog{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:12.5px;color:var(--sub)}
+  .prog .track{flex:1;height:7px;border-radius:99px;background:var(--line);overflow:hidden}
+  .prog .fill{height:100%;background:var(--done);width:0;transition:width .25s ease}
+  .prog b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+  h2.sec{
+    font-size:16px;font-weight:800;color:var(--deep);margin:30px 0 4px;
+    display:flex;align-items:baseline;gap:9px;
+  }
+  h2.sec .n{font-size:11.5px;color:var(--sub);font-weight:700}
+  .secrule{height:2px;background:linear-gradient(90deg,var(--deep),transparent);opacity:.5;border-radius:2px;margin-bottom:14px}
+
+  .part{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:14px 15px;box-shadow:var(--shadow);margin-bottom:13px;
+  }
+  .part.done{border-color:var(--done);background:var(--done-bg)}
+  .phead{display:flex;align-items:flex-start;gap:10px}
+  .badge{
+    flex:none;min-width:30px;height:30px;border-radius:9px;background:var(--deep-soft);color:var(--deep);
+    font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;
+    font-variant-numeric:tabular-nums;padding:0 6px;
+  }
+  .part.done .badge{background:var(--done);color:#fff}
+  .ptitle{flex:1;font-weight:800;font-size:15px;line-height:1.5}
+  .ptitle .min{display:block;font-size:11.5px;color:var(--sub);font-weight:600;margin-top:1px}
+  .chk{
+    flex:none;border:1px solid var(--line);background:none;color:var(--sub);
+    border-radius:8px;padding:5px 9px;font-size:11.5px;cursor:pointer;font-family:inherit;white-space:nowrap;
+  }
+  .chk:hover{border-color:var(--done);color:var(--done)}
+  .chk:focus-visible{outline:2px solid var(--done);outline-offset:2px}
+  .part.done .chk{background:var(--done);border-color:var(--done);color:#fff;font-weight:700}
+
+  .body{margin-top:11px;padding-top:11px;border-top:1px dashed var(--line)}
+  .line{
+    font-size:14.5px;margin:0 0 9px;padding-left:13px;border-left:2px solid var(--line2);
+  }
+  .line:last-child{margin-bottom:0}
+  .line .tag{
+    display:block;font-size:11px;color:var(--sub);font-weight:700;margin-bottom:1px;letter-spacing:.02em;
+  }
+  em{font-style:normal;background:linear-gradient(transparent 62%,var(--deep-soft) 62%);font-weight:700}
+
+  .trap{
+    margin-top:11px;background:var(--amber-bg);border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.7;
+  }
+  .trap .t{font-weight:800;color:var(--amber);font-size:11.5px;letter-spacing:.03em;display:block;margin-bottom:3px}
+  .trap u{text-decoration:none;color:var(--red);font-weight:800;background:var(--red-bg);border-radius:4px;padding:0 3px}
+  .trap ul{margin:0;padding-left:1.15em}
+  .trap li{margin:2px 0}
+
+  footer.foot{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);font-size:11.5px;color:var(--sub);line-height:1.8}
+  .reset{background:none;border:1px solid var(--line);color:var(--sub);border-radius:8px;padding:5px 10px;font-size:11.5px;cursor:pointer;font-family:inherit;margin-top:8px}
+  .reset:hover{border-color:var(--red);color:var(--red)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="inner">
+
+  <header class="head">
+    <div class="eyebrow">国税徴収法 ／ 直前期</div>
+    <h1>15分暗記パーツ集<br>保全措置・第二次納税義務</h1>
+    <p class="lede">「30分で条文全部」は無理でも、<b>15分で短い1本</b>なら確実に入る。その単位に割った13パーツ。本文はテキスト原文のまま。</p>
+
+    <div class="howto">
+      <b>使い方（1パーツ15分）</b>
+      <ol>
+        <li>本文を声に出して2回読む（3分）</li>
+        <li>隠して書く／言う → 詰まった所だけ見る（9分）</li>
+        <li>落とし穴を確認して、もう1回通す（3分）</li>
+      </ol>
+    </div>
+
+    <div class="prog">
+      <span>覚えた</span>
+      <span class="track"><span class="fill" id="pfill"></span></span>
+      <span><b id="pdone">0</b> / <b>13</b></span>
+    </div>
+  </header>
+
+  <!-- ============ 保全措置 ============ -->
+  <h2 class="sec">保全措置 <span class="n">7パーツ／約105分</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="h1">
+    <div class="phead"><div class="badge">1</div>
+      <div class="ptitle">繰上請求：要件・手続・完納なきとき<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">要件</span>次のすべてに該当するときは、税務署長は、その国税の納期限を繰り上げ、その納付を請求することができる。①納付すべき税額の確定した国税でその納期限までに完納されないと認められるものがあること②繰上請求の事実に該当すること。</p>
+      <p class="line"><span class="tag">手続</span>税務署長が、納付すべき税額・繰上げに係る期限及び納付場所を記載した<em>繰上請求書</em>（源泉徴収等による国税で納付の告知がされていないものは<em>納税告知書</em>）を送達して行う。</p>
+      <p class="line"><span class="tag">完納しないとき</span>納税者が繰上請求に係る国税をその請求に係る期限までに完納しないときは、徴収職員は、滞納者の国税につきその財産を差し押さえなければならない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>繰上請求後に完納がないときは<u>督促しないで直ちに差押え</u>。「直ちに督促状を発する」は誤り。</li>
+        <li>差し押さえるべき財産が他に差し押さえられているときは、<u>交付要求</u>ができる。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="h2">
+    <div class="phead"><div class="badge">2</div>
+      <div class="ptitle">繰上請求の事実（6つ）<span class="min">⏱ 15分・ここは丸暗記</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line">繰上請求の事実とは、①納税者の財産につき<em>強制換価手続が開始</em>②納税者の<em>死亡</em>で相続人が<em>限定承認</em>③法人である納税者が<em>解散</em>④納める義務が信託財産責任負担債務である国税に係る<em>信託が終了</em>⑤<em>納税管理人</em>を定めないで国内に住所及び居所を有しないこととなる⑥<em>偽りその他不正の行為</em>により国税を免れ等、のいずれかの事実をいう。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>この6つは繰上請求・繰上差押え・繰上保全差押えに共通で効く土台。<u>ここが空くと3論点まとめて落ちる</u>ので最優先。</li>
+        <li>「強制換価手続が開始」＝他の税目の差押えでも該当しうる（税額確定前でも繰上請求は可）。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="h3">
+    <div class="phead"><div class="badge">3</div>
+      <div class="ptitle">繰上保全差押え（期限“前”・10月）<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">要件</span>次のすべてに該当するときは、税務署長は、その国税の<em>法定申告期限前</em>に、繰上保全差押金額を決定し、その金額を限度として、その者の財産を直ちに差し押さえることができる。①繰上請求の事実に該当②納税義務の成立した国税等でその確定後において徴収を確保できないものがあること。</p>
+      <p class="line"><span class="tag">解除</span>徴収職員は、繰上保全差押金額の通知をした日から<em>10月</em>を経過した日までに、その国税につき納付すべき額の確定がないときは、その差押え又は担保を解除しなければならない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴（あなたが実際に落としてる所）</span>
+      <ul>
+        <li>繰上保全＝<u>10月</u>／保全＝<u>6月</u>。<b>数字が逆</b>で出る頻出引っかけ。長い方が「繰上」。</li>
+        <li>繰上保全差押えは<u>法定申告期限の経過後はできない</u>。経過後は決定通知書を発して繰上請求へ。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="h4">
+    <div class="phead"><div class="badge">4</div>
+      <div class="ptitle">保全差押え：要件・承認・交付要求<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">要件</span>次のすべてに該当するときは、税務署長は、保全差押金額を決定し、その金額を限度として、その者の財産を直ちに差し押さえることができる。(1)納税義務があると認められる者が<em>不正に国税を免れ等の嫌疑</em>に基づき差押え・押収・逮捕等を受けたこと(2)その処分に係る国税の<em>納付すべき額の確定後</em>においてはその国税の徴収を確保することができないと認められること。</p>
+      <p class="line"><span class="tag">承認</span>税務署長は、保全差押金額を決定しようとするときは、あらかじめ、その所属する<em>国税局長の承認</em>を受けなければならない。</p>
+      <p class="line"><span class="tag">財産不足</span>差し押さえるべき財産に不足があると認められるときは、税務署長は、差押えに代えて<em>交付要求</em>をすることができる。この場合、その交付要求であることを明らかにしなければならない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>⑤繰上保全＝<u>期限“前”</u>／⑥保全＝<u>期限“後”</u>でも打てる。入口の事実が「繰上請求の事実」か「不正の嫌疑」かで見分ける。</li>
+        <li>保全差押えは<u>国税局長の承認</u>が要る。繰上請求には不要。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="h5">
+    <div class="phead"><div class="badge">5</div>
+      <div class="ptitle">保全差押え：換価制限・供託・担保・解除（6月）・賠償<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">換価の制限</span>保全差押えをした財産は、その差押えに係る国税につき<em>納付すべき額の確定があった後</em>でなければ、換価することができない。</p>
+      <p class="line"><span class="tag">供託</span>税務署長が保全差押えをした金銭がある場合において、その差押えに係る国税につき納付すべき額の確定がされていないときは、これを<em>供託</em>しなければならない。</p>
+      <p class="line"><span class="tag">担保の提供</span>保全差押金額の通知をした場合において、納税義務があると認められる者がその金額に相当する担保を提供して、その差押えをしないことを求めたときは、徴収職員は、その差押えをすることが<em>できない</em>。</p>
+      <p class="line"><span class="tag">解除</span>徴収職員は、保全差押金額の通知をした日から<em>6月</em>を経過した日までに、その国税につき納付すべき額の確定がないときは、その差押え又は担保を解除しなければならない。</p>
+      <p class="line"><span class="tag">損害賠償</span>確定をした金額が保全差押金額に満たない場合において、その差押えを受けた者がその差押えにより損害を受けたときは、国は、その損害を賠償する責めに任ずる（通常生ずべき損失の額）。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>解除は<u>6月</u>（繰上保全の10月と取り違え注意）。</li>
+        <li>担保を提供して求めたときは差押え「することができない」＝<u>義務的に不可</u>。「することができる」ではない。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="h6">
+    <div class="phead"><div class="badge">6</div>
+      <div class="ptitle">保全担保：命令・期限（7日）・指定金額<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">要件</span>次のすべてに該当するときは、税務署長は、その国税の担保として、金額及び期限を指定して、その者に担保提供を命ずることができる。①納税者が<em>消費税等（消費税を除く。）</em>を滞納したこと②その後その者に課すべきその国税の徴収を確保することができないと認められること。</p>
+      <p class="line"><span class="tag">期限</span>担保提供の期限は、担保提供命令に係る書面を発する日から起算して<em>7日を経過した日以後の日</em>としなければならない。ただし、繰上請求の事実が生じたときは繰り上げることができる。</p>
+      <p class="line"><span class="tag">指定金額</span>指定金額は、次のいずれか<em>大きい</em>金額とする。①担保の提供を命ずる月の前月分のその国税の額の<em>3倍</em>に相当する金額②前年における担保の提供を命ずる月に対応する月分及びその後<em>2月分</em>のその国税の金額。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>指定金額は<u>いずれか大きい方</u>。保全が目的だから、少ない方だと足りない。</li>
+        <li>「7日を経過した日<u>以後の日</u>」＝提供期限をその日以後に設定する規定。督促の「10日を経過した日（翌日から差押え）」とは別物。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="h7">
+    <div class="phead"><div class="badge">7</div>
+      <div class="ptitle">保全担保：抵当権の設定・解除<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">抵当権の設定</span>税務署長は、その国税（<em>酒税を除く。</em>）の担保提供を命じた場合において、納税者が期限までに担保提供しないときは、その者の財産で抵当権の目的となるものにつき、指定金額を限度として抵当権を設定することを<em>書面で通知</em>することができる。</p>
+      <p class="line"><span class="tag">みなし</span>抵当権設定の通知があったときは、その通知を受けた納税者は、その抵当権を<em>設定したものとみなす</em>。</p>
+      <p class="line"><span class="tag">解除（法定）</span>税務署長は、担保の提供等があった場合において、担保提供命令に係る国税の滞納がない期間が継続して<em>3月</em>に達したときは、その担保を解除しなければならない。</p>
+      <p class="line"><span class="tag">解除（裁量）</span>税務署長は、担保の提供等があった納税者の資力その他の事情の変化により担保の提供等の必要がなくなったと認めるときは、直ちにその担保を解除することが<em>できる</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>解除は<u>3月継続で義務（しなければならない）</u>／事情変化は<u>裁量（できる）</u>。語尾で点が動く。</li>
+        <li>抵当権の設定は<u>酒税を除く</u>。かっこ書きが問われる。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ 第二次納税義務 ============ -->
+  <h2 class="sec">第二次納税義務 <span class="n">6パーツ／約90分</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="n1">
+    <div class="phead"><div class="badge">8</div>
+      <div class="ptitle">通則：告知 → 督促 → 差押え<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">告知</span>税務署長は、納税者の国税を第二次納税義務者から徴収しようとするときは、その者に対し、徴収しようとする金額、納付の期限その他必要な事項を記載した<em>納付通知書</em>により告知しなければならない。</p>
+      <p class="line"><span class="tag">納付の期限</span>納付の期限は、納付通知書を発する日の<em>翌日から起算して1月を経過する日</em>とする。</p>
+      <p class="line"><span class="tag">督促</span>第二次納税義務者がその国税を納付通知書に記載した納付の期限までに完納しないときは、税務署長は、繰上請求をする場合を除き、<em>納付催告書</em>によりその納付を督促しなければならない。</p>
+      <p class="line"><span class="tag">発する期限</span>納付催告書は、別段の定めがあるものを除き、その納付の期限から<em>50日以内</em>に発するものとする。</p>
+      <p class="line"><span class="tag">差押え</span>第二次納税義務者が督促を受け、その督促に係る国税をその納付催告書を発した日から起算して<em>10日を経過した日</em>までに完納しないときは、徴収職員は、その国税につき、その財産を差し押さえなければならない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴（あなたの正答率43%の所）</span>
+      <ul>
+        <li>督促は「督促<u>状</u>」ではなく<u>納付催告書</u>。ここが最頻出の引っかけ。</li>
+        <li>納付の期限は<u>発する日の翌日から起算して1月を経過する日</u>。4/20発付なら5/20。</li>
+        <li>強制換価手続の開始等（繰上請求の事実）があれば、納付の期限を<u>繰り上げられる</u>（7日を経過した日まで等）。</li>
+        <li>告知したら<u>第二次納税義務者の</u>所在地を所轄する税務署長に通知（本来の納税者の所轄ではない）。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="n2">
+    <div class="phead"><div class="badge">9</div>
+      <div class="ptitle">通則：換価の制限・求償権<span class="min">⏱ 15分（短い・軽め）</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">換価の制限</span>第二次納税義務者の財産の換価は、その財産の<em>価額が著しく減少するおそれがあるときを除き</em>、納税者の財産を<em>換価に付した後</em>でなければ、行うことができない。</p>
+      <p class="line"><span class="tag">求償権</span>第二次納税義務者がその義務の履行をしたときは、納税者に対してする<em>求償権の行使を妨げない</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>「常に本来の納税者に優先して換価」は<u>誤り</u>。逆で、<u>納税者の財産を換価に付した後</u>でなければできない。</li>
+        <li>制限されるのは<u>換価</u>であって<u>差押えではない</u>。差押えは先にできる。</li>
+        <li>例外＝<u>価額が著しく減少するおそれ</u>。この例外を落とすと減点。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="n3">
+    <div class="phead"><div class="badge">10</div>
+      <div class="ptitle">合名会社等の社員（＋責任の消滅 2年・5年）<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">要件</span>合名会社若しくは合資会社又は税理士法人若しくは弁護士法人などが国税を滞納したこと。</p>
+      <p class="line"><span class="tag">義務者・限度</span>合名会社等の社員の第二次納税義務者は<em>無限責任社員</em>であり、責任限度は滞納者の<em>滞納国税の全額</em>とする。</p>
+      <p class="line"><span class="tag">連帯</span>無限責任社員が二人以上いるときは、<em>連帯して</em>その責めを負う。</p>
+      <p class="line"><span class="tag">退社した者</span>退社により無限責任社員でなくなった者は、その<em>退社前に成立している国税</em>について第二次納税義務を負う。ただし、その退社の登記後<em>2年以内</em>に納付通知書による告知又はその予告をしなかった場合は、その退社登記後2年以内を経過した時にその責任は消滅する。</p>
+      <p class="line"><span class="tag">解散した会社</span>解散した会社の合名会社等の社員の第二次納税義務は、会社が本店の所在地において解散の登記をした後、<em>5年以内</em>に納付通知書による告知又はその予告をしなかった場合には、その解散の登記後5年以内を経過した時に消滅する。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>退社した社員は<u>退社前に成立した</u>国税だけ。<u>退社後に納税義務が成立</u>した国税は追及不可（期の途中で退社→期末成立の法人税はダメ）。</li>
+        <li>消滅は 退社＝<u>2年</u>／解散＝<u>5年</u>。数字を入れ替える出題に注意。</li>
+        <li>責任限度は<u>滞納国税の全額</u>（無限責任だから頭打ちがない）。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="n4">
+    <div class="phead"><div class="badge">11</div>
+      <div class="ptitle">清算人等／同族会社<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">清算人等・限度</span><em>清算人</em>については分配又は引渡しをした財産の価額、<em>残余財産の分配又は引渡しを受けた者</em>については、その受けた財産の価額を限度とする。</p>
+      <p class="line"><span class="tag">同族会社・要件</span>滞納者がその者を判定の基礎となる株主又は社員として選定した場合に<em>同族会社に該当する会社</em>の株式又は出資を有すること。</p>
+      <p class="line"><span class="tag">同族会社・限度</span>滞納者が有する<em>その同族会社の株式又は出資の価額</em>を限度とする。ただし、滞納国税の<em>法定納期限の1年以上前</em>に取得したものを除く。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>清算人だけでなく<u>分配を受けた者も</u>。逆に、分配を受けた者だけに限る記述は誤り（清算人には<u>分配した財産の価額</u>を限度に追及できる）。</li>
+        <li>同族会社の限度は<u>株式又は出資の価額</u>。「現物出資した財産の出資時の価額」は<u>誤り</u>。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="n5">
+    <div class="phead"><div class="badge">12</div>
+      <div class="ptitle">実質課税額等／事業を譲り受けた特殊関係者<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">実質課税額等</span>同族会社等の行為計算否認等により否認された滞納者の行為等につき利益を受けたものとされる者は、<em>受けた利益の額</em>を限度とする。</p>
+      <p class="line"><span class="tag">事業譲受・義務者と限度</span>事業を譲り受けた特殊関係者の第二次納税義務者は<em>事業の譲受人</em>であり、責任限度は<em>譲受財産の価額</em>を限度とする。</p>
+      <p class="line"><span class="tag">事業譲受・要件</span>滞納者が<em>生計を一にする親族その他特殊な関係のある者</em>に事業を譲渡したこと。ただし、滞納国税の<em>法定納期限の1年以上前</em>にされたものを除く。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴（あなたのメモより）</span>
+      <ul>
+        <li>「期限を切って要件を定めるときは<u>法定納期限</u>」。<u>法定納期限“等”ではない</u>。ここは体で覚えず言語化しておく。</li>
+        <li>実質課税額の第二次納税義務は<u>物的限度</u>。責任限度となる第三者名義の財産だけが対象で、<u>その第三者の他の財産は差し押さえられない</u>。</li>
+        <li>株主名義の建物を借りて事業→<u>共同的な事業者</u>であって「事業を譲り受けた特殊関係者」ではない。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="n6">
+    <div class="phead"><div class="badge">13</div>
+      <div class="ptitle">無償又は著しい低額の譲受人等／人格のない社団等<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">要件</span>滞納者がその財産につき<em>無償又は著しく低い額の対価による譲渡、債務の免除</em>その他第三者に利益を与える処分をしたこと。ただし、滞納国税の<em>法定納期限の1年前の日以後</em>にされたものに限る。</p>
+      <p class="line"><span class="tag">限度</span>(2)の者が<em>第三者</em>であるときはこれらの処分により受けた利益が<em>現に存する額</em>を、<em>特殊関係者</em>であるときは<em>受けた利益の額</em>を限度とする。</p>
+      <p class="line"><span class="tag">人格のない社団等</span>人格のない社団等から財産の払戻し又は分配を受けた者は、<em>払戻し又は分配を受けた財産の価額</em>を限度とする。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>ここだけ<u>「1年前の日以後」（限る）</u>。合名会社等・同族会社・事業譲受の<u>「1年以上前」（除く）</u>と向きが逆。</li>
+        <li>基準は<u>法定納期限</u>の1年前の日。修正申告を出した日（法定納期限等）の1年前ではない。</li>
+        <li>限度額 ＝ 適正時価 − 対価（例：500万−200万＝300万）。<u>第三者は「現に存する」</u>、特殊関係者は「受けた」で差が出る。</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer class="foot">
+    国税徴収法　15分暗記パーツ集（保全措置7＋第二次納税義務6＝13パーツ）／ 2026-08-03 作成。<br>
+    本文は理論テキストの規定本文どおり。落とし穴はあなたの学習アプリの○×解説・メモ・誤答データから抽出。<br>
+    チェックはこの端末に保存されます。
+    <br><button class="reset" onclick="resetAll()">チェックを全部リセット</button>
+  </footer>
+
+</div>
+</div>
+
+<script>
+  var KEY='kokucho_parts_done_v1';
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ return {}; } }
+  function save(o){ try{ localStorage.setItem(KEY, JSON.stringify(o)); }catch(e){} }
+  function refresh(){
+    var st=load(), n=0;
+    document.querySelectorAll('.part').forEach(function(p){
+      var on=!!st[p.dataset.id];
+      p.classList.toggle('done', on);
+      var b=p.querySelector('.chk');
+      b.textContent = on ? '✓ 覚えた' : '覚えた';
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if(on) n++;
+    });
+    document.getElementById('pdone').textContent=n;
+    document.getElementById('pfill').style.width=(n/13*100)+'%';
+  }
+  function tog(btn){
+    var p=btn.closest('.part'), st=load();
+    if(st[p.dataset.id]) delete st[p.dataset.id]; else st[p.dataset.id]=1;
+    save(st); refresh();
+  }
+  function resetAll(){ save({}); refresh(); }
+  refresh();
+</script>
+</body>
+</html>

@@ -1936,6 +1936,8 @@ function showScreen(name){
 
 /* ============ 参考資料 ============ */
 const REF_MATERIALS=[
+  {sec:'暗記パーツ集（1パーツ15分）'},
+  {t:'15分暗記パーツ集　保全措置・第二次納税義務', d:'全13パーツ。規定本文＋落とし穴つき。「覚えた」チェックで進捗が残ります。', link:'参考資料/anki_parts.html'},
   {sec:'まとめ図（罰則・期限）'},
   {t:'罰則・期限マップ', d:'懲役・罰金の重さと、期限の起算点をまとめた図。', f:'参考資料/bassoku_kigen_map.png'},
   {t:'罰則・期限マップ（白抜き・記入版）', d:'懲役・罰金・期限が空欄。印刷して手書きで暗記チェック用。', f:'参考資料/bassoku_kigen_blank.png'},
@@ -1955,13 +1957,23 @@ const REF_MATERIALS=[
 ];
 function renderRef(){
   const box=document.getElementById('refList'); box.innerHTML='';
-  const items=REF_MATERIALS.filter(m=>m.f);
+  const items=REF_MATERIALS.filter(m=>m.f||m.link);
   if(!items.length){ box.innerHTML='<div class="card"><div class="small">参考資料はまだありません。</div></div>'; return; }
   REF_MATERIALS.forEach(m=>{
     if(m.sec){
       const h=document.createElement('div');
       h.style.cssText='font-size:13px;font-weight:700;color:var(--sub);margin:14px 0 6px;';
       h.textContent=m.sec; box.appendChild(h); return;
+    }
+    if(m.link){
+      const el=document.createElement('div'); el.className='card';
+      el.innerHTML='<div style="font-weight:700;font-size:14px;margin-bottom:2px;">'+m.t+'</div>'+
+        '<div class="small" style="margin-bottom:10px;">'+m.d+'</div>';
+      const a=document.createElement('a');
+      a.href=m.link; a.target='_blank'; a.rel='noopener';
+      a.className='bigbtn'; a.textContent='📖 開く';
+      a.style.cssText='display:block;text-align:center;text-decoration:none;font-size:14px;padding:13px;';
+      el.appendChild(a); box.appendChild(el); return;
     }
     const el=document.createElement('div'); el.className='card';
     el.innerHTML='<div style="font-weight:700;font-size:14px;margin-bottom:2px;">'+m.t+'</div>'+
