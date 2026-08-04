@@ -175,6 +175,9 @@
     <div style="font-size:13px;font-weight:700;color:var(--sub);margin:6px 0 8px;">暗記モード（理論テキスト）</div>
     <div id="textSetList"></div>
 
+    <button class="bigbtn" id="reviewWrongBtn" style="font-size:14px;padding:14px;background:var(--batsu);" onclick="startFillReview()">🔁 直近まちがい復習（穴埋め）</button>
+    <div class="small" id="reviewWrongNote" style="margin:-2px 0 10px;text-align:center;"></div>
+
     <button class="bigbtn ghost" style="font-size:14px;padding:14px;" onclick="showScreen('list')">📚 問題一覧・履歴を見る</button>
     <button class="bigbtn ghost" style="font-size:14px;padding:14px;" onclick="showScreen('ref')">📑 参考資料（まとめ図・表）</button>
 
@@ -286,7 +289,7 @@
 
   <!-- FILL -->
   <div class="screen" id="s-fill">
-    <div class="meta"><div>穴埋め　第 <b id="fillCur">1</b> / <b id="fillTotal">0</b> 文<span id="fillScore"></span></div>
+    <div class="meta"><div><span id="fillModeLabel">穴埋め</span>　第 <b id="fillCur">1</b> / <b id="fillTotal">0</b> 文<span id="fillScore"></span></div>
       <div><button id="fillAudioToggle" onclick="toggleFillAudio()" style="background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer;">🔊 読み上げ ON</button>
       <button onclick="replayFillAudio()" style="background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:4px 8px;font-size:12px;cursor:pointer;margin-left:4px;">↺</button></div>
     </div>
@@ -2004,7 +2007,7 @@ function renderHome(){
   let total=0; CATEGORIES.forEach(c=>c.questions.forEach((_,i)=>total+=getHist(c.id,i).length));
   ['fill','puzzle','type'].forEach(mode=>TEXT_SETS.forEach(s=>s.items.forEach(it=>total+=getTHist(mode,it.id).length)));
   document.getElementById('hTotal').textContent=total;
-  renderCats(); renderTextSets();
+  renderCats(); renderTextSets(); renderReviewWrong();
   const sr=document.getElementById('syncRoomInput'); if(sr && document.activeElement!==sr) sr.value=syncRoom();
   if(calYear===undefined){ const d=new Date(); calYear=d.getFullYear(); calMonth=d.getMonth(); }
   renderCal(); renderAch();
@@ -2025,6 +2028,19 @@ function renderCats(){
       '<button class="seq" onclick="startQuiz('+ci+',false)">順番</button></div>';
     box.appendChild(el);
   });
+}
+function renderReviewWrong(){
+  const btn=document.getElementById('reviewWrongBtn'), note=document.getElementById('reviewWrongNote');
+  if(!btn)return;
+  const wrong=collectWrongFill();
+  const by={};
+  wrong.forEach(it=>{ const s=TEXT_SETS.find(x=>x.items.indexOf(it)>=0); if(s) by[s.name]=(by[s.name]||0)+1; });
+  btn.textContent='🔁 直近まちがい復習（穴埋め）　'+wrong.length+'文';
+  btn.disabled=!wrong.length;
+  btn.style.opacity=wrong.length?'1':'.5';
+  note.textContent=wrong.length
+    ? Object.keys(by).map(k=>k+' '+by[k]).join('　/　')
+    : '直近の解答が×の文はありません';
 }
 function modeAcc(mode,set){
   let att=0,cor=0;
@@ -2335,7 +2351,7 @@ function renderFillScore(){
 const FILL_AUDIO_BASE='audio/fill/';
 let fillAudioOn=(localStorage.getItem('fillAudioOn')!=='0');
 let fillAudioEl=null, fillAudioSeg=0, fillAudioNClips=0;
-function fillHasAudio(){ return TEXT_SETS[curSetIdx] && TEXT_SETS[curSetIdx].id==='ch3'; }
+function fillHasAudio(){ const it=TEXT_ITEMS&&TEXT_ITEMS[fillOrder[fillIdx]]; return !!(it && /^t3_/.test(it.id)); }
 function toggleFillAudio(){ fillAudioOn=!fillAudioOn; localStorage.setItem('fillAudioOn', fillAudioOn?'1':'0');
   document.getElementById('fillAudioToggle').textContent = fillAudioOn?'🔊 読み上げ ON':'🔇 読み上げ OFF';
   if(!fillAudioOn && fillAudioEl){ fillAudioEl.pause(); } }
@@ -2356,15 +2372,36 @@ function fillAudioOnFill(){
   if(c>fillAudioSeg){ fillAudioSeg=c; playFillClip(c); }
 }
 function replayFillAudio(){ fillAudioSeg=fillContigFilled(); playFillClip(fillAudioSeg); }
-function startFill(setIdx,startIdx){ curSetIdx=setIdx; TEXT_ITEMS=TEXT_SETS[setIdx].items;
+function startFill(setIdx,startIdx){ fillReview=false; curSetIdx=setIdx; TEXT_ITEMS=TEXT_SETS[setIdx].items;
   fillOrder=TEXT_ITEMS.map((_,i)=>i); /* テキスト順（シャッフルしない） */
   fillIdx=Math.min(Math.max(startIdx||0,0), TEXT_ITEMS.length-1);
   setProg('fill',TEXT_SETS[setIdx].id,fillIdx); persist();
   fillSesAns=0; fillSesCor=0; renderFillScore();
   document.getElementById('fillTotal').textContent=TEXT_ITEMS.length; showScreen('fill'); renderFill(); }
+
+/* ===== 直近まちがい復習（最後の解答が×の文だけ集める・全章横断） ===== */
+let fillReview=false;
+function collectWrongFill(){
+  const out=[];
+  TEXT_SETS.forEach(s=>s.items.forEach(it=>{
+    const h=getTHist('fill',it.id);
+    if(h.length && h[h.length-1].c===false) out.push(it);
+  }));
+  return out;
+}
+function startFillReview(){
+  const items=collectWrongFill();
+  if(!items.length){ toast('直近まちがいはありません。よくできています'); return; }
+  fillReview=true; TEXT_ITEMS=items;
+  fillOrder=items.map((_,i)=>i); fillIdx=0;
+  fillSesAns=0; fillSesCor=0; renderFillScore();
+  document.getElementById('fillTotal').textContent=items.length;
+  showScreen('fill'); renderFill();
+}
 function renderFill(){
   const it=TEXT_ITEMS[fillOrder[fillIdx]];
   document.getElementById('fillCur').textContent=fillIdx+1;
+  document.getElementById('fillModeLabel').textContent=fillReview?'🔁 まちがい復習':'穴埋め';
   document.getElementById('fillSrc').innerHTML=srcHTML(it.src);
   fillState=it.blanks.map(()=>null); fillSel=-1;
   fillBank=[]; it.blanks.forEach(b=>{ fillBank.push(b.a); (b.d||[]).forEach(d=>fillBank.push(d)); });
@@ -2433,11 +2470,16 @@ function checkFill(){
   document.getElementById('fillNext').textContent=(fillIdx===TEXT_ITEMS.length-1)?'ホームへ →':'次の文 →';
   checkAchievements({});
 }
-function nextFill(){ const setId=TEXT_SETS[curSetIdx].id;
-  if(fillIdx<TEXT_ITEMS.length-1){ fillIdx++; setProg('fill',setId,fillIdx); persist(); renderFill(); }
-  else { setProg('fill',setId,0); persist();
-    toast('穴埋め一周完了！　今回 '+(fillSesAns?Math.round(fillSesCor/fillSesAns*100):0)+'%（'+fillSesCor+'/'+fillSesAns+'）');
-    showScreen('home'); } }
+function nextFill(){
+  const setId=(!fillReview && TEXT_SETS[curSetIdx])?TEXT_SETS[curSetIdx].id:null;   // 復習モードは進捗を保存しない
+  const pct=fillSesAns?Math.round(fillSesCor/fillSesAns*100):0;
+  if(fillIdx<TEXT_ITEMS.length-1){ fillIdx++; if(setId){ setProg('fill',setId,fillIdx); persist(); } renderFill(); }
+  else {
+    if(setId){ setProg('fill',setId,0); persist(); }
+    toast(fillReview
+      ? 'まちがい復習 完了！　今回 '+pct+'%（'+fillSesCor+'/'+fillSesAns+'）'
+      : '穴埋め一周完了！　今回 '+pct+'%（'+fillSesCor+'/'+fillSesAns+'）');
+    fillReview=false; showScreen('home'); } }
 function saveFillMemo(){ const it=TEXT_ITEMS[fillOrder[fillIdx]]; setTMemo('fill',it.id,document.getElementById('fillMemo').value);
   clearTimeout(memoTimer); memoTimer=setTimeout(()=>{ persist(); const e=document.getElementById('fillSaved'); e.textContent='✓ 保存'; setTimeout(()=>e.textContent='',1500); },400); }
 
