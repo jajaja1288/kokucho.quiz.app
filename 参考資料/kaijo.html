@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>国税徴収法　解除まわり整理図</title>
+<style>
+  :root{
+    --paper:#F4F6F6; --card:#FFF; --ink:#182024; --sub:#57646B;
+    --line:#DDE3E4; --line2:#EDF1F1;
+    --teal:#1F5C63; --teal-soft:#E3EEEF;
+    --must:#8C3A2E; --must-bg:#F8E9E6;      /* 義務 */
+    --may:#2E6B4F; --may-bg:#E5F0EA;        /* 裁量 */
+    --num:#1F5C63; --numbg:#E3EEEF;
+    --shadow:0 1px 2px rgba(16,28,32,.05),0 6px 18px rgba(16,28,32,.05);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--paper:#0F1416;--card:#171E21;--ink:#E6EBEC;--sub:#98A6AD;
+      --line:#283236;--line2:#212A2D;--teal:#8FC4C9;--teal-soft:#16292C;
+      --must:#E09287;--must-bg:#37211D;--may:#84C4A2;--may-bg:#172E23;
+      --num:#8FC4C9;--numbg:#16292C;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);}
+  }
+  :root[data-theme="light"]{--paper:#F4F6F6;--card:#FFF;--ink:#182024;--sub:#57646B;
+    --line:#DDE3E4;--line2:#EDF1F1;--teal:#1F5C63;--teal-soft:#E3EEEF;
+    --must:#8C3A2E;--must-bg:#F8E9E6;--may:#2E6B4F;--may-bg:#E5F0EA;--num:#1F5C63;--numbg:#E3EEEF;
+    --shadow:0 1px 2px rgba(16,28,32,.05),0 6px 18px rgba(16,28,32,.05);}
+  :root[data-theme="dark"]{--paper:#0F1416;--card:#171E21;--ink:#E6EBEC;--sub:#98A6AD;
+    --line:#283236;--line2:#212A2D;--teal:#8FC4C9;--teal-soft:#16292C;
+    --must:#E09287;--must-bg:#37211D;--may:#84C4A2;--may-bg:#172E23;--num:#8FC4C9;--numbg:#16292C;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);}
+
+  *{box-sizing:border-box} body{margin:0}
+  .wrap{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",system-ui,sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.72;-webkit-font-smoothing:antialiased;padding:24px 16px 64px}
+  .inner{max-width:920px;margin:0 auto}
+  .tnum{font-variant-numeric:tabular-nums}
+
+  .eyebrow{font-size:11.5px;letter-spacing:.16em;color:var(--sub);font-weight:700}
+  h1{font-size:clamp(21px,4.4vw,30px);margin:.3em 0 .2em;font-weight:800;line-height:1.35;text-wrap:balance}
+  .lede{color:var(--sub);font-size:13.5px;margin:0}
+  .lede b{color:var(--ink)}
+
+  h2.sec{font-size:16.5px;font-weight:800;color:var(--teal);margin:32px 0 3px;display:flex;align-items:baseline;gap:10px}
+  h2.sec .n{font-size:11.5px;color:var(--sub);font-weight:700}
+  .secrule{height:2px;background:linear-gradient(90deg,var(--teal),transparent);opacity:.5;border-radius:2px;margin-bottom:15px}
+
+  /* 義務 / 裁量 */
+  .split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .col{background:var(--card);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);overflow:hidden}
+  .colh{padding:11px 15px;font-weight:800;font-size:14.5px;display:flex;align-items:baseline;gap:8px}
+  .col.must .colh{background:var(--must-bg);color:var(--must)}
+  .col.may .colh{background:var(--may-bg);color:var(--may)}
+  .colh .c{margin-left:auto;font-size:11px;font-weight:700;opacity:.8}
+  .colb{padding:6px 15px 13px}
+  .row{padding:9px 0;border-top:1px solid var(--line2)}
+  .row:first-child{border-top:none}
+  .row .t{font-weight:700;font-size:13.5px}
+  .row .d{font-size:12px;color:var(--sub);margin-top:1px;line-height:1.65}
+  .chip{display:inline-block;background:var(--numbg);color:var(--num);font-weight:800;
+    border-radius:7px;padding:1px 8px;font-size:12.5px;margin-left:5px}
+
+  /* 通知の分岐 */
+  .branch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .bcard{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:14px 16px;box-shadow:var(--shadow)}
+  .bcard h3{margin:0 0 10px;font-size:14.5px;font-weight:800;display:flex;align-items:center;gap:8px}
+  .bcard h3 .dot{width:9px;height:9px;border-radius:3px;background:var(--teal);flex:none}
+  .step{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-top:1px dashed var(--line)}
+  .step:first-of-type{border-top:none}
+  .step .k{flex:none;font-size:10.5px;font-weight:800;color:var(--sub);width:74px;padding-top:3px;letter-spacing:.02em}
+  .step .v{font-size:13.5px;font-weight:700}
+  .step .v em{font-style:normal;background:linear-gradient(transparent 62%,var(--teal-soft) 62%)}
+  .step .v small{display:block;font-size:11.5px;color:var(--sub);font-weight:500;margin-top:1px}
+  .bnote{margin-top:11px;padding-top:9px;border-top:1px solid var(--line2);font-size:12px;color:var(--sub);line-height:1.7}
+  .bnote b{color:var(--ink)}
+
+  /* 二択 */
+  .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .tc{background:var(--card);border:1px solid var(--line);border-left-width:5px;border-radius:13px;padding:12px 15px;box-shadow:var(--shadow)}
+  .tc.a{border-left-color:var(--must)} .tc.b{border-left-color:var(--teal)}
+  .tc .q{font-size:12px;color:var(--sub);font-weight:700}
+  .tc .a2{font-size:14.5px;font-weight:800;margin-top:3px}
+
+  /* その他 */
+  .misc{display:flex;flex-direction:column;gap:12px}
+  .mi{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 15px;box-shadow:var(--shadow)}
+  .mi .h{font-weight:800;font-size:14px;margin-bottom:3px}
+  .mi .b{font-size:12.5px;line-height:1.75}
+  .mi .b b{color:var(--teal)}
+
+  .numstrip{margin-top:16px;background:var(--teal-soft);border-radius:13px;padding:13px 16px;
+    display:flex;flex-wrap:wrap;gap:9px 18px;align-items:center;font-size:13px}
+  .numstrip .lbl{font-weight:800;color:var(--teal);font-size:12px;letter-spacing:.03em}
+  .numstrip span.i{display:inline-flex;align-items:baseline;gap:5px}
+  .numstrip b{font-size:17px;font-weight:800;color:var(--teal)}
+
+  .memo{margin-top:15px;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:13px 16px;font-size:13px;line-height:1.85}
+  .memo b{color:var(--teal)}
+  .memo u{text-decoration:none;color:var(--must);font-weight:800}
+
+  footer.foot{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);font-size:11.5px;color:var(--sub);line-height:1.8}
+  @media (max-width:660px){ .split,.branch,.two{grid-template-columns:1fr} .step .k{width:62px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="inner">
+
+  <div class="eyebrow">国税徴収法 ／ 直前整理</div>
+  <h1>解除まわり</h1>
+  <p class="lede">テキスト本文の「解除」<b>21か所</b>を整理。軸は<b>①義務か裁量か ②誰に通知するか</b>の2本だけ。</p>
+
+  <!-- ① 義務 / 裁量 -->
+  <h2 class="sec">① 解除の分かれ道 <span class="n">語尾で点が動く。迷ったら義務側</span></h2>
+  <div class="secrule"></div>
+
+  <div class="split">
+    <div class="col must">
+      <div class="colh">解除しなければならない<span class="c">義務・6つ</span></div>
+      <div class="colb">
+        <div class="row"><div class="t">差押えの解除（法定）</div>
+          <div class="d">①納付・充当・更正の取消しその他で<b>国税の全額が消滅</b>したとき<br>
+          ②差押財産の価額が、滞納処分費＋先だつ他の国税・地方税その他の債権の<b>合計額を超える見込みがなくなった</b>とき</div></div>
+        <div class="row"><div class="t">換価の申立てがあった後<span class="chip tnum">2月</span></div>
+          <div class="d">申立てがあった日から2月以内にその財産を差し押さえ、かつ換価に付さないとき → <b>当初差し押さえた財産</b>の差押えを解除</div></div>
+        <div class="row"><div class="t">交付要求の解除</div>
+          <div class="d">納付・充当・更正の取消しその他で<b>交付要求に係る国税が消滅</b>したとき</div></div>
+        <div class="row"><div class="t">保全担保<span class="chip tnum">3月</span></div>
+          <div class="d">担保提供命令に係る国税の<b>滞納がない期間が継続して3月</b>に達したとき</div></div>
+        <div class="row"><div class="t">保全差押え<span class="chip tnum">6月</span></div>
+          <div class="d">保全差押金額を<b>通知した日</b>から6月を経過した日までに税額の確定がないとき（差押え又は担保を解除）</div></div>
+        <div class="row"><div class="t">繰上保全差押え<span class="chip tnum">10月</span></div>
+          <div class="d">繰上保全差押金額を<b>通知した日</b>から10月を経過した日までに税額の確定がないとき</div></div>
+      </div>
+    </div>
+
+    <div class="col may">
+      <div class="colh">解除することができる<span class="c">裁量・2つだけ</span></div>
+      <div class="colb">
+        <div class="row"><div class="t">差押えの解除（裁量）<span class="chip tnum">3回</span></div>
+          <div class="d"><b>3回公売</b>に付しても入札等がなかった場合において、更に公売に付しても<b>買受人がないと認められ</b>、かつ<b>随意契約による売却の見込みもない</b>と認められるとき</div></div>
+        <div class="row"><div class="t">保全担保（事情変化）</div>
+          <div class="d">担保の提供等があった納税者の<b>資力その他の事情の変化</b>により必要がなくなったと認めるとき → <b>直ちに</b>解除できる</div></div>
+      </div>
+      <div class="colb" style="padding-top:0">
+        <div style="background:var(--may-bg);border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.75;">
+          <b style="color:var(--may)">裁量はこの2つで打ち止め。</b><br>
+          あとは全部「しなければならない」。<br>
+          <span style="color:var(--sub)">同じ保全担保でも、<b>3月継続＝義務</b>／<b>事情変化＝裁量</b>と割れているのが引っかけどころ。</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② 通知 -->
+  <h2 class="sec">② 解除は誰に通知するか <span class="n">「解除を行う相手」と「別に通知する相手」は違う</span></h2>
+  <div class="secrule"></div>
+
+  <div class="branch">
+    <div class="bcard">
+      <h3><span class="dot"></span>動産・有価証券</h3>
+      <div class="step"><span class="k">解除の方法</span><span class="v"><em>滞納者に通知</em>することによって行う</span></div>
+      <div class="step"><span class="k">追加の通知</span><span class="v" style="font-weight:600;color:var(--sub)">—</span></div>
+      <div class="bnote">解除したら<b>引渡し</b>が必要。場所は下の二択。</div>
+    </div>
+
+    <div class="bcard">
+      <h3><span class="dot"></span>債権</h3>
+      <div class="step"><span class="k">解除の方法</span><span class="v"><em>第三債務者に通知</em>することによって行う</span></div>
+      <div class="step"><span class="k">追加の通知</span><span class="v"><em>滞納者</em>にも通知しなければならない<small>債権だけ2段構え</small></span></div>
+      <div class="bnote">差押えの効力は第三債務者に及んでいるので、<b>解除も第三債務者が先</b>。滞納者は事後に知らせる。</div>
+    </div>
+  </div>
+
+  <div class="bcard" style="margin-top:14px">
+    <h3><span class="dot" style="background:var(--must)"></span>財産の種類を問わず（共通）</h3>
+    <div class="step"><span class="k">通知の相手</span><span class="v"><em>質権者等のうち知れている者</em>　＋　<em>交付要求をしている者</em>
+      <small>差押えを解除した場合、これらの者があるときはその旨その他必要な事項を通知しなければならない</small></span></div>
+  </div>
+
+  <!-- 引渡場所 -->
+  <h2 class="sec">③ 動産・有価証券の引渡場所 <span class="n">解除の理由で場所が変わる</span></h2>
+  <div class="secrule"></div>
+  <div class="two">
+    <div class="tc a">
+      <div class="q">国の責めに帰すべき理由で解除</div>
+      <div class="a2">差押えの時に存在した場所</div>
+    </div>
+    <div class="tc b">
+      <div class="q">その他の理由で解除</div>
+      <div class="a2">解除した時に財産が存在する場所</div>
+    </div>
+  </div>
+  <div class="memo" style="margin-top:12px">
+    <b>覚え方：</b>国が悪いなら<u>元の場所まで戻す</u>。そうでないなら<u>今ある場所で渡す</u>。
+  </div>
+
+  <!-- ④ 毛色が違う解除 -->
+  <h2 class="sec">④ 同じ「解除」でも毛色が違うもの <span class="n">主語が国側でない／効果が特殊</span></h2>
+  <div class="secrule"></div>
+  <div class="misc">
+    <div class="mi">
+      <div class="h">交付要求の解除“請求”　<span style="font-size:11.5px;color:var(--sub);font-weight:600">— 請求するのは債権者側</span></div>
+      <div class="b">強制換価手続により配当を受けることができる債権者は、次の<b>すべて</b>を理由として解除を請求できる。<br>
+        ①その交付要求により<b>自己の債権の全部又は一部の弁済を受けることができない</b>こと<br>
+        ②滞納者が他に<b>換価が容易で第三者の権利の目的となっていない財産</b>を有し、かつ<b>その財産で交付要求に係る国税の全額を徴収できる</b>こと</div>
+    </div>
+    <div class="mi">
+      <div class="h">参加差押えの遡及効　<span style="font-size:11.5px;color:var(--sub);font-weight:600">— 解除されると効力が遡る</span></div>
+      <div class="b">参加差押えをした場合において、<b>先行の滞納処分による差押えが解除されたとき</b>は、その参加差押えは、財産の区分に応じ定める時に<b>遡って</b>差押えの効力を生じる（動産・有価証券＝参加差押書が行政機関等に交付された時 等）。</div>
+    </div>
+    <div class="mi">
+      <div class="h">契約の解除（引渡命令を受けた第三者）　<span style="font-size:11.5px;color:var(--sub);font-weight:600">— 解除するのは第三者</span></div>
+      <div class="b">賃貸借・使用貸借等に基づき動産を占有し、引渡しにより<b>占有の目的を達することができなくなる</b>ときは、その契約を解除できる。<br>
+        ・通知は<b>その動産の差押えの時まで</b>に税務署長へ<b>書面</b>で<br>
+        ・解除により取得する<b>損害賠償請求権</b>は、売却代金の<b>残余</b>から配当を受けられる<br>
+        ・差押えの時までに<b>契約解除の通知も使用収益の請求もない</b>ときは、<b>使用収益の請求があったものとみなす</b></div>
+    </div>
+  </div>
+
+  <div class="numstrip">
+    <span class="lbl">解除の数字</span>
+    <span class="i"><b class="tnum">2月</b>換価の申立て後</span>
+    <span class="i"><b class="tnum">3月</b>保全担保（継続）</span>
+    <span class="i"><b class="tnum">6月</b>保全差押え</span>
+    <span class="i"><b class="tnum">10月</b>繰上保全差押え</span>
+    <span class="i"><b class="tnum">3回</b>公売（裁量解除）</span>
+  </div>
+
+  <div class="memo">
+    <b>直前チェック：</b>
+    「解除しなければならない／することができる」を言い分けられるか　→
+    「動産は滞納者・債権は第三債務者」が出るか　→
+    「質権者等のうち知れている者＋交付要求をしている者」が言えるか。<br>
+    この3つが通れば解除は取れます。
+  </div>
+
+  <footer class="foot">
+    国税徴収法　解除まわり整理図 ／ 2026-08-05 作成。理論テキスト本文に「解除」を含む21か所を抽出して整理。文言はテキストのまま。
+  </footer>
+
+</div>
+</div>
+</body>
+</html>
