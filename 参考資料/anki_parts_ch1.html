@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>国税徴収法　15分暗記パーツ集　1章 国税と他の債権との調整</title>
+<style>
+  :root{
+    --paper:#F7F6F3; --card:#FFFFFF; --ink:#1C1F26; --sub:#5C6270;
+    --line:#E2E0DA; --line2:#EFEDE8;
+    --deep:#2E4A3F; --deep-soft:#E6EEE9;
+    --amber:#8A5A1E; --amber-bg:#FBF1DF;
+    --red:#A33540; --red-bg:#F8E7E8;
+    --done:#3E7C5A; --done-bg:#E6F1EA;
+    --shadow:0 1px 2px rgba(20,25,35,.05),0 6px 18px rgba(20,25,35,.05);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--paper:#12141A;--card:#171B24;--ink:#E7E9EF;--sub:#9AA2B4;
+      --line:#2A2F3B;--line2:#232833;--deep:#8FBFA8;--deep-soft:#1B2B24;
+      --amber:#E0B472;--amber-bg:#332714;--red:#E7929B;--red-bg:#372124;
+      --done:#7FC3A0;--done-bg:#1B3128;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);}
+  }
+  :root[data-theme="light"]{--paper:#F7F6F3;--card:#FFFFFF;--ink:#1C1F26;--sub:#5C6270;
+    --line:#E2E0DA;--line2:#EFEDE8;--deep:#2E4A3F;--deep-soft:#E6EEE9;
+    --amber:#8A5A1E;--amber-bg:#FBF1DF;--red:#A33540;--red-bg:#F8E7E8;
+    --done:#3E7C5A;--done-bg:#E6F1EA;--shadow:0 1px 2px rgba(20,25,35,.05),0 6px 18px rgba(20,25,35,.05);}
+  :root[data-theme="dark"]{--paper:#12141A;--card:#171B24;--ink:#E7E9EF;--sub:#9AA2B4;
+    --line:#2A2F3B;--line2:#232833;--deep:#8FBFA8;--deep-soft:#1B2B24;
+    --amber:#E0B472;--amber-bg:#332714;--red:#E7929B;--red-bg:#372124;
+    --done:#7FC3A0;--done-bg:#1B3128;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);}
+
+  *{box-sizing:border-box} body{margin:0}
+  .wrap{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",system-ui,sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.75;-webkit-font-smoothing:antialiased;padding:22px 16px 70px}
+  .inner{max-width:760px;margin:0 auto}
+
+  .eyebrow{font-size:11.5px;letter-spacing:.16em;color:var(--sub);font-weight:700}
+  h1{font-size:clamp(20px,4.4vw,27px);margin:.3em 0 .25em;font-weight:800;letter-spacing:.01em;line-height:1.4}
+  .lede{color:var(--sub);font-size:13.5px;margin:0}
+  .lede b{color:var(--ink)}
+
+  .howto{margin-top:14px;background:var(--deep-soft);border-radius:12px;padding:12px 14px;font-size:13px}
+  .howto b{color:var(--deep)}
+  .howto ol{margin:6px 0 0;padding-left:1.25em}
+  .howto li{margin:2px 0}
+
+  .key{margin-top:12px;background:var(--red-bg);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.8}
+  .key b{color:var(--red)}
+
+  .prog{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:12.5px;color:var(--sub)}
+  .prog .track{flex:1;height:7px;border-radius:99px;background:var(--line);overflow:hidden}
+  .prog .fill{height:100%;background:var(--done);width:0;transition:width .25s ease}
+  .prog b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+  h2.sec{font-size:16px;font-weight:800;color:var(--deep);margin:30px 0 4px;display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  h2.sec .n{font-size:11.5px;color:var(--sub);font-weight:700}
+  .secrule{height:2px;background:linear-gradient(90deg,var(--deep),transparent);opacity:.5;border-radius:2px;margin-bottom:14px}
+
+  .part{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 15px;box-shadow:var(--shadow);margin-bottom:13px}
+  .part.done{border-color:var(--done);background:var(--done-bg)}
+  .phead{display:flex;align-items:flex-start;gap:10px}
+  .badge{flex:none;min-width:30px;height:30px;border-radius:9px;background:var(--deep-soft);color:var(--deep);
+    font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;padding:0 6px}
+  .part.done .badge{background:var(--done);color:#fff}
+  .ptitle{flex:1;font-weight:800;font-size:15px;line-height:1.5}
+  .ptitle .min{display:block;font-size:11.5px;color:var(--sub);font-weight:600;margin-top:1px}
+  .chk{flex:none;border:1px solid var(--line);background:none;color:var(--sub);border-radius:8px;padding:5px 9px;
+    font-size:11.5px;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .chk:hover{border-color:var(--done);color:var(--done)}
+  .chk:focus-visible{outline:2px solid var(--done);outline-offset:2px}
+  .part.done .chk{background:var(--done);border-color:var(--done);color:#fff;font-weight:700}
+
+  .body{margin-top:11px;padding-top:11px;border-top:1px dashed var(--line)}
+  .line{font-size:14.5px;margin:0 0 9px;padding-left:13px;border-left:2px solid var(--line2)}
+  .line:last-child{margin-bottom:0}
+  .line .tag{display:block;font-size:11px;color:var(--sub);font-weight:700;margin-bottom:1px;letter-spacing:.02em}
+  em{font-style:normal;background:linear-gradient(transparent 62%,var(--deep-soft) 62%);font-weight:700}
+
+  .trap{margin-top:11px;background:var(--amber-bg);border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.7}
+  .trap .t{font-weight:800;color:var(--amber);font-size:11.5px;letter-spacing:.03em;display:block;margin-bottom:3px}
+  .trap u{text-decoration:none;color:var(--red);font-weight:800;background:var(--red-bg);border-radius:4px;padding:0 3px}
+  .trap ul{margin:0;padding-left:1.15em}
+  .trap li{margin:3px 0}
+  .mine{display:inline-block;font-size:10.5px;font-weight:800;color:var(--deep);background:var(--deep-soft);
+    border-radius:999px;padding:1px 7px;margin-right:4px;vertical-align:middle}
+
+  footer.foot{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);font-size:11.5px;color:var(--sub);line-height:1.8}
+  .reset{background:none;border:1px solid var(--line);color:var(--sub);border-radius:8px;padding:5px 10px;font-size:11.5px;cursor:pointer;font-family:inherit;margin-top:8px}
+  .reset:hover{border-color:var(--red);color:var(--red)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="inner">
+
+  <header>
+    <div class="eyebrow">国税徴収法 ／ 15分暗記パーツ集</div>
+    <h1>1章　国税と他の債権との調整</h1>
+    <p class="lede">全<b>45文</b>を<b>14パーツ</b>に細分化。1パーツ15分＝<b>約5日ぶん</b>（夜3パーツ×5日）。本文は理論テキストのまま。</p>
+
+    <div class="howto">
+      <b>使い方（1パーツ15分）</b>
+      <ol>
+        <li>本文を声に出して2回読む（3分）</li>
+        <li>隠して書く／言う → 詰まった所だけ見る（9分）</li>
+        <li>落とし穴を確認して、もう1回通す（3分）</li>
+      </ol>
+    </div>
+
+    <div class="key">
+      <b>この章の最重要ルール：ここは全部「法定納期限<u style="text-decoration:underline">等</u>」です。</b><br>
+      1章は<b>私債権との優劣を決める場面</b>なので、担保権者が国税の存在を知り得た時点まで後ろ倒しした「法定納期限<b>等</b>」を使います。
+      「等」が付かない<b>法定納期限</b>は<b>2章（第二次納税義務）の1年ルール</b>だけ。<u>理論でも計算でも、1章なら必ず「等」</u>。
+    </div>
+
+    <div class="prog">
+      <span>覚えた</span>
+      <span class="track"><span class="fill" id="pfill"></span></span>
+      <span><b id="pdone">0</b> / <b>14</b></span>
+    </div>
+  </header>
+
+  <!-- 1-1 -->
+  <h2 class="sec">問題1-1　国税相互間における優先関係 <span class="n">9文／3パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="a1">
+    <div class="phead"><div class="badge">1</div>
+      <div class="ptitle">三つの先着手ルール（差押え・交付要求・担保）<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕差押先着手による国税の優先</span>納税者の財産につき国税の滞納処分による<em>差押え</em>をした場合において、他の国税又は地方税の<em>交付要求</em>があったときは、その差押えに係る国税は、その換価代金につき、その交付要求に係る他の国税又は地方税に<em>先だって徴収する</em>。</p>
+      <p class="line"><span class="tag">〔2〕交付要求先着手による国税の優先</span>納税者の財産につき<em>強制換価手続</em>が行われた場合において、国税及び地方税の交付要求があったときは、その換価代金につき、<em>先にされた</em>交付要求に係る国税は、後にされた交付要求に係る国税又は地方税に先だって徴収する。</p>
+      <p class="line"><span class="tag">〔3〕担保を徴した国税の優先</span>国税につき徴した<em>担保財産</em>があるときは、〔1〕及び〔2〕にかかわらず、その国税は、その換価代金につき<em>他の国税及び地方税に先だって</em>徴収する。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「まず、だれが差押えるのか→<u>国税</u>。（とある国税が）滞納処分による差押えをした場合、他の国税が…と続く。<u>差押えの後にもう一回差押が来て競合することはない</u>」</li>
+        <li><span class="mine">あなたのメモ</span>「先着手の締めの句は<u>『先だって徴収する』</u>」— 〔1〕〔2〕〔3〕とも語尾が同じ。<b>「次いで徴収する」は被担保債権が相手のとき（1-2）</b>で、混ぜない。</li>
+        <li>〔1〕は<b>差押え vs 交付要求</b>、〔2〕は<b>交付要求 vs 交付要求</b>。土俵が違う。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="a2">
+    <div class="phead"><div class="badge">2</div>
+      <div class="ptitle">消費税等の特例と、費用の優先<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔4〕強制換価の場合の消費税等の優先</span>強制換価の場合の消費税等の徴収の特例等の規定により徴収する<em>消費税等（消費税を除く。）</em>は、差押先着手による国税の優先等及び先取特権等の優先の規定にかかわらず、その徴収の基因となった<em>移出又は引取り若しくは売却に係る物品</em>の換価代金につき、<em>他の国税、地方税その他の債権に先だって</em>徴収する。</p>
+      <p class="line"><span class="tag">参考｜強制換価手続の費用の優先</span>納税者の財産につき<em>強制換価手続</em>が行われた場合において、国税の交付要求をしたときは、その国税は、その換価代金につき、その手続に係る<em>費用に次いで</em>徴収する。</p>
+      <p class="line"><span class="tag">参考｜直接の滞納処分費の優先</span>納税者の財産を国税の<em>滞納処分により換価した</em>ときは、その滞納処分に係る<em>滞納処分費</em>は、その換価代金につき、他の国税、地方税その他の債権に<em>先だって</em>徴収する。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「<u>滞納処分により換価したときなんよ</u>。だって<b>直接の滞納処分費の優先</b>だから。<b>強制換価手続の費用の優先じゃない</b>から」— 2つは<b>入口の手続が違う</b>。強制換価手続＝費用に次いで／滞納処分＝滞納処分費が先だって。</li>
+        <li>消費税等は<b>（消費税を除く。）</b>のかっこ書きが命。酒税・たばこ税等を指す。</li>
+        <li>特例が効くのは<b>その物品の換価代金</b>だけ。他の財産には及ばない。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="a3">
+    <div class="phead"><div class="badge">3</div>
+      <div class="ptitle">譲渡担保財産の特例（先着手のみなし）<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔5〕(1)差押先着手の特例</span>譲渡担保財産について、<em>設定者</em>の国税が<em>担保権者</em>の国税等と競合する場合において、その財産が担保権者の国税等につき差し押さえられているときは、差押先着手の適用については、<em>その差押えはなかったものとみなし</em>、設定者の国税につきその財産が差し押さえられたものとみなす。</p>
+      <p class="line"><span class="tag">〔5〕(1)みなし交付要求</span>この場合においては、その<em>担保権者の国税等につき交付要求があったものとみなす</em>。</p>
+      <p class="line"><span class="tag">〔5〕(2)交付要求先着手の特例</span>譲渡担保財産について、設定者の国税が担保権者の国税等と競合する場合において、担保権者の国税等の交付要求の<em>後にされた</em>設定者の国税の交付要求があるときは、交付要求先着手の適用については、その設定者の国税の交付要求は、担保権者の国税等の交付要求よりも<em>先にされたものとみなす</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>登場人物は<b>設定者（本来の滞納者）</b>と<b>担保権者（名義人）</b>の2人。<u>どちらの国税の話かを常に確認</u>する。</li>
+        <li>方向は一貫して<b>設定者の国税を勝たせる</b>。名義が担保権者に移っていても実質は設定者の財産だから。</li>
+        <li>〔5〕(1)は<b>差押え</b>を、〔5〕(2)は<b>交付要求</b>をみなし替えする。パーツ1の〔1〕〔2〕と対応している。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1-2 -->
+  <h2 class="sec">問題1-2　国税と被担保債権の優先関係 <span class="n">11文／3パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="b1">
+    <div class="phead"><div class="badge">4</div>
+      <div class="ptitle">国税優先の原則／留置権／不動産保存の先取特権<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕国税優先の原則</span>国税は、納税者の<em>総財産</em>について、<em>別段の定めがある場合を除き</em>、すべての公課その他の債権に<em>先だって</em>徴収する。</p>
+      <p class="line"><span class="tag">〔2〕(1)留置権の優先（内容）</span>留置権が納税者の財産上にある場合において、その財産を<em>滞納処分により換価した</em>ときは、その国税は、その換価代金につき、その留置権の被担保債権に<em>次いで</em>徴収する。</p>
+      <p class="line"><span class="tag">〔2〕(2)留置権の優先（証明方法）</span>留置権の優先の規定は、その留置権者が、滞納処分の手続において、その行政機関等に対し、その留置権がある事実を<em>証明した場合に限り</em>適用する。証明は、その事実を証する書面等を<em>売却決定の日の前日まで</em>に税務署長に提出することによってしなければならない。</p>
+      <p class="line"><span class="tag">〔3〕(1)不動産保存の先取特権等の優先</span>不動産保存の先取特権等が納税者の財産上にあるときは、国税は、その<em>換価代金につき</em>、その先取特権の被担保債権に次いで徴収する。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「<u>国税が話の主人公</u>。『留置権が…次に徴収される』ではなく『<b>国税が</b>留置権の被担保債権に<b>次いで</b>徴収する』という書き方」— 主語を国税にする。</li>
+        <li><span class="mine">あなたのメモ</span>「<u>『換価代金につき』が抜けがち</u>」</li>
+        <li><span class="mine">あなたのメモ</span>「規定は<b>証明した場合に適用する</b>。これが骨組み。証明は書面を<b>売却決定の日の前日まで</b>に提出」</li>
+        <li>〔1〕は「<b>別段の定めがある場合を除き</b>」が要。<u>国税に私債権が優先する場合もある</u>から、この一句で以降の全部が生きる。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="b2">
+    <div class="phead"><div class="badge">5</div>
+      <div class="ptitle">質権・抵当権の優先（法定納期限等／譲受前／証明／限度）<span class="min">⏱ 15分・山場</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔4〕(1)①法定納期限等以前に設定</span>納税者がその財産上に質権又は抵当権を設定している場合において、その質権又は抵当権が国税の<em>法定納期限等以前</em>に設定されているものであるときは、その国税は、その換価代金につき、その質権又は抵当権の被担保債権に<em>次いで</em>徴収する。</p>
+      <p class="line"><span class="tag">〔4〕(1)②譲受前に設定</span>納税者が<em>質権又は抵当権の設定されている財産を譲り受けた</em>ときは、国税は、その換価代金につき、その質権又は抵当権の被担保債権に次いで徴収する。</p>
+      <p class="line"><span class="tag">〔4〕(3)証明をしない優先質権の特例</span>法定納期限等以前に設定された質権を有する者は、<em>証明をしなかったため国税におくれる金額</em>の範囲内においては、国税に優先する<em>後順位の質権者</em>に対して優先権を行うことができない。</p>
+      <p class="line"><span class="tag">〔4〕(4)①優先額の限度等</span>国税に先立つ質権又は抵当権の被担保債権の<em>元本の金額</em>は、その質権者又は抵当権者がその国税に係る<em>差押え又は交付要求の通知を受けた時</em>における債権額を<em>限度</em>とする。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「法定納期限等以前に設定された質権も、<u>証明しなければただの私債権</u>」</li>
+        <li><span class="mine">あなたのメモ</span>「<b>根抵当権</b>を例に考えるとやりやすい。<u>差押えの通知を受けた時点の債権額が限度</u>。そのあと増えても認めません」</li>
+        <li>①は<b>納税者が設定</b>、②は<b>設定済みの財産を譲り受けた</b>。②には法定納期限等の条件が<u>付かない</u>（もともと他人が設定したものだから）。</li>
+        <li>有価証券を目的とする質権も<b>証明は必要</b>。ただし公正証書等の書類によらず、事実が証明できればよい。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="b3">
+    <div class="phead"><div class="badge">6</div>
+      <div class="ptitle">増額登記／不動産賃貸の先取特権／前払借賃<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔4〕(4)②増額登記</span>質権又は抵当権の被担保債権額又は極度額を<em>増加する登記</em>がされた場合には、その<em>登記がされた時</em>において、その増加した債権額又は極度額につき<em>新たに質権又は抵当権が設定されたものとみなして</em>適用する。</p>
+      <p class="line"><span class="tag">〔5〕(1)不動産賃貸の先取特権等の優先</span>不動産賃貸の先取特権等が納税者の財産上に国税の<em>法定納期限等以前から</em>あるとき、又は納税者がその先取特権がある財産を<em>譲り受けた</em>ときは、その国税は、その換価代金につき、その先取特権の被担保債権に次いで徴収する。</p>
+      <p class="line"><span class="tag">参考｜前払借賃への配当</span>動産の引渡しを命ぜられた第三者が賃貸借契約に基きこれを占有している場合において、引渡しを命ぜられたためにその契約を<em>解除</em>し、かつ、その命令があった時前にその後の期間分の借賃を支払っているときは、その第三者は、税務署長に対し、その動産の売却代金のうちから、その借賃に相当する金額で差押えの日後の期間に係るもの（<em>最高3月分</em>）の配当を請求することができる。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「不動産賃貸の先取特権は<u>そんな強い私債権じゃない</u>。<b>法定納期限等以前から</b>ないとだめ」— 不動産<b>保存</b>（パーツ4）は時期を問わないのと対比。</li>
+        <li><span class="mine">あなたのメモ</span>「リース物件が差し押さえられて、既にリース料をもらっていたら、売れた金の中から<u>とりま3月分</u>は配当せえやと言える」</li>
+        <li>増額登記は「<b>その登記がされた時に新たに設定されたものとみなす</b>」。だから増加分は法定納期限等との勝負を<u>やり直し</u>になる。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1-3 -->
+  <h2 class="sec">問題1-3　担保権付財産が譲渡された場合の国税の徴収 <span class="n">5文／2パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="c1">
+    <div class="phead"><div class="badge">7</div>
+      <div class="ptitle">要件<span class="min">⏱ 15分・短い</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕柱書</span>次のすべてに該当するときは、納税者の国税は、<em>質権者又は抵当権者</em>から、これらの者が譲渡財産に係る強制換価手続において、その質権又は抵当権の被担保債権につき<em>配当を受けるべき金額のうちから</em>徴収することができる。</p>
+      <p class="line"><span class="tag">〔1〕(1)要件①</span>納税者が<em>他に国税に充てるべき十分な財産がない</em>場合において、その者がその国税の<em>法定納期限等後に登記した</em>質権又は抵当権を設定した財産を<em>譲渡</em>したこと。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>取る相手は<b>譲受人ではなく質権者・抵当権者</b>。しかも財産そのものではなく<u>配当を受けるべき金額のうちから</u>。</li>
+        <li>「<b>法定納期限等<u>後</u>に登記</b>」＝もともと国税に負けていた担保権。負けていたはずの者が譲渡で得をするのを防ぐ規定。</li>
+        <li>1-2の質権・抵当権は「法定納期限等<b>以前</b>」で国税が負ける側。<u>ここは「後」で国税が勝つ側</u>。向きが逆。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="c2">
+    <div class="phead"><div class="badge">8</div>
+      <div class="ptitle">手続（通知・交付要求・代位実行）<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔3〕(1)担保権者への通知</span>税務署長は、この規定により国税を徴収しようとするときは、その旨を<em>質権者又は抵当権者</em>に対して、所定の事項を記載した<em>書面により通知</em>しなければならない。</p>
+      <p class="line"><span class="tag">〔3〕(2)交付要求</span>税務署長は、譲渡財産につき<em>強制換価手続が行われた</em>場合には、徴収できる金額の国税につき、<em>執行機関</em>に対し、交付要求をすることができる。</p>
+      <p class="line"><span class="tag">〔3〕(3)担保権の代位実行</span>税務署長は、この規定により国税を徴収するため、質権者又は抵当権者に<em>代位して</em>その質権又は抵当権を<em>実行する</em>ことができる。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>3つは<b>通知（義務）→ 交付要求（できる）→ 代位実行（できる）</b>。<u>語尾が最初だけ義務</u>。</li>
+        <li>交付要求の相手は<b>執行機関</b>（税務署長ではない）。</li>
+        <li>代位実行は「<b>質権者・抵当権者に代位して</b>」。国が自分の権利で実行するのではない。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1-4 -->
+  <h2 class="sec">問題1-4　担保のための仮登記と国税の関係 <span class="n">8文／2パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="d1">
+    <div class="phead"><div class="badge">9</div>
+      <div class="ptitle">仮登記の優先／物上代位／用語の意義<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕(1)法定納期限等以前の仮登記</span>国税の<em>法定納期限等以前</em>に納税者の財産につき、その者を<em>登記義務者</em>として担保のための仮登記がされているときは、その国税は、その換価代金につき、その担保のための仮登記の被担保債権に<em>次いで</em>徴収する。</p>
+      <p class="line"><span class="tag">〔1〕(2)譲受前の仮登記</span>納税者が担保のための仮登記がされている財産を<em>譲り受けた</em>ときには、国税はその換価代金につき、その担保のための仮登記の被担保債権に次いで徴収する。</p>
+      <p class="line"><span class="tag">〔2〕国税と物上代位権の調整</span>担保のための仮登記がされている納税者の財産上に、次に掲げる担保権が設定されているときは、その国税は、その仮登記担保権付財産についての<em>清算金に係る換価代金</em>につき、<em>物上代位</em>の規定により権利が行使された次に掲げる担保権の被担保債権に<em>次いで</em>徴収する。</p>
+      <p class="line"><span class="tag">〔6〕用語の意義</span>担保のための仮登記とは、<em>仮登記担保契約に関する法律</em>に規定する仮登記担保契約に基づく<em>仮登記又は仮登録</em>をいう。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>〔1〕は<b>1-2の質権・抵当権とまったく同じ構造</b>（法定納期限等以前／譲受前の2本立て）。<u>セットで覚えると2倍速</u>。</li>
+        <li>〔2〕の対象は財産そのものではなく<b>清算金に係る換価代金</b>。仮登記担保は清算金が発生する制度だから。</li>
+        <li>用語は「仮登記<b>又は仮登録</b>」。登録のほうを落としやすい。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="d2">
+    <div class="phead"><div class="badge">10</div>
+      <div class="ptitle">清算金の前後で変わる差押えの効力／通知／訴訟<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔3〕(1)清算金支払<u>前</u>の差押え</span>担保のための仮登記がある財産につき、滞納処分による差押えが<em>清算金の支払の債務の弁済前</em>（清算金がないときは、清算期間経過前）にされたものであるときは、仮登記担保権者は、その仮登記に基づく<em>本登記の請求をすることができない</em>。</p>
+      <p class="line"><span class="tag">〔3〕(2)清算金支払<u>後</u>の差押え</span>担保のための仮登記がある財産につき、滞納処分による差押えが<em>清算金の支払の債務の弁済後</em>（清算金がないときは、清算期間経過後）にされたものであるときは、仮登記担保権者は、その財産の<em>所有権の取得をもって、差押債権者に対抗することができる</em>。</p>
+      <p class="line"><span class="tag">〔4〕仮登記の権利者に対する差押えの通知</span>税務署長は、仮登記がある財産を差し押さえたときは、<em>仮登記の権利者</em>に対し、その旨その他必要な事項を記載した<em>差押通知書</em>により通知しなければならない。なお、その仮登記が<em>担保のための仮登記と認められるとき</em>は、その旨を差押通知書に<em>記載</em>しなければならない。</p>
+      <p class="line"><span class="tag">〔5〕訴訟による換価の制限</span>差押えの通知（担保のための仮登記に係るものに限る。）に係る差押えにつき<em>訴えの提起</em>があったときは、その訴訟の<em>係属する間</em>は、その国税につき滞納処分による財産の<em>換価をすることができない</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><b>清算金の弁済前後で勝敗が入れ替わる</b>のが核心。<u>前＝国が勝つ（本登記できない）／後＝担保権者が勝つ（対抗できる）</u>。</li>
+        <li>制限されるのは<b>換価</b>であって差押えではない（訴訟中でも差押えは生きている）。</li>
+        <li>差押通知書は<b>出すだけでなく「担保のための仮登記と認められる旨」を記載</b>する義務まである。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1-5 -->
+  <h2 class="sec">問題1-5　譲渡担保権者の物的納税責任 <span class="n">8文／3パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="e1">
+    <div class="phead"><div class="badge">11</div>
+      <div class="ptitle">要件と告知<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕柱書</span>次のすべてに該当するときは、<em>譲渡担保権者に物的納税責任を課し</em>、譲渡担保財産から納税者の国税を徴収することができる。</p>
+      <p class="line"><span class="tag">〔1〕(2)要件②</span>その譲渡担保の設定が国税の<em>法定納期限等後</em>にされたものであること。</p>
+      <p class="line"><span class="tag">〔2〕譲渡担保権者に対する告知</span>税務署長は、譲渡担保財産から納税者の国税を徴収しようとするときは、譲渡担保権者に対し、徴収しようとする金額その他必要な事項を記載した<em>書面により告知</em>しなければならない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>「<b>法定納期限等<u>後</u></b>」— 1-3の担保権付財産の譲渡と同じ向き。<u>国税が先にあったのに担保に入れた</u>から責任を負わせる。</li>
+        <li><b>物的</b>納税責任なので、追えるのは<u>譲渡担保財産だけ</u>。譲渡担保権者の他の財産には及ばない。</li>
+        <li>2章の第二次納税義務が「納付<b>通知書</b>により告知」なのに対し、こちらは「<b>書面</b>により告知」。書類名が違う。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="e2">
+    <div class="phead"><div class="badge">12</div>
+      <div class="ptitle">通知先／10日で滞納処分／求償<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔2〕告知後の通知先</span>この場合においては、その者の<em>住所又は居所の所在地を所轄する税務署長</em>及び<em>納税者</em>に対してその旨を通知しなければならない。</p>
+      <p class="line"><span class="tag">〔3〕譲渡担保財産に対する滞納処分</span>譲渡担保権者に<em>告知書を発した日から10日を経過した日</em>までにその徴収しようとする金額が完納されていないときは、徴収職員は、譲渡担保権者を<em>第二次納税義務者とみなして</em>、その譲渡担保財産につき滞納処分を執行することができる。</p>
+      <p class="line"><span class="tag">〔4〕(2)求償（準用）</span>譲渡担保財産から納税者の国税を徴収したときは、譲渡担保権者から納税者に対してする<em>求償権の行使を妨げない</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>通知先は<b>2つ</b>：譲渡担保権者の所轄税務署長 ＋ <u>納税者本人</u>。片方だけだと減点。</li>
+        <li><b>10日を経過した日</b>まで。督促（督促状を発した日から10日）と同じリズムで覚える。</li>
+        <li>「<b>第二次納税義務者とみなして</b>」滞納処分。あくまで<u>みなし</u>で、第二次納税義務そのものではない。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="e3">
+    <div class="phead"><div class="badge">13</div>
+      <div class="ptitle">換価の制限と、譲渡担保が確定した場合の続行<span class="min">⏱ 15分・短い</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔5〕(1)換価の制限</span>譲渡担保財産の換価は、財産の価額が<em>著しく減少するおそれがあるときを除き</em>、<em>納税者の財産を換価に付した後</em>でなければ、行うことができない。</p>
+      <p class="line"><span class="tag">〔7〕確定的に帰属した場合の続行</span>譲渡担保権者への告知又は納税者の財産として行った滞納処分の続行の適用を受ける<em>差押えをした後</em>、納税者の財産の譲渡により担保される債権が<em>債務不履行その他弁済以外の理由により消滅</em>した場合においても、<em>なお譲渡担保財産として存続するものとみなして</em>適用する。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>換価の制限は<b>第二次納税義務（2章）とまったく同じ文型</b>。「著しく減少するおそれを除き、納税者の財産を換価に付した後」。<u>2章と一緒に覚える</u>。</li>
+        <li>制限されるのは<b>換価</b>。差押えは先にできる。</li>
+        <li>〔7〕は「<b>差押えをした後</b>に」担保が確定しても<u>逃げられない</u>という規定。差押え前なら適用されない。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1-6 -->
+  <h2 class="sec">問題1-6　国税及び地方税等と私債権との競合の調整 <span class="n">4文／1パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="f1">
+    <div class="phead"><div class="badge">14</div>
+      <div class="ptitle">ぐるぐる回りの手順（4ステップ）<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔2〕優先順位の確定している債権の先取り</span>換価代金は、<em>まず次の順序に従い</em>、それぞれこれらに充てる。</p>
+      <p class="line"><span class="tag">〔3〕グループへ充てるべき金額の算定</span>国税及び地方税等並びに私債権につき、<em>法定納期限等</em>又は<em>設定、登記、譲渡若しくは成立の時期</em>の<em>古いものから</em>それぞれ順次に規定を適用して、充てるべき金額の<em>総額</em>をそれぞれ定める。</p>
+      <p class="line"><span class="tag">〔4〕個々の租税公課への配当</span>定めた国税及び地方税等に充てるべき金額の総額を、<em>国税優先の原則</em>若しくは<em>差押先着手による国税の優先</em>等の規定等により、順次国税及び地方税等に充てる。</p>
+      <p class="line"><span class="tag">〔5〕個々の担保権付私債権への配当</span>定めた私債権に充てるべき金額の総額を<em>民法その他の法律</em>の規定により、順次私債権に充てる。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>流れは<b>①先取り → ②グループ総額を決める → ③租税の中で配る → ④私債権の中で配る</b>。<u>「まず総額、次に中身」の2段階</u>がこの制度の全部。</li>
+        <li>③は<b>徴収法</b>（国税優先・差押先着手）、④は<b>民法その他</b>。<u>使う法律が違う</u>のが問われる。</li>
+        <li>基準は「法定納期限<b>等</b>」と「設定・登記・譲渡・成立の時期」を<u>並べて古い順</u>。片方だけでは並ばない。</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer class="foot">
+    国税徴収法　15分暗記パーツ集　1章 国税と他の債権との調整（45文／14パーツ）／ 2026-08-12 作成。<br>
+    本文は理論テキストの規定本文どおり。落とし穴は学習アプリの○×解説・あなた自身のメモ・誤答データから抽出。<br>
+    <span class="mine">あなたのメモ</span> の付いた項目は、過去にあなたが書き残した気づきをそのまま使っています。<br>
+    チェックはこの端末に保存されます。
+    <br><button class="reset" onclick="resetAll()">チェックを全部リセット</button>
+  </footer>
+
+</div>
+</div>
+
+<script>
+  var KEY='kokucho_parts_ch1_v1';
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ return {}; } }
+  function save(o){ try{ localStorage.setItem(KEY, JSON.stringify(o)); }catch(e){} }
+  function refresh(){
+    var st=load(), n=0, all=document.querySelectorAll('.part');
+    all.forEach(function(p){
+      var on=!!st[p.dataset.id];
+      p.classList.toggle('done', on);
+      var b=p.querySelector('.chk');
+      b.textContent = on ? '✓ 覚えた' : '覚えた';
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if(on) n++;
+    });
+    document.getElementById('pdone').textContent=n;
+    document.getElementById('pfill').style.width=(n/all.length*100)+'%';
+  }
+  function tog(btn){
+    var p=btn.closest('.part'), st=load();
+    if(st[p.dataset.id]) delete st[p.dataset.id]; else st[p.dataset.id]=1;
+    save(st); refresh();
+  }
+  function resetAll(){ save({}); refresh(); }
+  refresh();
+</script>
+</body>
+</html>
