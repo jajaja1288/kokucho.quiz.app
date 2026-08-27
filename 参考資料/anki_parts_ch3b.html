@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>国税徴収法　15分暗記パーツ集　3章 滞納処分（中盤）</title>
+<style>
+  :root{
+    --paper:#F7F6F3; --card:#FFFFFF; --ink:#1C1F26; --sub:#5C6270;
+    --line:#E2E0DA; --line2:#EFEDE8;
+    --deep:#2E4A3F; --deep-soft:#E6EEE9;
+    --amber:#8A5A1E; --amber-bg:#FBF1DF;
+    --red:#A33540; --red-bg:#F8E7E8;
+    --done:#3E7C5A; --done-bg:#E6F1EA;
+    --shadow:0 1px 2px rgba(20,25,35,.05),0 6px 18px rgba(20,25,35,.05);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--paper:#12141A;--card:#171B24;--ink:#E7E9EF;--sub:#9AA2B4;
+      --line:#2A2F3B;--line2:#232833;--deep:#8FBFA8;--deep-soft:#1B2B24;
+      --amber:#E0B472;--amber-bg:#332714;--red:#E7929B;--red-bg:#372124;
+      --done:#7FC3A0;--done-bg:#1B3128;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);}
+  }
+  :root[data-theme="light"]{--paper:#F7F6F3;--card:#FFFFFF;--ink:#1C1F26;--sub:#5C6270;
+    --line:#E2E0DA;--line2:#EFEDE8;--deep:#2E4A3F;--deep-soft:#E6EEE9;
+    --amber:#8A5A1E;--amber-bg:#FBF1DF;--red:#A33540;--red-bg:#F8E7E8;
+    --done:#3E7C5A;--done-bg:#E6F1EA;--shadow:0 1px 2px rgba(20,25,35,.05),0 6px 18px rgba(20,25,35,.05);}
+  :root[data-theme="dark"]{--paper:#12141A;--card:#171B24;--ink:#E7E9EF;--sub:#9AA2B4;
+    --line:#2A2F3B;--line2:#232833;--deep:#8FBFA8;--deep-soft:#1B2B24;
+    --amber:#E0B472;--amber-bg:#332714;--red:#E7929B;--red-bg:#372124;
+    --done:#7FC3A0;--done-bg:#1B3128;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);}
+
+  *{box-sizing:border-box} body{margin:0}
+  .wrap{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",system-ui,sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.75;-webkit-font-smoothing:antialiased;padding:22px 16px 70px}
+  .inner{max-width:760px;margin:0 auto}
+
+  .eyebrow{font-size:11.5px;letter-spacing:.16em;color:var(--sub);font-weight:700}
+  h1{font-size:clamp(20px,4.4vw,27px);margin:.3em 0 .25em;font-weight:800;letter-spacing:.01em;line-height:1.4}
+  .lede{color:var(--sub);font-size:13.5px;margin:0}
+  .lede b{color:var(--ink)}
+
+  .howto{margin-top:14px;background:var(--deep-soft);border-radius:12px;padding:12px 14px;font-size:13px}
+  .howto b{color:var(--deep)}
+  .howto ol{margin:6px 0 0;padding-left:1.25em}
+  .howto li{margin:2px 0}
+
+  .key{margin-top:12px;background:var(--red-bg);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.8}
+  .key b{color:var(--red)}
+
+  .prog{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:12.5px;color:var(--sub)}
+  .prog .track{flex:1;height:7px;border-radius:99px;background:var(--line);overflow:hidden}
+  .prog .fill{height:100%;background:var(--done);width:0;transition:width .25s ease}
+  .prog b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+  h2.sec{font-size:16px;font-weight:800;color:var(--deep);margin:30px 0 4px;display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  h2.sec .n{font-size:11.5px;color:var(--sub);font-weight:700}
+  .secrule{height:2px;background:linear-gradient(90deg,var(--deep),transparent);opacity:.5;border-radius:2px;margin-bottom:14px}
+
+  .part{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 15px;box-shadow:var(--shadow);margin-bottom:13px}
+  .part.done{border-color:var(--done);background:var(--done-bg)}
+  .phead{display:flex;align-items:flex-start;gap:10px}
+  .badge{flex:none;min-width:30px;height:30px;border-radius:9px;background:var(--deep-soft);color:var(--deep);
+    font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;padding:0 6px}
+  .part.done .badge{background:var(--done);color:#fff}
+  .ptitle{flex:1;font-weight:800;font-size:15px;line-height:1.5}
+  .ptitle .min{display:block;font-size:11.5px;color:var(--sub);font-weight:600;margin-top:1px}
+  .chk{flex:none;border:1px solid var(--line);background:none;color:var(--sub);border-radius:8px;padding:5px 9px;
+    font-size:11.5px;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .chk:hover{border-color:var(--done);color:var(--done)}
+  .chk:focus-visible{outline:2px solid var(--done);outline-offset:2px}
+  .part.done .chk{background:var(--done);border-color:var(--done);color:#fff;font-weight:700}
+
+  .body{margin-top:11px;padding-top:11px;border-top:1px dashed var(--line)}
+  .line{font-size:14.5px;margin:0 0 9px;padding-left:13px;border-left:2px solid var(--line2)}
+  .line:last-child{margin-bottom:0}
+  .line .tag{display:block;font-size:11px;color:var(--sub);font-weight:700;margin-bottom:1px;letter-spacing:.02em}
+  em{font-style:normal;background:linear-gradient(transparent 62%,var(--deep-soft) 62%);font-weight:700}
+
+  .trap{margin-top:11px;background:var(--amber-bg);border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.7}
+  .trap .t{font-weight:800;color:var(--amber);font-size:11.5px;letter-spacing:.03em;display:block;margin-bottom:3px}
+  .trap u{text-decoration:none;color:var(--red);font-weight:800;background:var(--red-bg);border-radius:4px;padding:0 3px}
+  .trap ul{margin:0;padding-left:1.15em}
+  .trap li{margin:3px 0}
+  .mine{display:inline-block;font-size:10.5px;font-weight:800;color:var(--deep);background:var(--deep-soft);
+    border-radius:999px;padding:1px 7px;margin-right:4px;vertical-align:middle}
+
+  footer.foot{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);font-size:11.5px;color:var(--sub);line-height:1.8}
+  .reset{background:none;border:1px solid var(--line);color:var(--sub);border-radius:8px;padding:5px 10px;font-size:11.5px;cursor:pointer;font-family:inherit;margin-top:8px}
+  .reset:hover{border-color:var(--red);color:var(--red)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="inner">
+
+  <header>
+    <div class="eyebrow">国税徴収法 ／ 15分暗記パーツ集</div>
+    <h1>3章　滞納処分（中盤）</h1>
+    <p class="lede">問題3-8〜3-13・全<b>51文</b>を<b>16パーツ</b>に細分化。1パーツ15分＝<b>約5〜6日ぶん</b>（夜3パーツ×5〜6日）。本文は理論テキストのまま。</p>
+
+    <div class="howto">
+      <b>使い方（1パーツ15分）</b>
+      <ol>
+        <li>本文を声に出して2回読む（3分）</li>
+        <li>隠して書く／言う → 詰まった所だけ見る（9分）</li>
+        <li>落とし穴を確認して、もう1回通す（3分）</li>
+      </ol>
+    </div>
+
+    <div class="key">
+      <b>この章の最重要ルール：不動産の使用収益は「原則できる」、動産の使用収益は「原則できない」（1章パーツ10と真逆）。</b><br>
+      不動産は差し押さえられても滞納者又は権利者が<b>通常どおり使用収益できる</b>のが原則（価値が著しく減耗する行為だけ制限される）。
+      これに対して動産は原則<b>使用収益できない</b>（許可があるときだけ例外）。<u>財産の種類によって原則と例外が入れ替わる</u>ので、どちらの財産の話をしているか本文の頭で必ず確認する。
+    </div>
+
+    <div class="prog">
+      <span>覚えた</span>
+      <span class="track"><span class="fill" id="pfill"></span></span>
+      <span><b id="pdone">0</b> / <b>16</b></span>
+    </div>
+  </header>
+
+  <!-- 問題3-8 -->
+  <h2 class="sec">問題3-8　不動産・船舶・航空機・自動車等の差押え <span class="n">14文／3パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p1">
+    <div class="phead"><div class="badge">1</div>
+      <div class="ptitle">不動産の差押えの通知・差押登記の嘱託・効力発生時期・鉱業権の効力発生時期<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕(1) 不動産の差押えの通知</span>不動産の差押えは、<em>滞納者</em>に対する<em>差押書</em>の送達により行う。</p>
+      <p class="line"><span class="tag">〔1〕(2) 差押登記の嘱託</span>税務署長は、不動産を差し押さえたときは、差押えの登記を<em>関係機関</em>に嘱託しなければならない。</p>
+      <p class="line"><span class="tag">〔2〕(1) 不動産の差押えの効力発生時期</span>不動産の差押えの効力は、<em>差押書</em>が滞納者に送達された時に生ずる。ただし、差押えの登記が差押書の送達前にされた場合には、その差押えの<em>登記がされた時</em>に生ずる。</p>
+      <p class="line"><span class="tag">〔2〕(2) 鉱業権の差押えの効力発生時期</span>鉱業権の差押えの効力は、差押えの<em>登録</em>がされた時に生ずる。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>不動産の差押えは<b>滞納者に差押書を送達</b>して行う（動産の「占有」・債権の「第三債務者への差押通知書」とは方式が違う）。<span class="mine">あなたのメモ</span>「差押え調書は必ず必要」— <b>差押調書の作成</b>はどの財産でも常に必須だが、不動産の場合は<u>謄本を滞納者に交付する義務はない</u>（差押書の送達で足りるため）。</li>
+        <li>効力発生時期は原則<b>差押書が滞納者に送達された時</b>。ただし<u>登記が送達より先にされていた</u>場合は<b>登記がされた時</b>に繰り上がる。鉱業権だけは「登記」ではなく<b>登録</b>という別の言葉が使われる点に注意（権利の性質上、登記所ではなく登録機関で管理されるため）。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p2">
+    <div class="phead"><div class="badge">2</div>
+      <div class="ptitle">不動産の差押えの効力（使用収益）・船舶航空機の一時停泊・監守保存処分<span class="min">⏱ 15分・山場</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔3〕 不動産の差押えの効力</span>滞納者又は使用収益をする権利を有する第三者は、差し押さえられた不動産につき、通常の用法に従い、使用収益をすることが<em>できる</em>。ただし、税務署長は、不動産の価値が著しく<em>減耗する</em>行為がされると認められるときに限り、その使用収益を制限することができる。</p>
+      <p class="line"><span class="tag">〔5〕(3) 船舶・航空機の一時停泊</span>税務署長は、滞納処分のため必要があるときは、船舶又は航空機を<em>一時停泊</em>させることができる。ただし、<em>航行中</em>の船舶又は航空機については、この限りでない。</p>
+      <p class="line"><span class="tag">〔5〕(4) 監守保存処分</span>徴収職員は、滞納処分のため必要があるときは、船舶又は航空機の<em>監守及び保存</em>のため必要な処分をすることができる。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>不動産の使用収益は<b>原則できる</b>（このパーツ冒頭の最重要ルール）。動産は逆に原則できない（1章パーツ10）。「著しく<b>減耗</b>する」行為だけが制限対象で、単なる使用だけでは制限されない。</li>
+        <li>一時停泊できるのは<b>航行中ではない</b>船舶・航空機だけ。すでに航行中のものを止めることはできない。監守保存処分は「一時停泊」とは別に、<b>船舶・航空機そのものの保存</b>のために必要な処分をする規定で、両方とも「滞納処分のため必要があるとき」という同じ入り口から発動する。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p3">
+    <div class="phead"><div class="badge">3</div>
+      <div class="ptitle">船舶・航空機の航行許可・自動車等の占有・自動車等の差押えの効力<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔7〕(2) 船舶・航空機の航行許可</span>税務署長は、停泊中の船舶等を差し押さえた場合又は一時停泊させた場合において、営業上の必要その他相当の理由があるときは、滞納者、交付要求をした者及び抵当権その他の権利を有する者の<em>申立て</em>により、<em>航行</em>を許可することができる。</p>
+      <p class="line"><span class="tag">〔9〕(4) 自動車等の占有</span>税務署長は、自動車、建設機械又は小型船舶を差し押さえた場合には、滞納者に対し、これらの<em>引渡し</em>を命じ、徴収職員にこれらの<em>占有</em>をさせることができる。</p>
+      <p class="line"><span class="tag">〔11〕 自動車等の差押えの効力</span>自動車等を差し押さえた場合において、徴収職員が占有し又は第三者に保管させたときは、<em>使用収益</em>をすることはできない。ただし、営業上の必要その他相当の理由があるときは、関係者の申立てにより、その<em>運行、使用又は航行</em>を許可することができる。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>航行許可の申立権者は<b>滞納者・交付要求をした者・抵当権その他の権利を有する者</b>の3者。「営業上の必要その他相当の理由」があって初めて許可される裁量規定。</li>
+        <li>自動車等（自動車・建設機械・小型船舶）は<b>徴収職員が占有</b>するのが原則で、動産（1章パーツ9）と同じ発想。占有・保管させた後は<b>使用収益できない</b>のが原則だが、パーツ2の船舶・航空機と同じく「営業上の必要その他相当の理由」があれば<b>運行・使用・航行を許可</b>できるという共通パターンで揃えて覚える。</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- 問題3-9 -->
+  <h2 class="sec">問題3-9　第三債務者等がない無体財産権等の差押え <span class="n">3文／1パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p4">
+    <div class="phead"><div class="badge">4</div>
+      <div class="ptitle">差押えの通知・差押登記の嘱託・効力発生時期<span class="min">⏱ 15分・短い</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕(1) 差押えの通知</span>第三債務者等がない無体財産権等の差押えは、<em>滞納者</em>に対する<em>差押書</em>の送達により行う。</p>
+      <p class="line"><span class="tag">〔1〕(2) 差押登記の嘱託</span>税務署長は、無体財産権等でその<em>権利の移転</em>につき登記を要するものを差し押さえたときは、差押えの登記を関係機関に嘱託しなければならない。</p>
+      <p class="line"><span class="tag">〔2〕 効力発生時期</span>第三債務者等がない無体財産権等の差押えの効力は、差押書が滞納者に送達された時に生ずる。ただし、特許権その他の権利でその処分の制限につき<em>登記</em>しなければ効力が生じないものの差押えの効力は、差押えの<em>登記</em>がされた時に生ずる。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>第三債務者等が<b>いない</b>無体財産権等（特許権など）は、パーツ1の<b>不動産と同じ「滞納者に差押書を送達」</b>という方式。相手が第三債務者ではなく滞納者本人になる点が、次パーツ（第三債務者等が<b>ある</b>場合）との一番の分かれ目。</li>
+        <li>効力発生時期も不動産と同じ構造で、原則は<b>送達された時</b>、登記が必要な権利（特許権等）は<b>登記がされた時</b>に生ずる。パーツ1の鉱業権が「登録」だったのに対し、ここは「<b>登記</b>」という言葉になる点で用語がすり替わりやすい。</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- 問題3-10 -->
+  <h2 class="sec">問題3-10　第三債務者等がある無体財産権等・振替社債等の差押え <span class="n">13文／2パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p5">
+    <div class="phead"><div class="badge">5</div>
+      <div class="ptitle">差押えの通知・振替社債等の差押えの通知・処分禁止・効力発生時期<span class="min">⏱ 15分・山場</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕(1)① 差押えの通知</span>第三債務者等がある無体財産権等（振替社債等を除く。）の差押えは、<em>第三債務者等</em>に対する<em>差押通知書</em>の送達により行う。</p>
+      <p class="line"><span class="tag">〔1〕(2)① 振替社債等の差押えの通知</span>振替社債等の差押えは、振替社債等の<em>発行者</em>及び滞納者がその口座の開設を受けている<em>振替機関等</em>に対する差押通知書の送達により行う。</p>
+      <p class="line"><span class="tag">〔1〕(2)② 振替社債等の処分禁止</span>徴収職員は、振替社債等を差し押さえるときは、発行者に対し<em>その履行</em>を、振替機関等に対し振替社債等の<em>振替・抹消</em>を、滞納者に対し振替社債等の取立てその他の処分又は振替・抹消の申請を禁じなければならない。</p>
+      <p class="line"><span class="tag">〔2〕 効力発生時期</span>第三債務者等がある無体財産権等（振替社債等を除く。）の差押えの効力は、その差押通知書が<em>第三債務者等</em>に送達された時に生ずる。振替社債等の差押えの効力は、その差押通知書が<em>振替機関等</em>に送達された時に生ずる。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「電話加入権の差押手続は…NTTに対し差押通知書を送達し、作成した差押調書の謄本を滞納者に交付する」— 電話加入権のようにNTT（第三債務者）がいる無体財産権等は、パーツ4（相手がいない場合）と違って<b>第三債務者等に差押通知書</b>を送達する。債権の差押え（3-7）と同じ発想。</li>
+        <li><span class="mine">あなたのメモ</span>「上場株式なんか現物で手元にあるわけないだろ。振替社債等に該当するのは容易に推察できる。振替機関に差押通知書を送る。差押書の謄本は滞納者に交付する」— 上場株式は<b>振替社債等</b>に該当し、通知先は<b>発行者及び振替機関等</b>の2か所（第三債務者等がある通常の無体財産権等より宛先が1つ多い）。</li>
+        <li>効力発生時期は送達先とセット：通常は<b>第三債務者等に送達された時</b>、振替社債等は<b>振替機関等に送達された時</b>。処分禁止も三方向（発行者へ履行禁止・振替機関等へ振替抹消禁止・滞納者へ取立て等の禁止）で、通常の債権（第三債務者と滞納者の2方向）より1方向多い。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p6">
+    <div class="phead"><div class="badge">6</div>
+      <div class="ptitle">取立権の取得・持分の払戻し又は譲受けの請求<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔3〕(1) 取立権の取得</span>徴収職員は、第三債務者等がある無体財産権等の取立てをすることができる。取り立てたものが金銭以外のものであるときは、これを<em>差し押さえなければならない</em>。徴収職員が金銭を取り立てたときは、その限度において、滞納者から差押えに係る国税を徴収したものとみなす。</p>
+      <p class="line"><span class="tag">〔3〕(2) 持分の払戻し又は譲受けの請求</span>税務署長は、任意に脱退できる組合員等（合名・合資・合同会社を除く。）である滞納者の持分を差し押さえた場合において、一定の理由があり、かつ、その持分以外の財産につき滞納処分を執行してもなお徴収すべき国税に不足すると認められるときは、その組合等に対し、その持分の一部の払戻し又は譲受けを請求することができる。この請求は、<em>30日前</em>に組合等に予告した後でなければ、行うことができない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>取立権の構造は3-7〔3〕の債権の取立てと全く同じ型：<b>金銭以外なら改めて差し押さえる</b>、<b>金銭なら徴収したものとみなす</b>。財産の種類（動産・有価証券・債権・無体財産権等）が変わっても、この「金銭化＝徴収完了」の考え方は共通。</li>
+        <li>持分の払戻し・譲受け請求は<b>合名会社・合資会社・合同会社の社員持分は対象外</b>（任意に脱退できない、又は特別な規律があるため）。かつ請求の前に<b>30日前</b>の予告が必須という期間要件を忘れない。</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- 問題3-11 -->
+  <h2 class="sec">問題3-11　差押財産の換価 <span class="n">16文／3パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p7">
+    <div class="phead"><div class="badge">7</div>
+      <div class="ptitle">換価する財産の範囲・債権の換価・一括換価・自動車等の換価前の占有<span class="min">⏱ 15分・山場</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕(1) 換価する財産の範囲</span>差押財産（<em>金銭、債権及び取立てをする有価証券</em>を除く。）又は特定参加差押不動産（差押財産等）は、換価<em>しなければならない</em>。</p>
+      <p class="line"><span class="tag">〔1〕(2) 債権の換価</span>差し押さえた債権のうち、その全部又は一部の弁済期限が取立てをしようとする時から<em>6月以内</em>に到来しないもの及び取立てをすることが著しく困難であると認められるものは、換価することができる。</p>
+      <p class="line"><span class="tag">〔1〕(3) 一括換価</span>税務署長は、相互の利用上差押財産等を他の差押財産等（滞納者を異にするものを含む。）と一括して同一の買受人に買い受けさせることが相当であると認めるときは、これらの差押財産等を一括して<em>公売</em>に付し、又は<em>随意契約</em>により売却することができる。</p>
+      <p class="line"><span class="tag">〔2〕 自動車等の換価前の占有</span>自動車、建設機械又は小型船舶の換価は、徴収職員が<em>占有した後</em>に行うものとする。ただし、換価に支障がないと認められるときは、この限りでない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>換価しなくてよい（＝換価対象から除かれる）のは<b>金銭・債権・取立てをする有価証券</b>。これらは取立てでそのまま国税に充てられるので、わざわざ公売する必要がない。</li>
+        <li>債権はこの除外の例外として、<b>弁済期限が6月以内に到来しない</b>もの、又は<b>取立てが著しく困難</b>なものに限り換価できる。原則「換価しない」財産が例外的に換価対象になる場面、と押さえる。</li>
+        <li>自動車等の換価は<b>占有した後</b>に行うのが原則（パーツ3の占有規定とつながる）。ただし支障がなければ占有前でもよいという例外つき。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p8">
+    <div class="phead"><div class="badge">8</div>
+      <div class="ptitle">修理等の処分・換価の制限（果実）・買受人の制限・暴力団員等でない旨の陳述<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔3〕 修理等の処分</span>税務署長は、差押財産等を換価する場合において、必要があると認めるときは、<em>滞納者の同意</em>を得て、その財産につき修理その他その価額を増加する処分をすることができる。</p>
+      <p class="line"><span class="tag">〔4〕(1) 換価の制限（果実）</span>果実は<em>成熟した</em>後、蚕は<em>繭</em>となった後でなければ、換価をすることができない。</p>
+      <p class="line"><span class="tag">〔5〕 買受人の制限</span><em>滞納者</em>は、換価の目的となった自己の財産を、直接であると間接であるとを問わず、買い受けることができない。また、国税庁・国税局・税務署・税関に所属する職員で国税に関する事務に従事する職員も、買い受けることができない。</p>
+      <p class="line"><span class="tag">〔6〕(1) 暴力団員等でない旨の陳述</span>公売不動産の入札等をしようとする者（法人は代表者）は、税務署長に対し、<em>暴力団員</em>等のいずれにも該当しない旨を陳述しなければ、入札等をすることができない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>修理等の処分は<b>滞納者の同意</b>があって初めてできる。税務署長が勝手に財産の価値を増やす処分をすることは許されない。</li>
+        <li>換価の制限は天然果実（米など）が<b>成熟した後</b>という基準だが、蚕だけは特別に<b>繭となった後</b>という独自の基準がある（3-1パーツ3の「差押えの効力は天然果実に及ぶ」という話と、こちらは「いつ換価できるか」という別の論点である点に注意）。</li>
+        <li>買受人の制限は<b>滞納者本人</b>と<b>国税に関する事務に従事する国税庁・国税局・税務署・税関の職員</b>の2種類。</li>
+        <li>暴力団員等でない旨の陳述義務は<b>公売不動産</b>に限定された規定。動産や債権の公売にはこの陳述義務は課されない。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p9">
+    <div class="phead"><div class="badge">9</div>
+      <div class="ptitle">虚偽陳述の罰則・公売実施の適正化・公売保証金の処理・参加差押えをした税務署長による換価<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔6〕(3) 虚偽陳述の罰則</span>陳述すべき事項について虚偽の陳述をした者は、<em>6月以下</em>の懲役又は<em>50万円以下</em>の罰金に処する。</p>
+      <p class="line"><span class="tag">〔7〕(1) 公売実施の適正化</span>税務署長は、公売への参加・買受代金の納付等を妨害した者、不正に連合した者などに該当する事実がある者については、その事実があった後<em>2年間</em>、公売の場所に入ることを制限し、退場させ、又は入札等をさせないことができる。</p>
+      <p class="line"><span class="tag">〔7〕(3) 公売保証金の処理</span>処分を受けた者の納付した公売保証金があるときは、<em>国庫</em>に帰属する。</p>
+      <p class="line"><span class="tag">〔8〕 参加差押えをした税務署長による換価</span>参加差押えをした税務署長は、その参加差押不動産が換価の催告をしてもなお換価に付されないときは、参加差押えに係る滞納処分をした行政機関等の<em>同意</em>を得て、参加差押不動産につき換価の執行をする旨の決定（換価執行決定）をすることができる。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>虚偽陳述の罰則は<b>6月以下の懲役又は50万円以下の罰金</b>。6章に出てくる滞納処分を免れる行為の罰則（3年以下の懲役・250万円以下の罰金）とは桁が違うので、数字を混同しないよう「軽い違反＝軽い罰則」で整理する。</li>
+        <li>公売実施を妨害した者等は<b>その事実があった後2年間</b>、公売参加が制限される。</li>
+        <li>不正等で処分を受けた者が納付した公売保証金は<b>国庫に帰属</b>し、返還されない。次パーツ12〔5〕(4)の「買受人となり得なかった者への保証金は<b>遅滞なく返還</b>」という通常ルールとは正反対の扱いになる点が最大の対比ポイント。</li>
+        <li>参加差押えをした税務署長が自ら換価するには、本来の滞納処分をした行政機関等の<b>同意</b>が要る。他人（本来の差押権者）の権限に踏み込む話なので同意が必要、という理屈で覚える。</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- 問題3-12 -->
+  <h2 class="sec">問題3-12　公売の手続 <span class="n">20文／5パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p10">
+    <div class="phead"><div class="badge">10</div>
+      <div class="ptitle">公売・公売公告<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕 公売</span>税務署長は、差押財産等を換価するときは、これを公売に付さなければならない。公売は、<em>入札</em>又は<em>競り売り</em>の方法により行わなければならない。</p>
+      <p class="line"><span class="tag">〔2〕 公売公告</span>税務署長は、差押財産等を公売に付するときは、公売の日の少なくとも<em>10日前</em>までに、公売財産の名称、数量、性質及び所在その他一定の事項を公告しなければならない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>公売の方法は<b>入札又は競り売り</b>の2つだけ。随意契約（3-11〔1〕(3)や次の問題3-12〔12〕）は公売そのものではなく<b>公売に代わる別の売却方法</b>という位置づけを混同しない。</li>
+        <li><span class="mine">あなたのメモ</span>「10日前までがややこしいな。19.18.17.16.15....って数えんとわからんもんな。そもそも公売公告を公売日の10日前までってことすらおぼえれてなかったけどな。」— 公売公告は公売の日の<b>少なくとも10日前</b>まで。3-1パーツ2の差押換えの換価申立て（7日）などと数字を混同しないよう、「公売公告＝10日」で固定して覚える。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p11">
+    <div class="phead"><div class="badge">11</div>
+      <div class="ptitle">公売の通知・債権現在額申立書・見積価額の決定<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔3〕(1) 公売の通知</span>税務署長は、公売公告をしたときは、公告した事項及び公売に係る国税の額を、<em>滞納者</em>及び交付要求をした者・公売財産上に権利を有する者・換価同意行政機関等のうち知れている者に通知しなければならない。</p>
+      <p class="line"><span class="tag">〔3〕(2) 債権現在額申立書</span>税務署長は、公売の通知をするときは、売却代金から配当を受けることができる者のうち知れている者に対し、<em>債権現在額申立書</em>をその財産の<em>売却決定をする日の前日</em>までに提出すべき旨の催告をあわせてしなければならない。</p>
+      <p class="line"><span class="tag">〔4〕 見積価額の決定</span>税務署長は、近傍類似又は同種の財産の取引価格、公売財産から生ずべき収益、公売財産の原価その他の事情を適切に勘案して、公売財産の<em>見積価額</em>を決定し、所定の日までにその<em>見積価額</em>を公告しなければならない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>公売の通知先は<b>知れている者</b>への通知という点で、3-3パーツ8の質権者等への差押えの通知と同じ発想。宛先には滞納者本人も含まれることを忘れない。</li>
+        <li>債権現在額申立書の提出期限は<b>売却決定をする日の前日まで</b>。配当計算（後の問題3-15）の前提資料になる書類で、公売の日そのものではない点に注意。</li>
+        <li>見積価額の決定基準は<b>取引価格・収益・原価</b>など複数の事情を総合的に勘案するという抽象的な基準。次パーツの公売保証金の額の基準（見積価額の割合）につながる出発点になる数字。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p12">
+    <div class="phead"><div class="badge">12</div>
+      <div class="ptitle">公売保証金・公売保証金の不要・公売保証金の返還<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔5〕(1)① 公売保証金</span>入札者等は、税務署長が公売財産の<em>見積価額の100分の10以上の額</em>により定める公売保証金を提供しなければならない。</p>
+      <p class="line"><span class="tag">〔5〕(1)② 公売保証金の不要</span>税務署長は、公売財産の見積価額が<em>50万円以下</em>である場合又は買受代金を売却決定の日に納付させる場合は、公売保証金の提供を要しないものとすることができる。</p>
+      <p class="line"><span class="tag">〔5〕(4) 公売保証金の返還</span>税務署長は、買受人以外の入札者等が提供した公売保証金を、その者が買受人となり得ないことが確定した場合には、<em>遅滞なく</em>、その提供した者に返還しなければならない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>公売保証金の額は見積価額の<b>100分の10以上</b>で税務署長が定める。</li>
+        <li>公売保証金が不要になるのは①見積価額が<b>50万円以下</b>、②買受代金を<b>売却決定の日に納付させる</b>場合の2パターン。どちらか一方に該当すれば足りる。</li>
+        <li>買受人になれなかった入札者等の保証金は<b>遅滞なく返還</b>するのが通常のルール。パーツ9の「不正等で処分を受けた者の保証金は国庫に帰属して<u>返還されない</u>」という例外と対で覚えると忘れにくい。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p13">
+    <div class="phead"><div class="badge">13</div>
+      <div class="ptitle">再度入札・最高価申込者の決定・次順位買受申込者の決定<span class="min">⏱ 15分・山場</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔6〕(3) 再度入札</span>税務署長は、入札の方法により公売する場合において、入札者がないとき又は入札価額が見積価額に達しないときは、直ちに<em>再度入札</em>をすることができる。この場合、見積価額を<em>変更することができない</em>。</p>
+      <p class="line"><span class="tag">〔8〕 最高価申込者の決定</span>徴収職員は、見積価額以上の入札者等のうち最高の価額による入札者等を<em>最高価申込者</em>として定める。最高の価額による入札者等が2人以上あるときは更に入札等をさせて定め、なお価額が同じときは<em>くじ</em>で定める。</p>
+      <p class="line"><span class="tag">〔9〕 次順位買受申込者の決定</span>徴収職員は、入札の方法により不動産等の公売をした場合において、最高価申込者の入札価額に次ぐ高い価額（見積価額以上でかつ最高入札価額から<em>公売保証金の額</em>を控除した金額以上であるものに限る。）による入札者から申込みがあるときは、その者を<em>次順位買受申込者</em>として定めなければならない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>再度入札の条件は<b>入札者がない</b>又は<b>入札価額が見積価額に達しない</b>の2パターン。この場合、見積価額は<b>変更することができない</b>——次パーツの再公売（見積価額を変更できる）との違いが最大の引っかけ所なので、「再度入札＝変更不可／再公売＝変更可」で対にして覚える。</li>
+        <li>最高価申込者が同額で複数いるときは<b>くじ</b>で決める（話し合いや先着順ではない）。</li>
+        <li>次順位買受申込者の要件は「見積価額以上」かつ「最高入札価額から<b>公売保証金の額</b>を控除した金額以上」の両方を満たすこと。不動産等の<b>入札</b>の場合に限られ、競り売りには適用されない。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p14">
+    <div class="phead"><div class="badge">14</div>
+      <div class="ptitle">再公売・随意契約による売却・不動産等の意義<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔11〕 再公売</span>税務署長は、公売に付しても入札者等がないとき又は一定の場合において売却決定を取り消したときなどは、更に公売に付するものとする。この場合、公売財産の<em>見積価額</em>などを変更することができる。</p>
+      <p class="line"><span class="tag">〔12〕 随意契約による売却</span>次のいずれかに該当する場合には、税務署長は、差押財産等を、公売に代えて、<em>随意契約</em>により売却することができる。①法令により買受人が一人であるとき等②取引所の相場がある財産をその日の相場で売却するとき③公売に付しても入札等がない・見積価額に達しない・売却決定を取り消したとき。</p>
+      <p class="line"><span class="tag">〔14〕 不動産等の意義</span>不動産等とは、不動産、船舶、航空機、自動車、建設機械、小型船舶、債権又は<em>電話加入権</em>以外の無体財産権等をいう。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>再公売では公売財産の<b>見積価額などを変更できる</b>。パーツ13の再度入札（変更不可）と正反対なので、「再<u>度</u>入札は不可、再<u>公売</u>は可」と言葉の違いで区別する。</li>
+        <li>随意契約は3パターン：①法令上買受人が一人に限られる等②<b>取引所の相場がある財産</b>（パーツ5〔1〕(2)①の上場株式＝振替社債等がここに該当）をその日の相場で売却③公売しても入札等がない等の場合。3-11〔1〕(3)の一括換価の随意契約とは根拠条文が別だが、どちらも「公売の例外」という位置づけは共通。</li>
+        <li>不動産等の定義から<b>電話加入権</b>は除かれる。電話加入権はパーツ4の第三債務者等がない無体財産権等に分類され、次パーツの「動産等」の売却決定手続（公売期日等に即日決定）が適用される財産である点を先取りしておく。</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- 問題3-13 -->
+  <h2 class="sec">問題3-13　売却決定・買受代金の納付 <span class="n">9文／2パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p15">
+    <div class="phead"><div class="badge">15</div>
+      <div class="ptitle">動産等の売却決定・不動産等の売却決定・動産有価証券の売却決定の取消し<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕(1) 動産等の売却決定</span>税務署長は、動産、有価証券又は電話加入権を換価に付すときは、<em>公売期日等</em>において<em>最高価申込者</em>に対して売却決定を行う。</p>
+      <p class="line"><span class="tag">〔1〕(2) 不動産等の売却決定</span>税務署長は、不動産等を換価に付すときは、<em>公売期日等</em>から起算して<em>7日</em>を経過した日（不動産は暴力団員等該当性の調査に通常要する日数を勘案して定めた日。売却決定期日）において最高価申込者に対して売却決定を行う。</p>
+      <p class="line"><span class="tag">〔2〕 動産・有価証券の売却決定の取消し</span>換価をした動産又は有価証券に係る売却決定の取消しは、これをもって買受代金を納付した<em>善意</em>の買受人に対抗することができない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>動産・有価証券・<b>電話加入権</b>（パーツ14で「不動産等」から除かれると確認した財産）は<b>公売期日等に即日</b>売却決定。不動産等は<b>7日経過した日</b>まで待つ——暴力団員等でないかの調査期間を確保するため（パーツ8の陳述義務・調査と同じ趣旨）。この日数差が動産等と不動産等の一番の違い。</li>
+        <li>売却決定の取消しは、<b>善意で</b>買受代金を納付した買受人には対抗できない。すでにお金を払って財産を得たと信じている買受人を保護する規定。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p16">
+    <div class="phead"><div class="badge">16</div>
+      <div class="ptitle">買受代金の納付の期限・代金不納付による取消し・売却決定通知書の交付<span class="min">⏱ 15分・山場</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔3〕(1) 買受代金の納付の期限</span>買受人は、換価財産の買受代金を、<em>売却決定の日</em>に現金で納付しなければならない。ただし、税務署長は、必要があると認めるときは、この納付の期限を<em>30日を超えない</em>期間で延長することができる。</p>
+      <p class="line"><span class="tag">〔3〕(2) 代金不納付による取消し</span>税務署長は、買受人が買受代金をその納付の期限までに納付しないときは、その<em>売却決定</em>を取り消すことができる。</p>
+      <p class="line"><span class="tag">〔4〕 売却決定通知書の交付</span>買受人が買受代金を納付したときは、税務署長は、<em>売却決定通知書</em>を買受人に交付しなければならない。ただし、<em>動産</em>については、その交付をしないことができる。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「動産のオークションには金持って参加しろよ！」— 買受代金の納付期限は原則<b>売却決定の日</b>に現金で即日払い。ただし税務署長の裁量で<b>30日を超えない</b>期間まで延長できる（無条件の即日払いではない）。</li>
+        <li>期限までに納付しないときの売却決定の取消しは<b>できる規定</b>（義務ではなく裁量）。</li>
+        <li>売却決定通知書は原則買受人に交付するが、<b>動産</b>だけは交付しないことができる。パーツ1で見た「不動産は差押調書の<u>謄本</u>を交付しなくてよい」のと対になる形で、今度は<b>動産の方が交付を省略できる</b>側になっている——どちらの財産がどちらの書面を省略できるかを逆に覚えないよう注意。</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <footer class="foot">
+    国税徴収法　15分暗記パーツ集　3章 滞納処分（中盤）（51文／16パーツ）／ 2026-08-27 作成。<br>
+    本文は理論テキストの規定本文どおり。落とし穴は学習アプリの○×解説・あなた自身のメモ・誤答データから抽出。<br>
+    <span class="mine">あなたのメモ</span> の付いた項目は、過去にあなたが書き残した気づきをそのまま使っています。<br>
+    チェックはこの端末に保存されます。
+    <br><button class="reset" onclick="resetAll()">チェックを全部リセット</button>
+  </footer>
+
+</div>
+</div>
+
+<script>
+  var KEY='kokucho_parts_ch3b_v1';
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ return {}; } }
+  function save(o){ try{ localStorage.setItem(KEY, JSON.stringify(o)); }catch(e){} }
+  function refresh(){
+    var st=load(), n=0, all=document.querySelectorAll('.part');
+    all.forEach(function(p){
+      var on=!!st[p.dataset.id];
+      p.classList.toggle('done', on);
+      var b=p.querySelector('.chk');
+      b.textContent = on ? '✓ 覚えた' : '覚えた';
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if(on) n++;
+    });
+    document.getElementById('pdone').textContent=n;
+    document.getElementById('pfill').style.width=(n/all.length*100)+'%';
+  }
+  function tog(btn){
+    var p=btn.closest('.part'), st=load();
+    if(st[p.dataset.id]) delete st[p.dataset.id]; else st[p.dataset.id]=1;
+    save(st); refresh();
+  }
+  function resetAll(){ save({}); refresh(); }
+  refresh();
+</script>
+</body>
+</html>
