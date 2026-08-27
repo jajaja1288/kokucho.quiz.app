@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>国税徴収法　15分暗記パーツ集　3章 滞納処分（前半）</title>
+<style>
+  :root{
+    --paper:#F7F6F3; --card:#FFFFFF; --ink:#1C1F26; --sub:#5C6270;
+    --line:#E2E0DA; --line2:#EFEDE8;
+    --deep:#2E4A3F; --deep-soft:#E6EEE9;
+    --amber:#8A5A1E; --amber-bg:#FBF1DF;
+    --red:#A33540; --red-bg:#F8E7E8;
+    --done:#3E7C5A; --done-bg:#E6F1EA;
+    --shadow:0 1px 2px rgba(20,25,35,.05),0 6px 18px rgba(20,25,35,.05);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--paper:#12141A;--card:#171B24;--ink:#E7E9EF;--sub:#9AA2B4;
+      --line:#2A2F3B;--line2:#232833;--deep:#8FBFA8;--deep-soft:#1B2B24;
+      --amber:#E0B472;--amber-bg:#332714;--red:#E7929B;--red-bg:#372124;
+      --done:#7FC3A0;--done-bg:#1B3128;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);}
+  }
+  :root[data-theme="light"]{--paper:#F7F6F3;--card:#FFFFFF;--ink:#1C1F26;--sub:#5C6270;
+    --line:#E2E0DA;--line2:#EFEDE8;--deep:#2E4A3F;--deep-soft:#E6EEE9;
+    --amber:#8A5A1E;--amber-bg:#FBF1DF;--red:#A33540;--red-bg:#F8E7E8;
+    --done:#3E7C5A;--done-bg:#E6F1EA;--shadow:0 1px 2px rgba(20,25,35,.05),0 6px 18px rgba(20,25,35,.05);}
+  :root[data-theme="dark"]{--paper:#12141A;--card:#171B24;--ink:#E7E9EF;--sub:#9AA2B4;
+    --line:#2A2F3B;--line2:#232833;--deep:#8FBFA8;--deep-soft:#1B2B24;
+    --amber:#E0B472;--amber-bg:#332714;--red:#E7929B;--red-bg:#372124;
+    --done:#7FC3A0;--done-bg:#1B3128;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);}
+
+  *{box-sizing:border-box} body{margin:0}
+  .wrap{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",system-ui,sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.75;-webkit-font-smoothing:antialiased;padding:22px 16px 70px}
+  .inner{max-width:760px;margin:0 auto}
+
+  .eyebrow{font-size:11.5px;letter-spacing:.16em;color:var(--sub);font-weight:700}
+  h1{font-size:clamp(20px,4.4vw,27px);margin:.3em 0 .25em;font-weight:800;letter-spacing:.01em;line-height:1.4}
+  .lede{color:var(--sub);font-size:13.5px;margin:0}
+  .lede b{color:var(--ink)}
+
+  .howto{margin-top:14px;background:var(--deep-soft);border-radius:12px;padding:12px 14px;font-size:13px}
+  .howto b{color:var(--deep)}
+  .howto ol{margin:6px 0 0;padding-left:1.25em}
+  .howto li{margin:2px 0}
+
+  .key{margin-top:12px;background:var(--red-bg);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.8}
+  .key b{color:var(--red)}
+
+  .prog{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:12.5px;color:var(--sub)}
+  .prog .track{flex:1;height:7px;border-radius:99px;background:var(--line);overflow:hidden}
+  .prog .fill{height:100%;background:var(--done);width:0;transition:width .25s ease}
+  .prog b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+  h2.sec{font-size:16px;font-weight:800;color:var(--deep);margin:30px 0 4px;display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  h2.sec .n{font-size:11.5px;color:var(--sub);font-weight:700}
+  .secrule{height:2px;background:linear-gradient(90deg,var(--deep),transparent);opacity:.5;border-radius:2px;margin-bottom:14px}
+
+  .part{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 15px;box-shadow:var(--shadow);margin-bottom:13px}
+  .part.done{border-color:var(--done);background:var(--done-bg)}
+  .phead{display:flex;align-items:flex-start;gap:10px}
+  .badge{flex:none;min-width:30px;height:30px;border-radius:9px;background:var(--deep-soft);color:var(--deep);
+    font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;padding:0 6px}
+  .part.done .badge{background:var(--done);color:#fff}
+  .ptitle{flex:1;font-weight:800;font-size:15px;line-height:1.5}
+  .ptitle .min{display:block;font-size:11.5px;color:var(--sub);font-weight:600;margin-top:1px}
+  .chk{flex:none;border:1px solid var(--line);background:none;color:var(--sub);border-radius:8px;padding:5px 9px;
+    font-size:11.5px;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .chk:hover{border-color:var(--done);color:var(--done)}
+  .chk:focus-visible{outline:2px solid var(--done);outline-offset:2px}
+  .part.done .chk{background:var(--done);border-color:var(--done);color:#fff;font-weight:700}
+
+  .body{margin-top:11px;padding-top:11px;border-top:1px dashed var(--line)}
+  .line{font-size:14.5px;margin:0 0 9px;padding-left:13px;border-left:2px solid var(--line2)}
+  .line:last-child{margin-bottom:0}
+  .line .tag{display:block;font-size:11px;color:var(--sub);font-weight:700;margin-bottom:1px;letter-spacing:.02em}
+  em{font-style:normal;background:linear-gradient(transparent 62%,var(--deep-soft) 62%);font-weight:700}
+
+  .trap{margin-top:11px;background:var(--amber-bg);border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.7}
+  .trap .t{font-weight:800;color:var(--amber);font-size:11.5px;letter-spacing:.03em;display:block;margin-bottom:3px}
+  .trap u{text-decoration:none;color:var(--red);font-weight:800;background:var(--red-bg);border-radius:4px;padding:0 3px}
+  .trap ul{margin:0;padding-left:1.15em}
+  .trap li{margin:3px 0}
+  .mine{display:inline-block;font-size:10.5px;font-weight:800;color:var(--deep);background:var(--deep-soft);
+    border-radius:999px;padding:1px 7px;margin-right:4px;vertical-align:middle}
+
+  footer.foot{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);font-size:11.5px;color:var(--sub);line-height:1.8}
+  .reset{background:none;border:1px solid var(--line);color:var(--sub);border-radius:8px;padding:5px 10px;font-size:11.5px;cursor:pointer;font-family:inherit;margin-top:8px}
+  .reset:hover{border-color:var(--red);color:var(--red)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="inner">
+
+  <header>
+    <div class="eyebrow">国税徴収法 ／ 15分暗記パーツ集</div>
+    <h1>3章　滞納処分（前半）</h1>
+    <p class="lede">問題3-1〜3-7・全<b>58文</b>を<b>17パーツ</b>に細分化。1パーツ15分＝<b>約6日ぶん</b>（夜3パーツ×6日）。本文は理論テキストのまま。</p>
+
+    <div class="howto">
+      <b>使い方（1パーツ15分）</b>
+      <ol>
+        <li>本文を声に出して2回読む（3分）</li>
+        <li>隠して書く／言う → 詰まった所だけ見る（9分）</li>
+        <li>落とし穴を確認して、もう1回通す（3分）</li>
+      </ol>
+    </div>
+
+    <div class="key">
+      <b>この章の最重要ルール：「超過差押えの禁止」と「無益な差押えの禁止」は別物です。</b><br>
+      超過差押えの禁止＝<b>財産の価額</b>と<b>徴収すべき国税</b>の比較（必要な財産以外はダメ）。
+      無益な差押えの禁止＝<b>財産の価額</b>と<b>滞納処分費＋先だつ他の債権の合計額</b>の比較（配当が回ってこない財産はダメ）。
+      <u>法定納期限等以前に設定された抵当権があるケース</u>は後者で引っかけられやすいので要注意。
+    </div>
+
+    <div class="prog">
+      <span>覚えた</span>
+      <span class="track"><span class="fill" id="pfill"></span></span>
+      <span><b id="pdone">0</b> / <b>17</b></span>
+    </div>
+  </header>
+
+  <!-- 問題3-1 -->
+  <h2 class="sec">問題3-1　滞納処分の要件・差押禁止財産等 <span class="n">15文／5パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p1">
+    <div class="phead"><div class="badge">1</div>
+      <div class="ptitle">差押えの要件（原則・繰上・第二次納税義務者等）<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕(1) 差押えの要件（原則）</span>国税が滞納となった場合には、原則として国税の納期限から<em>50日以内</em>に督促状による督促をし、納税者がその督促に係る国税をその督促状を発した日から起算して<em>10日を経過した日</em>までに完納しないときは、徴収職員は、滞納者の国税につきその財産を<em>差し押さえなければならない</em>。</p>
+      <p class="line"><span class="tag">〔1〕(3) 繰上差押え</span>国税の納期限後督促状を発した日から起算して10日を経過した日までに、督促を受けた滞納者につき、<em>繰上請求の事実</em>が生じたときは、徴収職員は、<em>直ちに</em>その財産を差し押さえることができる。</p>
+      <p class="line"><span class="tag">〔1〕(4) 第二次納税義務者等への適用</span>第二次納税義務者又は保証人に適用する場合には、督促状を<em>納付催告書</em>とする。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「初日不算入（5日から数える）とみせかけて発した日から『起算』なので4日から数える＆経過した日（10日経ったら13日だけど『した日』なので14日が期日）＆期日の次の日から差押え可能なので正しくは15日から差押えが可能ですよと。」— 4/4発送なら、13日目が4/16、期日は<u>4/17</u>、差押え可能は<u>4/18</u>から、という要領で自分の督促日で指を折って数える。</li>
+        <li>〔1〕(3)繰上差押えの決め手は<b>繰上請求の事実</b>。緩和措置の章に出てくる<b>繰上保全差押え</b>とは別物なので混同しない。</li>
+        <li>〔1〕(4)第二次納税義務者・保証人には督促状の代わりに<b>納付催告書</b>を使う。第二次納税義務そのものの告知書は<b>納付通知書</b>（別の書類）なので名前が似ていて紛らわしい。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p2">
+    <div class="phead"><div class="badge">2</div>
+      <div class="ptitle">超過差押えの禁止・無益な差押えの禁止・給与の差押禁止<span class="min">⏱ 15分・山場</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔2〕 超過差押えの禁止</span>国税を徴収するために<em>必要な</em>財産以外の財産は、差し押さえることができない。</p>
+      <p class="line"><span class="tag">〔3〕 無益な差押えの禁止</span>差し押さえることができる財産の価額がその差押えに係る滞納処分費及び徴収すべき国税に先だつ他の国税、地方税その他の債権の金額の合計額を<em>超える見込みがない</em>ときは、その財産は、差し押さえることができない。</p>
+      <p class="line"><span class="tag">〔5〕 給与の差押禁止</span>給与等については、<em>源泉徴収される</em>所得税に相当する金額、最低生活費保障額など一定の金額の合計額に達するまでの部分の金額については、差し押さえることができない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「不可分な財産という単語。」— 超過差押えの禁止は<b>その財産自体を分けられるか</b>で判定する。一つの不可分な土地なら価額が国税を超えていても超過差押えには<u>ならない</u>。</li>
+        <li>無益な差押えの禁止は<b>先順位の他の債権（滞納処分費＋先だつ国税・地方税等）</b>との比較。法定納期限等以前に設定された抵当権の被担保債権額と財産の時価が同額なら、配当が国税に回ってこないので<u>無益な差押えの禁止</u>で差し押さえられない（超過差押えの禁止ではない）。</li>
+        <li>給与等の差押禁止は<b>源泉徴収される所得税相当額＋最低生活費保障額など</b>の合計額まで、という<u>絶対的な</u>差押禁止。次パーツの条件付差押禁止財産（農業・漁業用資産等）は<b>滞納者の選択・申出</b>があって初めて外れる点が違う。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p3">
+    <div class="phead"><div class="badge">3</div>
+      <div class="ptitle">条件付差押禁止財産・果実（天然果実・法定果実）<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔6〕 条件付差押禁止財産</span>農業、漁業及び他の職業又は事業に必要な財産は、滞納者がその国税の<em>全額</em>を徴収することができる財産で、換価が困難でなく、かつ、第三者の権利の目的となっていないものを提供したときは、<em>その選択により</em>、差押えをしないものとする。</p>
+      <p class="line"><span class="tag">〔7〕(1) 果実（天然果実）</span>差押えの効力は、差押財産から生ずる<em>天然果実</em>に及ぶ。ただし、滞納者又は第三者が差押財産の使用又は収益をすることができる場合には、その財産から生ずる天然果実については、この限りでない。</p>
+      <p class="line"><span class="tag">〔7〕(2) 果実（法定果実）</span>差押えの効力は、差押財産から生ずる<em>法定果実</em>に及ばない。ただし、債権を差し押さえた場合における<em>差押え後の利息</em>については、この限りでない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>条件付差押禁止財産は、滞納者が①国税の<b>全額</b>を徴収できる財産で②換価が困難でなく③第三者の権利の目的になっていないものを<b>提供したとき</b>に限り、その<b>選択により</b>差押えをしない。滞納者側からのアクションが要る。</li>
+        <li>天然果実（米・卵など）は差押えの効力が<b>原則及ぶ</b>が、滞納者等が使用収益できる場合は及ばない。法定果実（利息・賃料など）は<b>原則及ばない</b>が、<u>債権を差し押さえた場合の差押え後の利息</u>だけは例外的に及ぶ。原則と例外が天然・法定で<b>逆向き</b>になっているのが引っかけ所。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p4">
+    <div class="phead"><div class="badge">4</div>
+      <div class="ptitle">相続後の滞納処分・仮差押え等がされた財産・保険金に対する効力<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔8〕(2) 相続後の滞納処分</span>滞納者の死亡後にその国税につき滞納者の名義の財産に対してした差押えは、その国税につきその財産を有する<em>相続人に対してされたものとみなす</em>。ただし、徴収職員がその死亡を<em>知っていたとき</em>は、この限りでない。</p>
+      <p class="line"><span class="tag">〔9〕 仮差押え等がされた財産</span>滞納処分は、<em>仮差押え又は仮処分</em>によりその執行を妨げられない。</p>
+      <p class="line"><span class="tag">〔10〕(1) 保険金に対する効力</span>差押財産が損害保険に付されているときは、その差押えの効力は、<em>保険金の支払を受ける権利</em>に及ぶ。ただし、財産を差し押さえた旨を保険者に<em>通知しなければ</em>、その差押えをもって保険者に対抗することができない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>相続後の滞納処分は、滞納者名義のままの財産への差押えを<b>相続人に対してされたもの</b>とみなす救済規定。ただし<u>徴収職員が滞納者の死亡を知っていたとき</u>はこのみなしは働かない（知らずにやった場合だけ救われる）。</li>
+        <li>仮差押え・仮処分（民事保全）は滞納処分の執行を<b>妨げない</b>＝私人の保全手続より滞納処分が強い。</li>
+        <li>保険金への差押えの効力は自動的に及ぶが、<b>保険者に通知しないと保険者に対抗できない</b>。差し押さえただけでは足りず「通知」までがセット。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p5">
+    <div class="phead"><div class="badge">5</div>
+      <div class="ptitle">差押えの解除（法定解除・裁量解除）・時効の完成猶予及び更新<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔11〕(1) 差押えの解除（法定解除）</span>徴収職員は、次のいずれかに該当するときは、差押えを解除しなければならない。①差押えに係る国税の<em>全額が消滅したとき</em>。②差押財産の価額が滞納処分費及び先だつ債権の合計額を超える<em>見込みがなくなったとき</em>。</p>
+      <p class="line"><span class="tag">〔11〕(2) 差押えの解除（裁量解除）</span>差押財産について、<em>3回公売</em>に付しても入札等がなかった場合において、更に公売に付しても買受人がないと認められ、かつ、随意契約による売却の見込みがないと認められるときは、徴収職員は、その差押えを<em>解除することができる</em>。</p>
+      <p class="line"><span class="tag">〔12〕 時効の完成猶予及び更新</span>国税の徴収権の時効は、督促状を発した日から起算して10日を経過した日（繰上差押えがされた場合には、そのされた日）までの期間は<em>完成せず</em>、その期間を経過した時から<em>新たにその進行を始める</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>法定解除の②は「差押財産の価額が滞納処分費＋先だつ他の債権の合計額を<b>超える見込みがなくなったとき</b>」＝パーツ2の<b>無益な差押えの禁止</b>の状態に陥ったとき、というだけ。要件を欠くに至ったら義務的に<u>解除しなければならない</u>。</li>
+        <li>裁量解除は「<b>3回公売</b>に付しても入札等がなく、更に公売しても買受人がないと認められ、かつ随意契約の見込みもない」という3条件がすべて揃って初めて<u>解除できる</u>（義務ではなく裁量）。</li>
+        <li>時効の完成猶予の起算点は「督促状を発した日から起算して<b>10日を経過した日</b>」＝パーツ1〔1〕の差押えができるようになる日と<u>同じ基準日</u>。繰上差押えがされた場合は<b>そのされた日</b>に読み替える。</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- 問題3-2 -->
+  <h2 class="sec">問題3-2　第三者・相続人の権利の尊重と差押換え <span class="n">7文／2パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p6">
+    <div class="phead"><div class="badge">6</div>
+      <div class="ptitle">第三者の権利の尊重・差押換えの請求・請求に対する措置・換価申立て<span class="min">⏱ 15分・山場</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕 第三者の権利の尊重</span>徴収職員は、滞納者の財産を差し押さえる場合には、滞納処分の執行に<em>支障がない限り</em>、その財産につき第三者が有する権利を害さないように<em>努めなければならない</em>。</p>
+      <p class="line"><span class="tag">〔2〕 第三者からの差押換えの請求</span>質権、抵当権、先取特権、留置権、賃借権その他第三者の権利の目的となっている財産が差し押さえられた場合においては、その第三者は、税務署長に対し、滞納者が次のすべてに該当する財産を有することを理由として、その財産の公売公告の日までにその差押換えを請求することができる。(1)<em>換価の容易なものであること</em>(2)<em>他の第三者の権利の目的となっていないものであること</em>(3)<em>滞納国税の全額を徴収できるものであること</em>。</p>
+      <p class="line"><span class="tag">〔3〕 差押換えの請求に対する措置</span>税務署長は、差押換えの請求を<em>相当と認めるとき</em>は、その差押換えをしなければならないものとし、その請求を<em>相当と認めないとき</em>は、その旨をその第三者に通知しなければならない。</p>
+      <p class="line"><span class="tag">〔4〕 換価申立て</span>差押換えの請求を相当と認めない通知があった場合においては、その第三者は、税務署長に対し、その通知を受けた日から<em>起算して7日を経過した日まで</em>に、差押換えの請求をした財産の<em>換価を申し立てる</em>ことができる。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>〔1〕は「滞納処分の執行に<b>支障がない限り</b>」第三者の権利を害さないよう努める、という<b>努力義務</b>。裏を返せば<u>支障がある場合は害してもよい</u>（パーツ2の無益な差押えの禁止とは別の場面での「支障」の使われ方）。</li>
+        <li><span class="mine">あなたのメモ</span>「差押換えの時は、換価が容易か、他の第三者の権利の目的となっていない、滞納国税の全額を徴収することができるか、をチェック」— この3条件は丸ごと暗記。公売公告の<b>日まで</b>に請求できる期限にも注意。</li>
+        <li><span class="mine">あなたのメモ</span>「あいつのこれを差押換えしてください！って言ったけど無理だったから、じゃあ換価してください！っておねがいするってことね。」— 差押換えの請求が<b>認められなかった</b>ときの次の一手が換価申立て。通知を受けた日から<b>起算して7日を経過した日</b>までが期限。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p7">
+    <div class="phead"><div class="badge">7</div>
+      <div class="ptitle">換価申立てに対する措置・相続人の権利の尊重・相続人からの差押換えの請求<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔5〕(2) 換価申立てに対する措置</span>税務署長は、換価申立てがあった場合において、その申立てがあった日から<em>2月以内</em>にその財産を差し押さえ、かつ、<em>換価に付さないとき</em>は、当初差し押さえたその財産の差押えを<em>解除しなければならない</em>。</p>
+      <p class="line"><span class="tag">〔7〕 相続人の権利の尊重</span>徴収職員は、被相続人の国税につきその相続人の財産を差し押さえる場合には、滞納処分の執行に支障がない限り、<em>まず相続財産を差し押さえるように</em>努めなければならない。</p>
+      <p class="line"><span class="tag">〔8〕 相続人からの差押換えの請求</span>被相続人の国税につき相続人の<em>固有財産が差し押さえられた場合</em>においては、その相続人は、税務署長に対し、次のすべてに該当する相続財産を有することを理由として、その財産の公売公告の日までにその差押換えを請求することができる。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>換価申立てへの措置は「申立てから<b>2月以内</b>に<u>差し押さえ、かつ、換価に付さないとき</u>」の両方がそろって初めて解除義務が生じる。差し押さえただけ・換価しただけでは解除にならない。</li>
+        <li>〔7〕〔8〕は<b>パーツ6の第三者版と同じ構造</b>を「相続人」に置き換えただけ。徴収職員はまず<b>相続財産</b>を差し押さえるよう努め、それでも<b>相続人の固有財産</b>が差し押さえられた場合には、相続人が差押換えを請求できる。</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- 問題3-3 -->
+  <h2 class="sec">問題3-3　差押え・解除に関する通知 <span class="n">4文／1パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p8">
+    <div class="phead"><div class="badge">8</div>
+      <div class="ptitle">差押調書の作成等・質権者等への通知・保険者への通知・差押解除の通知<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕 差押調書の作成等</span>徴収職員は、滞納者の財産を差し押さえたときは、<em>差押調書を作成し</em>、その財産が動産・有価証券、債権、第三債務者等がある無体財産権等であるときは、その<em>謄本を滞納者に交付しなければならない</em>。</p>
+      <p class="line"><span class="tag">〔2〕 質権者等に対する差押えの通知</span>質権、抵当権、先取特権、留置権、賃借権その他の第三者の権利の目的となっている財産等を差し押さえたときは、税務署長は、次に掲げる者のうち知れている者に対し、その旨その他必要な事項を記載した<em>差押通知書により通知しなければならない</em>。</p>
+      <p class="line"><span class="tag">〔3〕 保険者に対する差押えの通知</span>差し押さえた財産が損害保険に付されているときは、差し押さえた旨を<em>保険者に通知する</em>。</p>
+      <p class="line"><span class="tag">〔4〕 差押解除の通知</span>税務署長は、差押えを解除した場合において、質権者等のうち知れている者及び交付要求をしている者があるときは、これらの者に<em>その旨その他必要な事項を通知しなければならない</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「差押え調書は必ず必要」— 差押調書の<b>作成</b>はどの財産でも常に必須。ただしその<b>謄本を滞納者に交付</b>する義務があるのは<u>動産・有価証券、債権、第三債務者等がある無体財産権等</u>の場合だけ（不動産はここに含まれず交付不要）。「作成は常に／交付は限定」で切り分ける。</li>
+        <li>〔2〕質権者等への通知と〔3〕保険者への通知は<b>両方とも差し押さえた財産に利害関係を持つ第三者への連絡</b>という点で共通。ただし質権者等は<b>差押通知書</b>という正式書面、保険者への通知はそこまで様式が決まっていない点で書きぶりが違う。</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- 問題3-4 -->
+  <h2 class="sec">問題3-4　動産・有価証券の差押え <span class="n">9文／3パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p9">
+    <div class="phead"><div class="badge">9</div>
+      <div class="ptitle">占有・保管・効力発生時期<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕(1) 占有</span>動産又は有価証券の差押えは、徴収職員がその財産を<em>占有して行う</em>。</p>
+      <p class="line"><span class="tag">〔1〕(2) 保管</span>徴収職員は、必要があると認めるときは、差し押さえた動産又は有価証券を<em>滞納者又はその財産を占有する第三者に保管させる</em>ことができる。ただし、その第三者に保管させる場合には、その運搬が困難であるときを除き、その者の<em>同意を受けなければならない</em>。</p>
+      <p class="line"><span class="tag">〔2〕 効力発生時期</span>動産又は有価証券の差押えの効力は、徴収職員がその財産を<em>占有した時に生ずる</em>。ただし第三者等に保管させたときは、封印、公示書その他差押えを明白にする方法により<em>差し押さえた旨を表示した時</em>に、差押えの効力が生ずる。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>動産・有価証券の差押えは<b>徴収職員が占有</b>して行うのが原則。ただし必要があれば滞納者や第三者に<b>保管</b>させることもでき、第三者に保管させる場合は<u>その者の同意</u>が要る（ただし<b>運搬が困難なとき</b>は同意不要という例外つき）。</li>
+        <li>効力発生時期は、徴収職員が<b>占有した時</b>が原則。第三者等に保管させたときは、封印・公示書などで<b>差し押さえた旨を表示した時</b>にずれる。「占有」と「表示」のどちらの時点かは保管させたかどうかで変わる。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p10">
+    <div class="phead"><div class="badge">10</div>
+      <div class="ptitle">差押動産の使用収益・金銭差押えの効果・取立権の取得<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔3〕(1) 差押動産の使用収益</span>差し押さえた動産につき、<em>原則として使用収益をすることができない</em>。ただし、徴収職員は、滞納者又は使用収益をする権利を有する第三者に保管させる場合において、国税の徴収上支障がないと認めるときは、その使用収益を<em>許可することができる</em>。</p>
+      <p class="line"><span class="tag">〔3〕(2) 金銭差押えの効果</span>徴収職員が金銭を差し押さえたときは、その限度において、滞納者から差押えに係る国税を<em>徴収したものとみなす</em>。</p>
+      <p class="line"><span class="tag">〔3〕(3) 取立権の取得</span>有価証券を差し押さえたときは、徴収職員は、その有価証券に係る<em>金銭債権の取立てをすることができる</em>。徴収職員がこれにより金銭を取り立てたときは、その限度において、滞納者から差押えに係る国税を<em>徴収したものとみなす</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>使用収益の許可は<b>パーツ9の「保管」させる場合</b>にしかあり得ない（徴収職員が占有したままなら使用収益の話自体が出てこない）。国税の徴収上支障がないと認めるときに限り許可できる、という裁量規定。</li>
+        <li>金銭を差し押さえた場合も、有価証券を差し押さえて<b>取立て</b>をした場合も、結論は同じ「その限度において<b>国税を徴収したものとみなす</b>」。お金に換わった瞬間に徴収完了として扱われる、という共通の効果。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p11">
+    <div class="phead"><div class="badge">11</div>
+      <div class="ptitle">解除の通知・引渡場所・引渡対象者<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔4〕(1) 解除の通知</span>動産又は有価証券の差押えの解除は、その旨を<em>滞納者に通知することによって行う</em>。</p>
+      <p class="line"><span class="tag">〔4〕(3) 引渡場所</span><em>国の責めに帰すべき理由</em>により差押えを解除する場合には差押えの時に存在した場所において、<em>その他の理由</em>により差押えを解除する場合には差押えを解除した時に財産が存在する場所において、動産又は有価証券の引渡しを行わなければならない。</p>
+      <p class="line"><span class="tag">〔4〕(3) 引渡対象者</span>動産又は有価証券の引渡しは、<em>滞納者に対して行う</em>。ただし、差押えの時に滞納者以外の第三者が占有していたものについては、滞納者に対して引渡しをすべき旨の申出がない限り、<em>その第三者に対して引き渡さなければならない</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>動産・有価証券の差押えの解除は<b>滞納者に通知するだけ</b>で足りる。次パーツ以降で出てくる<b>債権の差押えの解除</b>は第三債務者への通知＋滞納者への通知の<u>両方</u>が要るので、通知の相手の数が違う点に注意。</li>
+        <li>引渡場所は理由によって基準時が変わる：<b>国の責めに帰すべき理由</b>なら差押えの<b>時</b>にあった場所、<b>その他の理由</b>なら解除した<b>時</b>にある場所。引渡対象者は原則滞納者だが、差押え時に<b>第三者が占有</b>していた財産は、滞納者への引渡しの申出がない限りその<b>第三者</b>へ返す。</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- 問題3-5 -->
+  <h2 class="sec">問題3-5　第三者が占有する動産等 <span class="n">4文／1パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p12">
+    <div class="phead"><div class="badge">12</div>
+      <div class="ptitle">第三者占有動産等への差押えの制限・引渡命令・引渡命令の期限・引渡命令後の差押え<span class="min">⏱ 15分・山場</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕 第三者占有動産等への差押えの制限</span>滞納者の動産又は有価証券でその親族その他の特殊関係者以外の第三者が占有しているものは、その者が<em>引渡しを拒むときは</em>、<em>差し押さえることができない</em>。</p>
+      <p class="line"><span class="tag">〔2〕(1) 引渡命令</span>滞納者の動産又は有価証券を占有している第三者がその引渡しを拒む場合において、滞納者が次のすべて（①換価が容易②滞納国税の全額を徴収できる）を満たす財産を有しないと認められるときは、税務署長は、その第三者に対し、期限を指定して、その動産又は有価証券を徴収職員に引き渡すべきことを<em>書面にて命ずることができる</em>。</p>
+      <p class="line"><span class="tag">〔2〕(3) 引渡命令の期限</span>引渡命令の期限は、その書面を発する日から<em>起算して7日を経過した日以後の日</em>としなければならない。ただし、その第三者につき繰上請求の事実が生じたとき等は、その期限を<em>繰り上げることができる</em>。</p>
+      <p class="line"><span class="tag">〔2〕(4) 引渡命令後の差押え</span>①引渡命令に係る動産等が徴収職員に引き渡されたとき、又は②その第三者が指定された期限までにその引渡しをしないときは、徴収職員は、第三者占有動産等への差押えの制限にかかわらず、その動産又は有価証券を<em>差し押さえることができる</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>第三者（親族等の特殊関係者を除く）が占有していて<b>引渡しを拒む</b>動産・有価証券は、原則<u>差し押さえられない</u>。ここが出発点。</li>
+        <li>例外が<b>引渡命令</b>。「滞納者が①換価容易②全額徴収可能、の財産を<u>有しないと認められるとき</u>」に限り、期限を指定して引渡しを書面で命じられる。パーツ6の差押換えの請求と同じ①②の2条件が、ここでは<b>逆向き（満たさない）</b>の場合に発動する点に注意。</li>
+        <li>引渡命令の期限は「書面を発する日から起算して<b>7日を経過した日以後の日</b>」。パーツ1〔1〕(3)の<b>繰上請求の事実</b>が生じたときは、この期限も<b>繰り上げられる</b>という同じキーワードが再登場する。</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- 問題3-6 -->
+  <h2 class="sec">問題3-6　第三者占有動産等に関する第三者の権利 <span class="n">8文／2パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p13">
+    <div class="phead"><div class="badge">13</div>
+      <div class="ptitle">契約の解除（内容・通知）・損害賠償請求権への配当・前払借賃への配当・配当順位<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕(1)① 契約の解除（内容）</span>動産の引渡しを命ぜられた第三者は、賃貸借契約・使用貸借契約などに基きその動産を占有していること、引渡しにより<em>占有の目的を達することができなくなる</em>ことのすべてに該当する場合には、その占有の基礎となっている<em>契約を解除することができる</em>。</p>
+      <p class="line"><span class="tag">〔1〕(1)② 契約解除の通知</span>契約の解除を選択したときは、その旨の通知をその<em>動産の差押えの時までに</em>税務署長に対し、<em>書面にてしなければならない</em>。</p>
+      <p class="line"><span class="tag">〔1〕(2) 損害賠償請求権への配当</span>第三者は、契約の解除により滞納者に対して取得する<em>損害賠償請求権</em>については、その動産の売却代金の残余のうちから<em>配当を受けることができる</em>。</p>
+      <p class="line"><span class="tag">〔1〕(3)① 前払借賃への配当</span>動産の引渡しを命ぜられた第三者は、一定の場合には、税務署長に対し、その動産の売却代金のうちから、その借賃に相当する金額で差押えの日後の期間に係るもの（<em>最高3月分</em>）の<em>配当を請求することができる</em>。</p>
+      <p class="line"><span class="tag">〔1〕(3)② 前払借賃の配当順位</span>前払借賃は、国税優先の原則の規定にかかわらず、その<em>滞納処分費に次ぎ</em>、かつ、その動産上の<em>留置権の被担保債権に次ぐ</em>ものとして配当することができる。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「契約解除して返すか、差押になるけど使わせてもらうか」— 引渡命令を受けた第三者には<b>契約を解除して手を引く</b>（本パーツ）か、次パーツの<b>使用収益を続ける</b>かの二択がある、という全体構造をまず押さえる。解除を選ぶ通知は<u>動産の差押えの時まで</u>に書面でする。</li>
+        <li>前払借賃への配当は<b>すでに1章パーツ6</b>で「参考」としてちらっと登場した規定の本体がここ（3-6）。最高<b>3月分</b>という上限、国税優先の原則にかかわらず<b>滞納処分費に次ぎ・留置権の被担保債権に次ぐ</b>という特別な配当順位がセット。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p14">
+    <div class="phead"><div class="badge">14</div>
+      <div class="ptitle">使用収益の選択・使用収益の請求（みなし）・引渡しを拒まない第三者<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔2〕(1) 使用収益の選択</span>徴収職員は、動産の引渡しを命ぜられた第三者の請求がある場合には、その第三者が契約を解除したときを除き、その動産の占有の基礎となっている契約の期間内（<em>最高3月間</em>）は、その第三者にその<em>使用収益をさせなければならない</em>。</p>
+      <p class="line"><span class="tag">〔2〕(2) 使用収益の請求（みなし）</span>使用収益の選択をしたときは、その請求をその動産の差押えの時までに税務署長に対し書面にてする。差押えの時までに契約解除の通知又は使用収益の請求がないときは、<em>使用収益の請求があったものとみなす</em>。</p>
+      <p class="line"><span class="tag">〔3〕 引渡しを拒まない第三者</span>解除の選択及び使用収益の選択は、動産の引渡しを拒まなかった第三者について<em>準用する</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>契約を<b>解除しなかった</b>第三者が使用収益を選ぶと、契約期間内（最高<b>3月間</b>）は徴収職員が使用収益させ<b>なければならない</b>＝義務規定。前パーツの契約解除（できる規定）と語尾の強さが違う。</li>
+        <li>差押えの時までに<b>解除の通知も使用収益の請求も何もしなかった</b>場合は、自動的に<b>使用収益の請求があったものとみなす</b>。「黙っていたら使用収益を選んだことになる」という補充規定。</li>
+        <li>〔3〕は<b>引渡しを拒まなかった第三者</b>にも解除・使用収益の選択をそのまま<b>準用</b>する、という守備範囲の広げ方。拒んだかどうかで適用条文を変える必要がない。</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- 問題3-7 -->
+  <h2 class="sec">問題3-7　債権の差押え <span class="n">11文／3パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p15">
+    <div class="phead"><div class="badge">15</div>
+      <div class="ptitle">債権の差押えの通知・処分禁止・電子記録債権の差押えの通知・抵当権等の被担保債権の差押え・債権証書の取上げ<span class="min">⏱ 15分・山場</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕(1)① 債権の差押えの通知</span>債権（電子記録債権を除く。）の差押えは、<em>第三債務者に対する債権差押通知書の送達</em>により行う。</p>
+      <p class="line"><span class="tag">〔1〕(1)② 処分禁止</span>徴収職員は、債権を差し押さえるときは、第三債務者に対しその<em>履行を</em>、滞納者に対し債権の<em>取立てその他の処分を禁じなければならない</em>。</p>
+      <p class="line"><span class="tag">〔1〕(2)① 電子記録債権の差押えの通知</span>電子記録債権の差押えは、第三債務者及びその電子記録債権の電子記録をしている<em>電子債権記録機関に対する債権差押通知書の送達</em>により行う。</p>
+      <p class="line"><span class="tag">〔1〕(3) 抵当権等の被担保債権の差押え</span>抵当権又は登記することができる質権若しくは先取特権の被担保債権を差し押さえたときは、税務署長は、その債権の<em>差押えの登記を関係機関に嘱託することができる</em>。</p>
+      <p class="line"><span class="tag">〔1〕(4) 債権証書の取上げ</span>徴収職員は、債権の差押えのため必要があるときは、<em>その債権に関する証書を取り上げることができる</em>。この取上げは、動産又は有価証券の差押手続等を準用する。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「滞納者の差押え調書をA銀行に渡したらだめでしょ！プライバシーの侵害だよ！笑」— 債権を差し押さえたときの<b>債権差押通知書</b>は第三債務者（A銀行等）へ送達するもの。<u>差押調書の謄本は滞納者へ</u>交付するもので、宛先が逆にならないよう注意（パーツ8〔1〕差押調書の作成等と対で覚える）。</li>
+        <li>処分禁止は<b>第三債務者には履行を、滞納者には取立てその他の処分を</b>、それぞれ禁じるという<b>両面</b>の禁止。片方だけでは差押えの効果が完結しない。</li>
+        <li>電子記録債権は通常の債権と違い、第三債務者に<b>加えて</b>電子債権記録機関にも債権差押通知書を送達する。宛先が1か所増えるだけで、通知書という手段自体はパーツ8の差押通知書と同じ発想。</li>
+        <li>債権証書の取上げは「差押えのため<b>必要があるとき</b>」に限られる裁量規定で、<b>動産又は有価証券の差押手続等を準用</b>する（パーツ9の占有・保管の考え方がここでも生きる）。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p16">
+    <div class="phead"><div class="badge">16</div>
+      <div class="ptitle">効力発生時期・継続的な収入に対する効力・債権の取立て・弁済委託<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔2〕 効力発生時期</span>債権（電子記録債権を除く。）の差押えの効力は、債権差押通知書が<em>第三債務者に送達された時</em>に生ずる。電子記録債権の差押えの効力は、債権差押通知書が<em>電子債権記録機関に送達された時</em>に生ずる。</p>
+      <p class="line"><span class="tag">〔3〕(2) 継続的な収入に対する効力</span>給料若しくは年金又はこれらに類する継続収入の債権の差押えの効力は、<em>徴収すべき国税の額を限度として</em>、<em>差押え後に収入すべき金額に及ぶ</em>。</p>
+      <p class="line"><span class="tag">〔3〕(3)① 債権の取立て</span>徴収職員は、差し押さえた債権の<em>取立てをすることができる</em>。取り立てたものが金銭以外のものであるときは、これを<em>差し押さえなければならない</em>。徴収職員が金銭を取り立てたときは、その限度において、滞納者から差押えに係る国税を徴収したものとみなす。</p>
+      <p class="line"><span class="tag">〔3〕(3)② 弁済委託</span>第三債務者は、差し押さえられた債権の履行のために、国税の納付に使用できる証券以外の有価証券を提供して<em>弁済の委託をすることができる</em>。その証券の取り立てるべき期限が差し押さえた債権の弁済期後となるときは、第三債務者は、<em>滞納者の承認を受けなければならない</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>効力発生時期は送達先とセット。通常の債権は<b>第三債務者に送達された時</b>、電子記録債権は<b>電子債権記録機関に送達された時</b>。パーツ15の通知の宛先の違いがそのまま効力発生時期の違いになる。</li>
+        <li>給料・年金等の<b>継続的な収入</b>は、差押えの効力が<b>差押え後に収入すべき金額</b>にまで及ぶという例外（ただし徴収すべき国税の額が上限）。通常の債権は差押え時点の1回限りが原則なので、継続収入はここだけの特別ルール。</li>
+        <li>徴収職員が取り立てたものが<b>金銭以外</b>のときは、それを<b>改めて差し押さえなければならない</b>。取立て＝即終了ではなく、金銭化されるまで手続が続く。金銭を取り立てたときはパーツ10の取立権と同じく「<b>徴収したものとみなす</b>」。</li>
+        <li>弁済委託で受け取る証券の取立期限が<b>差し押さえた債権の弁済期後</b>になる場合は、第三債務者は<b>滞納者の承認</b>を受けなければならない。滞納者に不利益が及びうる場面だけ承認を要求する仕組み。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p17">
+    <div class="phead"><div class="badge">17</div>
+      <div class="ptitle">差し押さえる債権の範囲・債権の差押えの解除<span class="min">⏱ 15分・短い</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔4〕 差し押さえる債権の範囲</span>徴収職員は、債権を差し押さえるときは、<em>その全額を差し押さえなければならない</em>。ただし、その全額を差し押さえる必要がないと認めるときは、<em>その一部を差し押さえることができる</em>。</p>
+      <p class="line"><span class="tag">〔5〕(1) 債権の差押えの解除</span>債権の差押えの解除は、その旨を<em>第三債務者に通知することによって行う</em>。なお、徴収職員は、債権の差押えを解除したときは、<em>滞納者に対してその旨を通知しなければならない</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>債権差押えは<b>全額差押えが原則</b>、必要がないと認めるときだけ<b>一部差押え</b>ができる例外。パーツ2〔2〕超過差押えの禁止（必要な財産以外はダメ）と発想の向きが逆＝こちらは<b>全部取るのが原則</b>で、抑えるのが例外という点を混同しない。</li>
+        <li>債権の差押えの解除は<b>第三債務者への通知</b>で効力が生じるが、それに加えて<b>滞納者にも</b>通知しなければならない。パーツ11の動産等の解除（滞納者への通知だけで足りる）と比べて、通知の相手が1人多い。</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <footer class="foot">
+    国税徴収法　15分暗記パーツ集　3章 滞納処分（前半）（58文／17パーツ）／ 2026-08-27 作成。<br>
+    本文は理論テキストの規定本文どおり。落とし穴は学習アプリの○×解説・あなた自身のメモ・誤答データから抽出。<br>
+    <span class="mine">あなたのメモ</span> の付いた項目は、過去にあなたが書き残した気づきをそのまま使っています。<br>
+    チェックはこの端末に保存されます。
+    <br><button class="reset" onclick="resetAll()">チェックを全部リセット</button>
+  </footer>
+
+</div>
+</div>
+
+<script>
+  var KEY='kokucho_parts_ch3a_v1';
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ return {}; } }
+  function save(o){ try{ localStorage.setItem(KEY, JSON.stringify(o)); }catch(e){} }
+  function refresh(){
+    var st=load(), n=0, all=document.querySelectorAll('.part');
+    all.forEach(function(p){
+      var on=!!st[p.dataset.id];
+      p.classList.toggle('done', on);
+      var b=p.querySelector('.chk');
+      b.textContent = on ? '✓ 覚えた' : '覚えた';
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if(on) n++;
+    });
+    document.getElementById('pdone').textContent=n;
+    document.getElementById('pfill').style.width=(n/all.length*100)+'%';
+  }
+  function tog(btn){
+    var p=btn.closest('.part'), st=load();
+    if(st[p.dataset.id]) delete st[p.dataset.id]; else st[p.dataset.id]=1;
+    save(st); refresh();
+  }
+  function resetAll(){ save({}); refresh(); }
+  refresh();
+</script>
+</body>
+</html>
