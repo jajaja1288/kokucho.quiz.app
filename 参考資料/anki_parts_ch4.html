@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>国税徴収法　15分暗記パーツ集　4章 緩和措置</title>
+<style>
+  :root{
+    --paper:#F7F6F3; --card:#FFFFFF; --ink:#1C1F26; --sub:#5C6270;
+    --line:#E2E0DA; --line2:#EFEDE8;
+    --deep:#2E4A3F; --deep-soft:#E6EEE9;
+    --amber:#8A5A1E; --amber-bg:#FBF1DF;
+    --red:#A33540; --red-bg:#F8E7E8;
+    --done:#3E7C5A; --done-bg:#E6F1EA;
+    --shadow:0 1px 2px rgba(20,25,35,.05),0 6px 18px rgba(20,25,35,.05);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--paper:#12141A;--card:#171B24;--ink:#E7E9EF;--sub:#9AA2B4;
+      --line:#2A2F3B;--line2:#232833;--deep:#8FBFA8;--deep-soft:#1B2B24;
+      --amber:#E0B472;--amber-bg:#332714;--red:#E7929B;--red-bg:#372124;
+      --done:#7FC3A0;--done-bg:#1B3128;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);}
+  }
+  :root[data-theme="light"]{--paper:#F7F6F3;--card:#FFFFFF;--ink:#1C1F26;--sub:#5C6270;
+    --line:#E2E0DA;--line2:#EFEDE8;--deep:#2E4A3F;--deep-soft:#E6EEE9;
+    --amber:#8A5A1E;--amber-bg:#FBF1DF;--red:#A33540;--red-bg:#F8E7E8;
+    --done:#3E7C5A;--done-bg:#E6F1EA;--shadow:0 1px 2px rgba(20,25,35,.05),0 6px 18px rgba(20,25,35,.05);}
+  :root[data-theme="dark"]{--paper:#12141A;--card:#171B24;--ink:#E7E9EF;--sub:#9AA2B4;
+    --line:#2A2F3B;--line2:#232833;--deep:#8FBFA8;--deep-soft:#1B2B24;
+    --amber:#E0B472;--amber-bg:#332714;--red:#E7929B;--red-bg:#372124;
+    --done:#7FC3A0;--done-bg:#1B3128;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);}
+
+  *{box-sizing:border-box} body{margin:0}
+  .wrap{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",system-ui,sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.75;-webkit-font-smoothing:antialiased;padding:22px 16px 70px}
+  .inner{max-width:760px;margin:0 auto}
+
+  .eyebrow{font-size:11.5px;letter-spacing:.16em;color:var(--sub);font-weight:700}
+  h1{font-size:clamp(20px,4.4vw,27px);margin:.3em 0 .25em;font-weight:800;letter-spacing:.01em;line-height:1.4}
+  .lede{color:var(--sub);font-size:13.5px;margin:0}
+  .lede b{color:var(--ink)}
+
+  .howto{margin-top:14px;background:var(--deep-soft);border-radius:12px;padding:12px 14px;font-size:13px}
+  .howto b{color:var(--deep)}
+  .howto ol{margin:6px 0 0;padding-left:1.25em}
+  .howto li{margin:2px 0}
+
+  .key{margin-top:12px;background:var(--red-bg);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.8}
+  .key b{color:var(--red)}
+
+  .prog{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:12.5px;color:var(--sub)}
+  .prog .track{flex:1;height:7px;border-radius:99px;background:var(--line);overflow:hidden}
+  .prog .fill{height:100%;background:var(--done);width:0;transition:width .25s ease}
+  .prog b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+  h2.sec{font-size:16px;font-weight:800;color:var(--deep);margin:30px 0 4px;display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  h2.sec .n{font-size:11.5px;color:var(--sub);font-weight:700}
+  .secrule{height:2px;background:linear-gradient(90deg,var(--deep),transparent);opacity:.5;border-radius:2px;margin-bottom:14px}
+
+  .part{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 15px;box-shadow:var(--shadow);margin-bottom:13px}
+  .part.done{border-color:var(--done);background:var(--done-bg)}
+  .phead{display:flex;align-items:flex-start;gap:10px}
+  .badge{flex:none;min-width:30px;height:30px;border-radius:9px;background:var(--deep-soft);color:var(--deep);
+    font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;padding:0 6px}
+  .part.done .badge{background:var(--done);color:#fff}
+  .ptitle{flex:1;font-weight:800;font-size:15px;line-height:1.5}
+  .ptitle .min{display:block;font-size:11.5px;color:var(--sub);font-weight:600;margin-top:1px}
+  .chk{flex:none;border:1px solid var(--line);background:none;color:var(--sub);border-radius:8px;padding:5px 9px;
+    font-size:11.5px;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .chk:hover{border-color:var(--done);color:var(--done)}
+  .chk:focus-visible{outline:2px solid var(--done);outline-offset:2px}
+  .part.done .chk{background:var(--done);border-color:var(--done);color:#fff;font-weight:700}
+
+  .body{margin-top:11px;padding-top:11px;border-top:1px dashed var(--line)}
+  .line{font-size:14.5px;margin:0 0 9px;padding-left:13px;border-left:2px solid var(--line2)}
+  .line:last-child{margin-bottom:0}
+  .line .tag{display:block;font-size:11px;color:var(--sub);font-weight:700;margin-bottom:1px;letter-spacing:.02em}
+  em{font-style:normal;background:linear-gradient(transparent 62%,var(--deep-soft) 62%);font-weight:700}
+
+  .trap{margin-top:11px;background:var(--amber-bg);border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.7}
+  .trap .t{font-weight:800;color:var(--amber);font-size:11.5px;letter-spacing:.03em;display:block;margin-bottom:3px}
+  .trap u{text-decoration:none;color:var(--red);font-weight:800;background:var(--red-bg);border-radius:4px;padding:0 3px}
+  .trap ul{margin:0;padding-left:1.15em}
+  .trap li{margin:3px 0}
+  .mine{display:inline-block;font-size:10.5px;font-weight:800;color:var(--deep);background:var(--deep-soft);
+    border-radius:999px;padding:1px 7px;margin-right:4px;vertical-align:middle}
+
+  footer.foot{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);font-size:11.5px;color:var(--sub);line-height:1.8}
+  .reset{background:none;border:1px solid var(--line);color:var(--sub);border-radius:8px;padding:5px 10px;font-size:11.5px;cursor:pointer;font-family:inherit;margin-top:8px}
+  .reset:hover{border-color:var(--red);color:var(--red)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="inner">
+
+  <header>
+    <div class="eyebrow">国税徴収法 ／ 15分暗記パーツ集</div>
+    <h1>4章　緩和措置</h1>
+    <p class="lede">全<b>29文</b>を<b>9パーツ</b>に細分化。1パーツ15分＝<b>約3日ぶん</b>（夜3パーツ×3日）。本文は理論テキストのまま。</p>
+
+    <div class="howto">
+      <b>使い方（1パーツ15分）</b>
+      <ol>
+        <li>本文を声に出して2回読む（3分）</li>
+        <li>隠して書く／言う → 詰まった所だけ見る（9分）</li>
+        <li>落とし穴を確認して、もう1回通す（3分）</li>
+      </ol>
+    </div>
+
+    <div class="key">
+      <b>この章の最重要ルール：ここは「法定納期限」を使わない。</b><br>
+      1章・2章は「法定納期限（等）」が基準だったが、4章の猶予制度が基準にするのは<b>「納期限」</b>（4-1・4-2・4-6〜4-9）または<b>「法定申告期限」</b>（4-3の確定手続遅延の猶予）。
+      <u>「法定納期限」という言葉が出てきたら、それだけで誤り</u>と条件反射する。
+    </div>
+
+    <div class="prog">
+      <span>覚えた</span>
+      <span class="track"><span class="fill" id="pfill"></span></span>
+      <span><b id="pdone">0</b> / <b>9</b></span>
+    </div>
+  </header>
+
+  <!-- 4-1 -->
+  <h2 class="sec">問題4-1　災害による納税の猶予（納期限未到来） <span class="n">3文／1パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p1">
+    <div class="phead"><div class="badge">1</div>
+      <div class="ptitle">要件・災害の範囲・猶予期間<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕要件</span>次のすべてに該当するときは、税務署長等は、その災害のやんだ日から<em>2月以内</em>にされた納税者の申請に基づき、その国税の全部又は一部の納税を猶予することができる。</p>
+      <p class="line"><span class="tag">〔1〕(1)災害による損失</span><em>震災、風水害、落雷、火災その他これらに類する災害</em>により、納税者がその財産につき<em>相当な損失</em>を受けたこと。</p>
+      <p class="line"><span class="tag">〔2〕猶予期間</span>原則として猶予に係る国税の<em>納期限から1年以内</em>の期間を限り猶予される。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「ここなぜ法定納期限ではないのか？理由は猶予の対象となる国税には、更正の決定に係る国税や、修正申告に係る国税も含まれる。これらの本来の法定納期限から1年以内としてしまうと、確定申告等でぴったり支払われるべき国税だけが対象になってしまい、緩和措置の意味が薄れるから」— 基準は「その国税の<b>納期限</b>」。</li>
+        <li>申請期限は<b>災害のやんだ日から2月以内</b>。この猶予は<u>担保が不要</u>（他の猶予は原則担保が必要）。</li>
+        <li>更正・修正申告に係る国税でも要件を満たせば適用できるが、<b>納期限が経過した後</b>に生じた災害には適用できない（「未到来」が要件）。納期限経過後の災害は4-2（一般の納税の猶予）で対応する。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4-2 -->
+  <h2 class="sec">問題4-2　災害等による一般の納税の猶予 <span class="n">6文／2パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p2">
+    <div class="phead"><div class="badge">2</div>
+      <div class="ptitle">要件・担保の徴取・一時に納付できない事実<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕要件</span>次のすべてに該当するときは、税務署長等は、その<em>納付することができないと認められる金額を限度として</em>、納税者の申請に基づき、その納税を猶予することができる。</p>
+      <p class="line"><span class="tag">〔1〕担保の徴取</span>なお、税務署長等は、納税の猶予をする場合には、<em>原則として担保を徴さなければならない</em>。</p>
+      <p class="line"><span class="tag">〔1〕(2)一時に納付できない事実</span>納税者がその財産につき、震災、風水害、落雷、火災その他の災害を受け、又は<em>盗難にかかった</em>こと、納税者又はその者と<em>生計を一にする親族</em>が<em>病気にかかり、又は負傷した</em>こと等に該当する事実に基づき、納税者がその国税を<em>一時に納付することができない</em>と認められること。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>猶予できるのは「納付することができないと認められる<b>金額を限度</b>」。<u>全額とは限らない</u>。</li>
+        <li>4-1（納期限未到来）は担保<u>不要</u>だったが、こちらは<b>原則として担保を徴さなければならない</b>（義務）。次パーツの担保不要の例外とセットで覚える。</li>
+        <li>「一時に納付できない事実」は災害・盗難だけでなく<b>本人または生計を一にする親族の病気・負傷</b>も含む、4-1より対象が広い規定。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part" data-id="p3">
+    <div class="phead"><div class="badge">3</div>
+      <div class="ptitle">猶予期間・分割納付・担保提供のただし書<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔2〕猶予期間</span>原則として<em>1年以内</em>の期間を限り猶予される。…ただし、その期間は、既にその者につき納税の猶予をした期間とあわせて<em>2年をこえることができない</em>。</p>
+      <p class="line"><span class="tag">〔3〕分割納付</span>納税の猶予をする場合には、その猶予に係る国税の納付については、その猶予をする期間内において、その猶予に係る金額をその者の財産の状況その他の事情からみて<em>合理的かつ妥当なものに分割して</em>納付させることができる。</p>
+      <p class="line"><span class="tag">〔5〕担保の提供（ただし書）</span>税務署長等は、その猶予に係る金額に相当する<em>担保を徴さなければならない</em>。ただし、<em>猶予に係る税額が100万円以下</em>である場合、その<em>猶予に係る期間が3月以内</em>である場合又は<em>担保を徴することができない特別の事情</em>がある場合は、この限りでない。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「一年以内ね」— 原則<b>1年以内</b>。<u>既にした猶予期間とあわせて2年が上限</u>（1年ずつ延長しても合計2年まで）。</li>
+        <li>分割納付は「合理的かつ妥当なものに<b>分割して納付させることができる</b>」＝<u>できる規定</u>であって必ず分割するわけではない。</li>
+        <li>担保不要の3パターンは<b>100万円以下／3月以内／特別の事情</b>のどれか一つに該当すれば足りる（全部そろえる必要はない）。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4-3 -->
+  <h2 class="sec">問題4-3　確定手続が遅延した場合の納税の猶予 <span class="n">2文／1パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p4">
+    <div class="phead"><div class="badge">4</div>
+      <div class="ptitle">要件・申告納税方式の場合<span class="min">⏱ 15分・短い</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕要件</span>次のすべてに該当するときは、税務署長等は、その納付することができないと認められる金額を限度として、その<em>国税の納期限内</em>にされた納税者の申請に基づき、その納税を猶予することができる。</p>
+      <p class="line"><span class="tag">〔1〕(1)①申告納税方式</span>申告納税方式による国税で、その<em>法定申告期限</em>から<em>1年を経過した日以後</em>に納付すべき税額が確定した場合における、その確定した部分の税額であること。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「確定手続きが遅延した場合の納税の猶予は、その国税の納期限内に納税者が申請する。修正申告なんかが該当する。納期限内に申請っていうのも、修正申告と同時に申請するのが普通と考えると理解しやすい」</li>
+        <li><span class="mine">あなたのメモ</span>「法定申告期限、法定申告期限、法定申告期限。緩和制度まわりで納期限聞かれたら、法定納期限は基本使われない！！！気を付ける」— ここは<b>法定申告期限</b>が基準。</li>
+        <li>対象は「法定申告期限から<b>1年を経過した日以後</b>に確定した部分」だけ。<u>1年経っていない年分の修正申告はこの猶予の対象にならない</u>。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4-4 -->
+  <h2 class="sec">問題4-4　納税の猶予の手続 <span class="n">3文／1パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p5">
+    <div class="phead"><div class="badge">5</div>
+      <div class="ptitle">申請書の提出・訂正・訂正しなかった場合<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕申請書の提出</span>納税の猶予の申請をしようとする者は、次に掲げる区分に応じ、それぞれに掲げる事項を記載した申請書に書類を添付し、これを<em>税務署長等に提出</em>しなければならない。</p>
+      <p class="line"><span class="tag">〔2〕(3)申請書等の訂正</span>申請書の訂正又は添付書類の訂正・提出を求められたその申請者は、その<em>通知を受けた日の翌日から起算して20日以内</em>にその申請書の訂正又はその添付書類の訂正・提出をしなければならない。</p>
+      <p class="line"><span class="tag">〔2〕(3)訂正しなかった場合</span>その期間内にその申請書の訂正又はその添付書類の訂正・提出をしなかったときは、その申請者は、<em>その期間を経過した日</em>においてその申請を<em>取り下げたものとみなす</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「20日ですか。長すぎず短すぎない訂正期間をくれましたね」</li>
+        <li>起算点は「求められた日」ではなく<b>通知を受けた日の<u>翌日</u></b>から。</li>
+        <li>訂正しなかった場合、却下ではなく「申請を<b>取り下げたものとみなす</b>」というみなし規定。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4-5 -->
+  <h2 class="sec">問題4-5　納税の猶予の効果 <span class="n">4文／1パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p6">
+    <div class="phead"><div class="badge">6</div>
+      <div class="ptitle">督促・滞納処分の制限／時効／延滞税の免除／取消しの弁明<span class="min">⏱ 15分・山場</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕(1)督促、滞納処分の制限</span>税務署長等は、納税の猶予をしたときは、その猶予期間内は、その猶予に係る金額に相当する国税につき、<em>新たに督促及び滞納処分（交付要求を除く。）</em>をすることができない。</p>
+      <p class="line"><span class="tag">〔1〕(4)時効の更新及び不進行</span>納税の猶予の<em>申請があった時</em>にその猶予に係る国税の徴収権の消滅時効は<em>更新</em>し、その猶予がされている期間内は、<em>進行しない</em>。</p>
+      <p class="line"><span class="tag">〔1〕(5)延滞税の免除</span>納税の猶予に係る国税の延滞税のうち、猶予期間に対応する部分の金額に相当する金額<em>又は</em>2分の1に相当する金額は、免除する。</p>
+      <p class="line"><span class="tag">〔2〕(2)①取消し（弁明の聴取）</span>税務署長等は、納税の猶予を取り消し又は猶予期間を短縮する場合には、<em>繰上請求の事実があるときを除き</em>、あらかじめ、その猶予を受けた者の<em>弁明を聞かなければならない</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>制限されるのは督促と滞納処分。ただし<b>交付要求はできる</b>（除かれていない）。4-9-1（換価の猶予の効果）の「交付要求はできる」と対応させて覚える。</li>
+        <li><span class="mine">あなたのメモ</span>「猶予の申請があったら今までの時効はリセット。猶予＝リセット」— 正確には<b>更新</b>（リセット）に加え、猶予期間中は<b>進行しない</b>という二重の効果。</li>
+        <li><span class="mine">あなたのメモ</span>「延滞税のうち半分は免除。猶予期間中」＋ ○×問題の解説：<u>納税者本人または生計を一にする親族の傷病</u>が理由の猶予は<b>全額</b>免除（2分の1ではない）。「全額」か「2分の1」かは猶予の理由で分かれる、と意識する。</li>
+        <li>弁明の聴取は原則<b>義務</b>だが、<b>繰上請求の事実がある</b>ときは省略できる（緊急性を優先）。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4-6 -->
+  <h2 class="sec">問題4-6　職権による換価の猶予 <span class="n">3文／1パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p7">
+    <div class="phead"><div class="badge">7</div>
+      <div class="ptitle">要件（事業継続等の困難）・手続（職権）<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕要件</span>次のすべてに該当するときは、税務署長は、その納付すべき国税につき<em>滞納処分による財産の換価を猶予</em>することができる。</p>
+      <p class="line"><span class="tag">〔1〕(2)①事業継続等の困難</span>その財産の換価を<em>直ちにすることにより</em>その<em>事業の継続</em>又はその<em>生活の維持</em>を困難にするおそれがあるとき。</p>
+      <p class="line"><span class="tag">〔2〕手続</span>換価の猶予は、<em>滞納者の申請を要せず</em>、<em>税務署長の職権</em>で行う。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>○×問題の解説：「納税の猶予・換価の猶予は原則として担保提供かつ申請が必要」は<b>誤り</b>。換価の猶予は<b>職権</b>でも<b>申請</b>でもできる（このパーツは職権、次パーツ4-7は申請）。</li>
+        <li>猶予されるのは「<b>換価</b>」（売却）だけ。<u>差押えそのものは制限されない</u>点は4-9で確認する。</li>
+        <li>要件は「<b>直ちに</b>換価することにより」事業継続・生活維持が困難になるおそれ、という一文。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4-7 / 4-9 -->
+  <h2 class="sec">問題4-7・4-9　申請による換価の猶予とその効果 <span class="n">3文／1パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p8">
+    <div class="phead"><div class="badge">8</div>
+      <div class="ptitle">要件（申請）・換価の制限・延滞税の免除<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">4-7〔1〕要件</span>次のすべてに該当するときは、税務署長は、その国税の<em>納期限から6月以内</em>にされた滞納者の申請に基づき、その納付すべき国税につき滞納処分による財産の換価を猶予することができる。</p>
+      <p class="line"><span class="tag">4-9〔1〕(1)換価の制限</span>猶予期間内は、税務署長は猶予に係る国税につき<em>財産の換価はできない</em>が、<em>交付要求、参加差押え又は新たな差押え</em>はできる。</p>
+      <p class="line"><span class="tag">4-9〔1〕(5)延滞税の免除</span>換価の猶予に係る国税の延滞税のうち、猶予期間に対応する部分の金額の<em>2分の1</em>に相当する金額は、免除する。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「ほら！法定納期限じゃない！！！」— 申請期限の基準はここでも<b>納期限から6月以内</b>。4-1・4-3と同じく「法定納期限」ではない。</li>
+        <li>制限されるのは<b>換価だけ</b>。交付要求・参加差押え・<u>新たな差押えもできる</u>。4-5（納税の猶予）は督促・滞納処分（交付要求を除く）が丸ごと止まるのに対し、こちらは<b>止まる範囲がずっと狭い</b>。</li>
+        <li><span class="mine">あなたのメモ</span>「延滞税が全額免除になることってなんかなかったっけ？」— それは4-5（納税の猶予）の話。<b>換価の猶予の延滞税免除は常に2分の1</b>で、全額になることはない。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4-10 -->
+  <h2 class="sec">問題4-10　滞納処分の停止 <span class="n">5文／1パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="p9">
+    <div class="phead"><div class="badge">9</div>
+      <div class="ptitle">要件（停止事由）・手続・納付義務の消滅・取消<span class="min">⏱ 15分・山場</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕要件</span>税務署長は、滞納者につき次のいずれかに該当する事実があると認めるときは、<em>滞納処分の執行を停止</em>することができる。</p>
+      <p class="line"><span class="tag">〔1〕(1)〜(3)停止事由</span>(1)滞納処分の執行等をすることができる<em>財産がないとき</em>、(2)滞納処分の執行等をすることによってその生活を<em>著しく窮迫させるおそれがあるとき</em>、(3)滞納者の<em>所在</em>及び滞納処分の執行等をすることができる<em>財産</em>がともに<em>不明である</em>とき。</p>
+      <p class="line"><span class="tag">〔2〕手続</span>滞納者の申請を要せず、<em>税務署長の職権</em>で行う。</p>
+      <p class="line"><span class="tag">〔3〕(2)納付義務の消滅</span>滞納処分の執行を停止した国税を納付する義務は、その執行の<em>停止が3年間継続した</em>ときは<em>消滅する</em>。</p>
+      <p class="line"><span class="tag">〔4〕取消</span>税務署長は、滞納処分の執行を停止した後<em>3年以内</em>に、その停止に係る滞納者につき<em>停止に係る事実がないと認めるとき</em>は、その執行の停止を<em>取り消さなければならない</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「窮迫させる！！！窮迫させる恐れがあるとき！！！　コン（困窮）したけど、間違いをたべさせたから、キツネの悪魔との契約はきられちゃって、コン（困窮）はできなくなった（選べなくなった）」— (2)の要件は「著しく<b>窮迫</b>させるおそれ」。</li>
+        <li>手続は4-6と同じく<b>税務署長の職権</b>のみ。滞納者からの申請では始まらない。</li>
+        <li>○×問題の解説：「停止後<b>5年</b>以内に事実がないと認められるときは、取り消す<b>ことができる</b>」は<b>誤り</b>。正しくは<b>3年以内</b>・「取り消さ<b>なければならない</b>」（義務・裁量なし）。</li>
+        <li>取消しの「3年以内」（事実の有無で判定）と、納付義務消滅の「3年間継続」（時の経過だけで判定）は<u>同じ3年でも趣旨が違う</u>。取り消されないまま3年経てば自動的に納付義務が消える。</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer class="foot">
+    国税徴収法　15分暗記パーツ集　4章 緩和措置（29文／9パーツ）／ 2026-09-01 作成。<br>
+    本文は理論テキストの規定本文どおり。落とし穴は学習アプリの○×解説・あなた自身のメモ・誤答データから抽出。<br>
+    <span class="mine">あなたのメモ</span> の付いた項目は、過去にあなたが書き残した気づきをそのまま使っています。<br>
+    チェックはこの端末に保存されます。
+    <br><button class="reset" onclick="resetAll()">チェックを全部リセット</button>
+  </footer>
+
+</div>
+</div>
+
+<script>
+  var KEY='kokucho_parts_ch4_v1';
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ return {}; } }
+  function save(o){ try{ localStorage.setItem(KEY, JSON.stringify(o)); }catch(e){} }
+  function refresh(){
+    var st=load(), n=0, all=document.querySelectorAll('.part');
+    all.forEach(function(p){
+      var on=!!st[p.dataset.id];
+      p.classList.toggle('done', on);
+      var b=p.querySelector('.chk');
+      b.textContent = on ? '✓ 覚えた' : '覚えた';
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if(on) n++;
+    });
+    document.getElementById('pdone').textContent=n;
+    document.getElementById('pfill').style.width=(n/all.length*100)+'%';
+  }
+  function tog(btn){
+    var p=btn.closest('.part'), st=load();
+    if(st[p.dataset.id]) delete st[p.dataset.id]; else st[p.dataset.id]=1;
+    save(st); refresh();
+  }
+  function resetAll(){ save({}); refresh(); }
+  refresh();
+</script>
+</body>
+</html>
