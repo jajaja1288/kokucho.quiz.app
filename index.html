@@ -55,6 +55,58 @@
   .cal-cell.used{background:var(--maru);color:#fff;font-weight:700;}
   .cal-cell.today{outline:2px solid var(--gold);}
 
+  /* ===== 学習履歴グラフ ===== */
+  .viz{ --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+        --grid:#22364f; --axis:#8fa6c2; }
+  .viz-tiles{display:flex;gap:8px;margin-bottom:12px;}
+  .viz-tile{flex:1;background:var(--card2);border-radius:10px;padding:8px 10px;}
+  .viz-tile .v{font-size:19px;font-weight:800;line-height:1.2;}
+  .viz-tile .l{font-size:10.5px;color:var(--sub);margin-top:1px;}
+  .viz-ctrl{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
+  .viz-ctrl button{background:var(--card2);border:1px solid var(--line);color:var(--sub);
+    border-radius:8px;padding:5px 11px;font-size:12px;cursor:pointer;font-family:inherit;}
+  .viz-ctrl button.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700;}
+  .viz-ctrl .sp{margin-left:auto;}
+  .viz-plot{position:relative;overflow-x:auto;overflow-y:hidden;padding-top:4px;}
+  .viz-inner{position:relative;min-width:100%;}
+  .viz-grid{position:absolute;left:0;right:0;top:0;pointer-events:none;}
+  .viz-grid i{position:absolute;left:0;right:0;height:1px;background:var(--grid);display:block;}
+  .viz-grid b{position:absolute;left:0;transform:translateY(-50%);font-size:9.5px;color:var(--axis);
+    font-weight:400;font-variant-numeric:tabular-nums;background:var(--card);padding-right:4px;}
+  .viz-bars{position:relative;display:flex;align-items:flex-end;gap:2px;}
+  .viz-col{flex:1 0 auto;display:flex;flex-direction:column;justify-content:flex-end;
+    cursor:pointer;background:none;border:0;padding:0 0 2px;font-family:inherit;}
+  .viz-col:focus-visible{outline:2px solid var(--gold);outline-offset:1px;}
+  .viz-col .seg{width:100%;display:block;}
+  .viz-col .seg + .seg{margin-bottom:2px;}          /* 2px の面色ギャップ */
+  .viz-col .seg:first-child{border-radius:4px 4px 0 0;}  /* データ端だけ角丸 */
+  .viz-col .zero{height:2px;background:var(--grid);border-radius:2px;}
+  .viz-x{display:flex;gap:2px;margin-top:5px;}
+  .viz-x span{flex:1 0 auto;text-align:center;font-size:9.5px;color:var(--axis);
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .viz-peak{position:absolute;font-size:9.5px;font-weight:700;color:var(--ink);
+    transform:translate(-50%,-100%);white-space:nowrap;pointer-events:none;}
+  .viz-legend{display:flex;flex-wrap:wrap;gap:10px 14px;margin-top:10px;font-size:11.5px;color:var(--sub);}
+  .viz-legend span{display:inline-flex;align-items:center;gap:5px;}
+  .viz-legend i{width:10px;height:10px;border-radius:3px;display:inline-block;}
+  .viz-tip{position:absolute;z-index:20;background:var(--bg);border:1px solid var(--line);
+    border-radius:9px;padding:8px 10px;font-size:11.5px;color:var(--ink);pointer-events:none;
+    box-shadow:0 6px 18px rgba(0,0,0,.45);min-width:132px;display:none;}
+  .viz-tip .d{font-weight:700;margin-bottom:4px;font-size:12px;}
+  .viz-tip .r{display:flex;align-items:center;gap:6px;margin:2px 0;}
+  .viz-tip .r i{width:8px;height:8px;border-radius:2px;display:inline-block;flex:none;}
+  .viz-tip .r b{margin-left:auto;font-variant-numeric:tabular-nums;}
+  .viz-tip .tot{margin-top:5px;padding-top:4px;border-top:1px solid var(--line);
+    display:flex;font-weight:700;}
+  .viz-tip .tot b{margin-left:auto;font-variant-numeric:tabular-nums;}
+  .viz-table{margin-top:10px;max-height:240px;overflow:auto;display:none;}
+  .viz-table table{width:100%;border-collapse:collapse;font-size:11.5px;}
+  .viz-table th,.viz-table td{border-bottom:1px solid var(--line);padding:4px 6px;text-align:right;
+    font-variant-numeric:tabular-nums;}
+  .viz-table th{color:var(--sub);font-weight:700;text-align:right;position:sticky;top:0;background:var(--card);}
+  .viz-table td:first-child,.viz-table th:first-child{text-align:left;}
+  .viz-empty{color:var(--sub);font-size:12.5px;padding:18px 0;text-align:center;}
+
   .ach-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
   .ach{display:flex;gap:8px;align-items:center;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;opacity:.45;}
   .ach.on{opacity:1;border-color:var(--gold);}
@@ -189,6 +241,21 @@
       </div>
       <div class="cal-grid" id="calGrid"></div>
       <div class="small" style="margin-top:8px;text-align:center;">緑＝学習した日／金枠＝今日</div>
+    </div>
+
+    <div class="card viz">
+      <div style="font-weight:700;font-size:14px;margin-bottom:10px;">📈 学習履歴（1日の回答数）</div>
+      <div class="viz-tiles" id="vizTiles"></div>
+      <div class="viz-ctrl">
+        <button class="on" data-range="30" onclick="setVizRange(30,this)">30日</button>
+        <button data-range="90" onclick="setVizRange(90,this)">90日</button>
+        <button data-range="0" onclick="setVizRange(0,this)">全期間</button>
+        <button class="sp" id="vizTableBtn" onclick="toggleVizTable()">表で見る</button>
+      </div>
+      <div class="viz-plot" id="vizPlot"></div>
+      <div class="viz-legend" id="vizLegend"></div>
+      <div class="viz-table" id="vizTable"></div>
+      <div class="viz-tip" id="vizTip"></div>
     </div>
 
     <div class="card">
@@ -2015,7 +2082,7 @@ function renderHome(){
   renderCats(); renderTextSets(); renderReviewWrong();
   const sr=document.getElementById('syncRoomInput'); if(sr && document.activeElement!==sr) sr.value=syncRoom();
   if(calYear===undefined){ const d=new Date(); calYear=d.getFullYear(); calMonth=d.getMonth(); }
-  renderCal(); renderAch();
+  renderCal(); renderViz(); renderAch();
 }
 function renderCats(){
   const box=document.getElementById('catList'); box.innerHTML='';
@@ -2073,6 +2140,161 @@ function renderTextSets(){
       '<button class="bigbtn ghost" style="margin-top:8px;font-size:14px;padding:11px;" onclick="startMode(\'type\','+si+')">✍️ 手入力（自己採点）</button>';
     box.appendChild(el);
   });
+}
+/* ============ 学習履歴グラフ ============ */
+const VIZ_SERIES=[
+  {k:'ox',     name:'○×クイズ', c:'#3987e5'},
+  {k:'fill',   name:'穴埋め',    c:'#d95926'},
+  {k:'puzzle', name:'パズル',    c:'#199e70'},
+  {k:'type',   name:'手入力',    c:'#c98500'}
+];
+let vizRange=30, vizTableOn=false;
+
+function vizDaily(){
+  const m={};
+  const add=(t,k)=>{ const d=String(t||'').slice(0,10);
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return;
+    (m[d]=m[d]||{ox:0,fill:0,puzzle:0,type:0})[k]++; };
+  const H=DB.history||{};
+  Object.keys(H).forEach(cid=>{ const o=H[cid]||{};
+    Object.keys(o).forEach(qi=>(o[qi]||[]).forEach(x=>add(x.t,'ox'))); });
+  const T=DB.textHist||{};
+  ['fill','puzzle','type'].forEach(mode=>{ const o=T[mode]||{};
+    Object.keys(o).forEach(id=>(o[id]||[]).forEach(x=>add(x.t,mode))); });
+  return m;
+}
+function vizDays(){
+  const m=vizDaily(), keys=Object.keys(m).sort();
+  if(!keys.length) return {rows:[],map:m};
+  const endS=todayStr();
+  const lastS = endS>keys[keys.length-1] ? endS : keys[keys.length-1];
+  let startS;
+  if(vizRange>0){
+    const d=new Date(lastS+'T00:00:00'); d.setDate(d.getDate()-(vizRange-1));
+    startS=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    if(startS<keys[0]) startS=keys[0];
+  } else startS=keys[0];
+  const rows=[]; const cur=new Date(startS+'T00:00:00'); const last=new Date(lastS+'T00:00:00');
+  while(cur<=last){
+    const ds=cur.getFullYear()+'-'+String(cur.getMonth()+1).padStart(2,'0')+'-'+String(cur.getDate()).padStart(2,'0');
+    const v=m[ds]||{ox:0,fill:0,puzzle:0,type:0};
+    rows.push({d:ds, v:v, total:v.ox+v.fill+v.puzzle+v.type});
+    cur.setDate(cur.getDate()+1);
+  }
+  return {rows:rows, map:m};
+}
+function setVizRange(n,btn){
+  vizRange=n;
+  document.querySelectorAll('.viz-ctrl button[data-range]').forEach(b=>b.classList.toggle('on',b===btn));
+  renderViz();
+}
+function toggleVizTable(){
+  vizTableOn=!vizTableOn;
+  document.getElementById('vizTableBtn').textContent=vizTableOn?'グラフに戻す':'表で見る';
+  document.getElementById('vizTable').style.display=vizTableOn?'block':'none';
+  document.getElementById('vizPlot').style.display=vizTableOn?'none':'block';
+  if(vizTableOn) renderVizTable();
+}
+function renderViz(){
+  const plot=document.getElementById('vizPlot'); if(!plot) return;
+  const tiles=document.getElementById('vizTiles');
+  const rows=vizDays().rows;
+  const studied=rows.filter(r=>r.total>0);
+  const sum=rows.reduce((a,r)=>a+r.total,0);
+  const max=rows.reduce((a,r)=>Math.max(a,r.total),0);
+  const avg=studied.length?Math.round(sum/studied.length):0;
+  tiles.innerHTML=
+    '<div class="viz-tile"><div class="v">'+sum+'</div><div class="l">期間内の回答</div></div>'+
+    '<div class="viz-tile"><div class="v">'+avg+'</div><div class="l">学習日の平均</div></div>'+
+    '<div class="viz-tile"><div class="v">'+studied.length+'</div><div class="l">学習した日</div></div>';
+
+  document.getElementById('vizLegend').innerHTML=
+    VIZ_SERIES.map(x=>'<span><i style="background:'+x.c+'"></i>'+x.name+'</span>').join('');
+
+  if(!studied.length){
+    plot.innerHTML='<div class="viz-empty">まだ記録がありません。問題を解くとここに出ます。</div>';
+    return;
+  }
+
+  const H=140;
+  const step=max<=5?1:max<=20?5:max<=60?20:max<=150?50:100;
+  const top=Math.max(step,Math.ceil(max/step)*step);
+  let grid='';
+  for(let v=0;v<=top;v+=step){
+    const y=H-(v/top*H);
+    grid+='<i style="top:'+y.toFixed(1)+'px"></i><b style="top:'+y.toFixed(1)+'px">'+v+'</b>';
+  }
+  const n=rows.length;
+  const everyX=n<=14?1:n<=35?5:n<=100?15:30;
+  let bars='', xs='';
+  rows.forEach((r,i)=>{
+    let segs='';
+    if(r.total===0){ segs='<span class="zero"></span>'; }
+    else{
+      for(let j=VIZ_SERIES.length-1;j>=0;j--){
+        const S=VIZ_SERIES[j], v=r.v[S.k]; if(!v) continue;
+        const h=Math.max(2,(v/top)*H);
+        segs+='<span class="seg" style="height:'+h.toFixed(1)+'px;background:'+S.c+'"></span>';
+      }
+    }
+    bars+='<button type="button" class="viz-col" data-i="'+i+'" style="height:'+H+'px" aria-label="'+r.d+' 合計'+r.total+'問">'+segs+'</button>';
+    const dp=r.d.slice(5).split('-'); const dd=Number(dp[0])+'/'+Number(dp[1]);
+    xs+='<span>'+((i%everyX===0||i===n-1)?dd:'')+'</span>';
+  });
+  const peakI=rows.findIndex(r=>r.total===max);
+  plot.innerHTML='<div class="viz-inner" style="min-width:'+Math.max(n*12+22,120)+'px">'+
+    '<div class="viz-grid" style="height:'+H+'px">'+grid+'</div>'+
+    '<div class="viz-bars" style="height:'+H+'px;padding-left:22px">'+bars+'</div>'+
+    '<div class="viz-x" style="padding-left:22px">'+xs+'</div></div>';
+
+  if(max>0){
+    const inner=plot.querySelector('.viz-inner');
+    const col=plot.querySelectorAll('.viz-col')[peakI];
+    if(col && inner){
+      const lab=document.createElement('div'); lab.className='viz-peak';
+      lab.textContent='最多 '+max;
+      lab.style.left=(col.offsetLeft+col.offsetWidth/2)+'px';
+      lab.style.top=(H-(max/top*H)-2)+'px';
+      inner.appendChild(lab);
+    }
+  }
+  bindVizHover(rows);
+  if(vizTableOn) renderVizTable();
+}
+function bindVizHover(rows){
+  const plot=document.getElementById('vizPlot'), tip=document.getElementById('vizTip');
+  if(!plot||!tip) return;
+  const show=(el)=>{
+    const r=rows[+el.dataset.i]; if(!r) return;
+    let html='<div class="d">'+r.d.replace(/-/g,'/')+'</div>';
+    VIZ_SERIES.forEach(S=>{ if(r.v[S.k]) html+='<div class="r"><i style="background:'+S.c+'"></i>'+S.name+'<b>'+r.v[S.k]+'</b></div>'; });
+    if(r.total===0) html+='<div class="r" style="color:var(--sub)">学習なし</div>';
+    html+='<div class="tot">合計<b>'+r.total+'</b></div>';
+    tip.innerHTML=html; tip.style.display='block';
+    const card=plot.closest('.card').getBoundingClientRect();
+    const b=el.getBoundingClientRect();
+    let x=b.left-card.left+b.width/2-tip.offsetWidth/2;
+    x=Math.max(6,Math.min(x,card.width-tip.offsetWidth-6));
+    tip.style.left=x+'px';
+    tip.style.top=Math.max(2,(b.top-card.top-tip.offsetHeight-8))+'px';
+  };
+  const hide=()=>{ tip.style.display='none'; };
+  plot.querySelectorAll('.viz-col').forEach(el=>{
+    el.addEventListener('mouseenter',()=>show(el));
+    el.addEventListener('focus',()=>show(el));
+    el.addEventListener('mouseleave',hide);
+    el.addEventListener('blur',hide);
+    el.addEventListener('click',()=>show(el));
+  });
+  plot.addEventListener('mouseleave',hide);
+}
+function renderVizTable(){
+  const rows=vizDays().rows.filter(r=>r.total>0).reverse();
+  let h='<table><tr><th>日付</th>'+VIZ_SERIES.map(s=>'<th>'+s.name+'</th>').join('')+'<th>合計</th></tr>';
+  rows.forEach(r=>{ h+='<tr><td>'+r.d.replace(/-/g,'/')+'</td>'+
+    VIZ_SERIES.map(s=>'<td>'+(r.v[s.k]||'')+'</td>').join('')+'<td><b>'+r.total+'</b></td></tr>'; });
+  h+='</table>';
+  document.getElementById('vizTable').innerHTML=h;
 }
 function calMove(d){ calMonth+=d; if(calMonth<0){calMonth=11;calYear--;} if(calMonth>11){calMonth=0;calYear++;} renderCal(); }
 function renderCal(){
