@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>国税徴収法　15分暗記パーツ集　6章 その他</title>
+<style>
+  :root{
+    --paper:#F7F6F3; --card:#FFFFFF; --ink:#1C1F26; --sub:#5C6270;
+    --line:#E2E0DA; --line2:#EFEDE8;
+    --deep:#2E4A3F; --deep-soft:#E6EEE9;
+    --amber:#8A5A1E; --amber-bg:#FBF1DF;
+    --red:#A33540; --red-bg:#F8E7E8;
+    --done:#3E7C5A; --done-bg:#E6F1EA;
+    --shadow:0 1px 2px rgba(20,25,35,.05),0 6px 18px rgba(20,25,35,.05);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--paper:#12141A;--card:#171B24;--ink:#E7E9EF;--sub:#9AA2B4;
+      --line:#2A2F3B;--line2:#232833;--deep:#8FBFA8;--deep-soft:#1B2B24;
+      --amber:#E0B472;--amber-bg:#332714;--red:#E7929B;--red-bg:#372124;
+      --done:#7FC3A0;--done-bg:#1B3128;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);}
+  }
+  :root[data-theme="light"]{--paper:#F7F6F3;--card:#FFFFFF;--ink:#1C1F26;--sub:#5C6270;
+    --line:#E2E0DA;--line2:#EFEDE8;--deep:#2E4A3F;--deep-soft:#E6EEE9;
+    --amber:#8A5A1E;--amber-bg:#FBF1DF;--red:#A33540;--red-bg:#F8E7E8;
+    --done:#3E7C5A;--done-bg:#E6F1EA;--shadow:0 1px 2px rgba(20,25,35,.05),0 6px 18px rgba(20,25,35,.05);}
+  :root[data-theme="dark"]{--paper:#12141A;--card:#171B24;--ink:#E7E9EF;--sub:#9AA2B4;
+    --line:#2A2F3B;--line2:#232833;--deep:#8FBFA8;--deep-soft:#1B2B24;
+    --amber:#E0B472;--amber-bg:#332714;--red:#E7929B;--red-bg:#372124;
+    --done:#7FC3A0;--done-bg:#1B3128;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);}
+
+  *{box-sizing:border-box} body{margin:0}
+  .wrap{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",system-ui,sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.75;-webkit-font-smoothing:antialiased;padding:22px 16px 70px}
+  .inner{max-width:760px;margin:0 auto}
+
+  .eyebrow{font-size:11.5px;letter-spacing:.16em;color:var(--sub);font-weight:700}
+  h1{font-size:clamp(20px,4.4vw,27px);margin:.3em 0 .25em;font-weight:800;letter-spacing:.01em;line-height:1.4}
+  .lede{color:var(--sub);font-size:13.5px;margin:0}
+  .lede b{color:var(--ink)}
+
+  .howto{margin-top:14px;background:var(--deep-soft);border-radius:12px;padding:12px 14px;font-size:13px}
+  .howto b{color:var(--deep)}
+  .howto ol{margin:6px 0 0;padding-left:1.25em}
+  .howto li{margin:2px 0}
+
+  .key{margin-top:12px;background:var(--red-bg);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.8}
+  .key b{color:var(--red)}
+
+  .prog{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:12.5px;color:var(--sub)}
+  .prog .track{flex:1;height:7px;border-radius:99px;background:var(--line);overflow:hidden}
+  .prog .fill{height:100%;background:var(--done);width:0;transition:width .25s ease}
+  .prog b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+  h2.sec{font-size:16px;font-weight:800;color:var(--deep);margin:30px 0 4px;display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  h2.sec .n{font-size:11.5px;color:var(--sub);font-weight:700}
+  .secrule{height:2px;background:linear-gradient(90deg,var(--deep),transparent);opacity:.5;border-radius:2px;margin-bottom:14px}
+
+  .part{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 15px;box-shadow:var(--shadow);margin-bottom:13px}
+  .part.done{border-color:var(--done);background:var(--done-bg)}
+  .phead{display:flex;align-items:flex-start;gap:10px}
+  .badge{flex:none;min-width:30px;height:30px;border-radius:9px;background:var(--deep-soft);color:var(--deep);
+    font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;padding:0 6px}
+  .part.done .badge{background:var(--done);color:#fff}
+  .ptitle{flex:1;font-weight:800;font-size:15px;line-height:1.5}
+  .ptitle .min{display:block;font-size:11.5px;color:var(--sub);font-weight:600;margin-top:1px}
+  .chk{flex:none;border:1px solid var(--line);background:none;color:var(--sub);border-radius:8px;padding:5px 9px;
+    font-size:11.5px;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .chk:hover{border-color:var(--done);color:var(--done)}
+  .chk:focus-visible{outline:2px solid var(--done);outline-offset:2px}
+  .part.done .chk{background:var(--done);border-color:var(--done);color:#fff;font-weight:700}
+
+  .body{margin-top:11px;padding-top:11px;border-top:1px dashed var(--line)}
+  .line{font-size:14.5px;margin:0 0 9px;padding-left:13px;border-left:2px solid var(--line2)}
+  .line:last-child{margin-bottom:0}
+  .line .tag{display:block;font-size:11px;color:var(--sub);font-weight:700;margin-bottom:1px;letter-spacing:.02em}
+  em{font-style:normal;background:linear-gradient(transparent 62%,var(--deep-soft) 62%);font-weight:700}
+
+  .trap{margin-top:11px;background:var(--amber-bg);border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.7}
+  .trap .t{font-weight:800;color:var(--amber);font-size:11.5px;letter-spacing:.03em;display:block;margin-bottom:3px}
+  .trap u{text-decoration:none;color:var(--red);font-weight:800;background:var(--red-bg);border-radius:4px;padding:0 3px}
+  .trap ul{margin:0;padding-left:1.15em}
+  .trap li{margin:3px 0}
+  .mine{display:inline-block;font-size:10.5px;font-weight:800;color:var(--deep);background:var(--deep-soft);
+    border-radius:999px;padding:1px 7px;margin-right:4px;vertical-align:middle}
+
+  footer.foot{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);font-size:11.5px;color:var(--sub);line-height:1.8}
+  .reset{background:none;border:1px solid var(--line);color:var(--sub);border-radius:8px;padding:5px 10px;font-size:11.5px;cursor:pointer;font-family:inherit;margin-top:8px}
+  .reset:hover{border-color:var(--red);color:var(--red)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="inner">
+
+  <header>
+    <div class="eyebrow">国税徴収法 ／ 15分暗記パーツ集</div>
+    <h1>6章　その他</h1>
+    <p class="lede">全<b>14文</b>を<b>4パーツ</b>に細分化。1パーツ15分＝<b>約1〜2日ぶん</b>（夜3パーツ×1日）。本文は理論テキストのまま。</p>
+
+    <div class="howto">
+      <b>使い方（1パーツ15分）</b>
+      <ol>
+        <li>本文を声に出して2回読む（3分）</li>
+        <li>隠して書く／言う → 詰まった所だけ見る（9分）</li>
+        <li>落とし穴を確認して、もう1回通す（3分）</li>
+      </ol>
+    </div>
+
+    <div class="key">
+      <b>この章の位置づけ：ばらばらの制度の寄せ集め。</b><br>
+      6章は<b>納付委託・不服申立て・納付義務の承継・保証人からの徴収・雑則</b>という<u>関連の薄い5つの論点</u>の集まりです。
+      無理に一本の筋で覚えず、<b>他の章の似た条文と対にして</b>覚えるのが近道（保証人の手続は2章の第二次納税義務とそっくり）。
+    </div>
+
+    <div class="prog">
+      <span>覚えた</span>
+      <span class="track"><span class="fill" id="pfill"></span></span>
+      <span><b id="pdone">0</b> / <b>4</b></span>
+    </div>
+  </header>
+
+  <!-- 6-1 -->
+  <h2 class="sec">問題6-1　納付委託 <span class="n">2文／1パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="f1">
+    <div class="phead"><div class="badge">1</div>
+      <div class="ptitle">納付委託の要件と担保としての効果<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕納付委託の要件</span>次のすべてに該当するときは、徴収職員は、納税者から国税の納付に使用することができる<em>証券以外の有価証券</em>の提供を受け、その証券の<em>取立てとその取り立てた金銭による</em>その国税の納付の委託を受けることができる。</p>
+      <p class="line"><span class="tag">〔3〕担保としての効果</span>納税の猶予又は換価の猶予に係る国税につき、納付委託があった場合において、<em>担保の提供の必要がないと認められるに至ったとき</em>は、<em>その限度において</em>その担保の提供があったものとすることができる。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><span class="mine">あなたのメモ</span>「委託＝手形と覚えよう。<u>どっちも手形よ</u>」— ただし主体が違う。<b>納付委託は納税者本人</b>が証券を提供し、<b>弁済委託は差し押さえられた債権の第三債務者</b>が提供する。</li>
+        <li>「納付委託は国税通則法の制度だから換価の猶予には適用されない」は<u>誤り</u>。〔3〕のとおり<b>換価の猶予に係る国税にも適用がある</b>。</li>
+        <li>対象は「国税の納付に使用することが<b>できない</b>証券以外の有価証券」＝手形など。納付に使える証券ならそもそも普通に納付すればよい。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 6-2 -->
+  <h2 class="sec">問題6-2　不服申立て <span class="n">3文／1パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="f2">
+    <div class="phead"><div class="badge">2</div>
+      <div class="ptitle">不服申立ての期間と、執行不停止・換価の制限<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕不服申立期間</span>不服申立て（再調査の請求後にする審査請求を除く。）は、処分があったことを知った日の翌日から起算して<em>3月</em>を経過したときはできない。再調査の請求後の審査請求は再調査決定書の謄本の送達があった日の翌日から起算して<em>1月</em>。また、不服申立ては処分があった日の翌日から起算して<em>1年</em>を経過したときはできない。</p>
+      <p class="line"><span class="tag">〔3〕滞納処分に関する不服申立て等の期限の特例</span>滞納処分の欠陥を理由とする不服申立ては、それぞれの期限までにしなければならない。督促＝差押えに係る通知を受けた日から3月を経過した日／不動産等の差押え＝<em>公売期日等</em>／公売公告から売却決定までの処分＝買受代金の納付期限／換価代金等の配当＝交付期日。</p>
+      <p class="line"><span class="tag">〔6〕(1)執行不停止及び換価の制限</span>不服申立ては、その目的となった処分の効力・処分の<em>執行又は手続の続行を妨げない</em>。ただし、その国税の徴収のため差し押さえた財産の滞納処分による<em>換価</em>は、価額が著しく減少するおそれがあるとき又は別段の申出があるときを除き、その不服申立てについての決定又は裁決があるまで、<em>することができない</em>。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>不動産の差押えに欠陥がある場合の再調査の請求は、<b>公売期日等</b>と<b>知った日の翌日から3月</b>の<u>いずれか早い日</u>までにしなければならない（原則と特例の短い方が効く）。</li>
+        <li>不服申立てで止まるのは<b>換価だけ</b>。「処分の執行又は手続の続行」自体は<u>妨げられない</u>。差押えを止められると勘違いしない。</li>
+        <li>発展：<b>取消訴訟</b>の係属中に換価が制限される場面は、①<u>担保のための仮登記</u>（1章）②<u>譲渡担保権者の物的納税責任</u>（1章）③<u>第二次納税義務者からの徴収</u>（2章）④<u>保証人からの徴収</u>（6-4）の<b>4類型に限定</b>される。不服申立て中の換価制限（原則すべての財産）とは適用範囲が違う。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 6-3 -->
+  <h2 class="sec">問題6-3　納付義務の承継 <span class="n">4文／1パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="f3">
+    <div class="phead"><div class="badge">3</div>
+      <div class="ptitle">相続・合併・分割による納付義務の承継<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">〔1〕相続による承継</span>相続があった場合には、相続人等は、その被相続人の納付義務を<em>承継する</em>。</p>
+      <p class="line"><span class="tag">〔1〕(2)承継する国税の範囲</span>①相続人が<em>限定承認</em>をしたときは、相続によって得た財産の限度で納付責任。②相続人が2人以上のときは、各相続人が承継する国税の額は<em>法定相続分等によりあん分</em>。③相続によって得た財産が②計算額をこえる者は、そのこえる価額を限度として、<em>他の相続人が承継する国税を納付する責任</em>を負う。</p>
+      <p class="line"><span class="tag">〔2〕法人の合併による承継</span>法人が合併した場合には、合併法人は、被合併法人の納付義務を<em>承継する</em>。</p>
+      <p class="line"><span class="tag">〔6〕法人の分割に係る連帯納付義務</span>法人が分割をした場合には、その分割承継法人は、分割法人の分割の日前に納税義務の成立した国税などについて<em>連帯納付義務</em>を負う。ただし、その分割法人から<em>承継した財産の価額を限度</em>とする。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li><b>合併＝承継</b>（合併法人が丸ごと引き継ぐ）だが、<b>分割＝連帯納付義務</b>（分割承継法人は自分が承継した財産の価額を限度に<u>連帯するだけ</u>）。同じ組織再編でも法的性質が違う。</li>
+        <li>相続の②③はセットで1つの計算：<u>法定相続分であん分 → その額を超えて財産を得た者が、超えた分だけ他の相続人の国税を肩代わりする</u>。②だけ覚えて③を忘れない。</li>
+        <li>「限定承認」は納付責任の限度を決めるだけでなく、<b>繰上請求の事由</b>（5章：相続人が限定承認をしたことは繰上請求の事実の1つ）にもなる。1つの事実が2つの制度に効いてくる。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 6-4/6-5 -->
+  <h2 class="sec">問題6-4・6-5　保証人からの徴収／雑則 <span class="n">5文／1パーツ</span></h2>
+  <div class="secrule"></div>
+
+  <div class="part" data-id="f4">
+    <div class="phead"><div class="badge">4</div>
+      <div class="ptitle">保証人からの徴収手続・換価の制限／滞納処分の引継ぎ・罰則<span class="min">⏱ 15分</span></div>
+      <button class="chk" onclick="tog(this)">覚えた</button></div>
+    <div class="body">
+      <p class="line"><span class="tag">6-4〔1〕(1)担保の処分（要件）</span>税務署長等は、担保の提供されている国税がその納期限までに完納されないとき、又は担保の提供されている国税についての納税の猶予などを取り消したときは、<em>担保物を処分してその国税に充て</em>又は<em>保証人にその国税を納付させる</em>。</p>
+      <p class="line"><span class="tag">6-4〔1〕(3)保証人からの徴収手続</span>保証人に国税を納付させる場合は、<em>納付通知書</em>により告知（納付の期限＝発する日の翌日から起算して<em>1月</em>を経過する日）→完納しないときは<em>納付催告書</em>により督促（納付の期限から<em>50日</em>以内に発する）→督促を受け納付催告書を発した日から起算して<em>10日</em>を経過した日までに完納しないとき、その財産を差し押さえる。</p>
+      <p class="line"><span class="tag">6-4〔1〕(4)換価の制限（補充性）</span>保証人の財産の換価は、<em>担保を提供した者の財産を換価に付した後でなければ</em>、行うことができない。</p>
+      <p class="line"><span class="tag">6-5〔1〕滞納処分の引継ぎ</span>税務署長又は国税局長は、差し押さえるべき財産又は差押財産がその<em>管轄区域外</em>にあるときは、その財産の所在地を所轄する税務署長又は国税局長に<em>滞納処分の引継ぎ</em>をすることができる。</p>
+      <p class="line"><span class="tag">6-5〔2〕滞納処分を免れる行為に対する罰</span>納税者が滞納処分の執行等を免れる目的でその財産を<em>隠蔽・損壊・国の不利益に処分</em>等したときは、その者は、<em>3年以下の懲役若しくは250万円以下の罰金</em>に処し、又は併科する。</p>
+    </div>
+    <div class="trap"><span class="t">⚠ 落とし穴</span>
+      <ul>
+        <li>保証人からの徴収手続（<b>納付通知書→1月／納付催告書→50日以内／10日経過で差押え</b>）は<u>2章・第二次納税義務者からの徴収手続とまったく同じリズム</u>。セットで覚えると2倍速。</li>
+        <li>ただし換価の制限は<b>違う</b>：第二次納税義務者の換価制限（2章）には「<u>価額が著しく減少するおそれがあるときを除き</u>」という例外があるが、<b>保証人の換価制限にはこの例外句がない</b>。保証人の補充性のほうが厳格＝例外なしで常に主たる財産が先。</li>
+        <li>罰則の重さの比較：虚偽陳述（3章3-11）＝<u>6月以下の懲役／50万円以下の罰金</u>、検査拒否等（3章3-18）＝<u>1年以下の懲役／50万円以下の罰金</u>、そして<b>財産の隠蔽等（6-5〔2〕）＝3年以下の懲役<u>もしくは</u>250万円以下の罰金・併科あり</b>が最も重い。財産を隠す行為が一番重く罰せられる。</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer class="foot">
+    国税徴収法　15分暗記パーツ集　6章 その他（14文／4パーツ）／ 2026-09-02 作成。<br>
+    本文は理論テキストの規定本文どおり。落とし穴は学習アプリの○×解説・あなた自身のメモ・他章の条文本文との対比から抽出。<br>
+    <span class="mine">あなたのメモ</span> の付いた項目は、過去にあなたが書き残した気づきをそのまま使っています。<br>
+    チェックはこの端末に保存されます。
+    <br><button class="reset" onclick="resetAll()">チェックを全部リセット</button>
+  </footer>
+
+</div>
+</div>
+
+<script>
+  var KEY='kokucho_parts_ch6_v1';
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ return {}; } }
+  function save(o){ try{ localStorage.setItem(KEY, JSON.stringify(o)); }catch(e){} }
+  function refresh(){
+    var st=load(), n=0, all=document.querySelectorAll('.part');
+    all.forEach(function(p){
+      var on=!!st[p.dataset.id];
+      p.classList.toggle('done', on);
+      var b=p.querySelector('.chk');
+      b.textContent = on ? '✓ 覚えた' : '覚えた';
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if(on) n++;
+    });
+    document.getElementById('pdone').textContent=n;
+    document.getElementById('pfill').style.width=(n/all.length*100)+'%';
+  }
+  function tog(btn){
+    var p=btn.closest('.part'), st=load();
+    if(st[p.dataset.id]) delete st[p.dataset.id]; else st[p.dataset.id]=1;
+    save(st); refresh();
+  }
+  function resetAll(){ save({}); refresh(); }
+  refresh();
+</script>
+</body>
+</html>
